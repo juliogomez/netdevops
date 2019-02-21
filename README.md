@@ -141,10 +141,10 @@ $ python
 ```
 
 What you are seeing here:
-* We installed a community library from a public package repository ( `pip install requests` )
-* We entered a Python interactive shell ( `python` )
-* We imported the library into our Python code ( `import requests` )
-* We made an HTTPS request to https://api.github.com and it was successful ( `<Response [200]>` )
+* We installed a community library from a public package repository ( `pip install requests` )
+* We entered a Python interactive shell ( `python` )
+* We imported the library into our Python code ( `import requests` )
+* We made an HTTPS request to https://api.github.com and it was successful ( `<Response [200]>` )
 
 Starting with installing the `requests` package on our machine, in four typed lines in a terminal we were able to download and install the package and use it to make an HTTPS request (without having to think about the steps involved with making the HTTPS request).
 
