@@ -43,7 +43,7 @@ So while Elon Musk finishes his [BMI](https://waitbutwhy.com/2017/04/neuralink.h
 
 Computers are _great_ at bulk-work, but if you want your computer to talk to your infrastructure and do something, you will need a machine-to-machine interface or __API__ (Application Programming Interface): an interface designed for software pieces to interact with each other.
 
-_Network Programmability_ uses a set of software tools to deploy, manage and troubleshoot network devices and controllers __via APIs__, gathering data and driving configurations to enhance and secure application delivery. This software can on-box or off-box, and work on-demand or event-driven.
+_Network Programmability_ uses a set of software tools to deploy, manage and troubleshoot network devices and controllers _via APIs_, gathering data and driving configurations to enhance and secure application delivery. This software can on-box or off-box, and work on-demand or event-driven.
 
 We can ask an API to:
 * Take some action
@@ -135,14 +135,14 @@ $ python
 ```
 
 What you are seeing here:
-* We installed a community library from a public package repository.pip install requests
-* We entered a Python interactive shell.python
-* We imported the library into our Python code.import requests
-* We made an HTTPS request to https://api.github.com and it was successful: `<Response [200]>`
+* We installed a community library from a public package repository (`pip install requests`)
+* We entered a Python interactive shell (`python`)
+* We imported the library into our Python code (`import requests`)
+* We made an HTTPS request to https://api.github.com and it was successful (`<Response [200]>`)
 
 Starting with installing the `requests` package on our machine, in four typed lines in a terminal we were able to download and install the package and use it to make an HTTPS request (without having to think about the steps involved with making the HTTPS request).
 
-Now that the languages and tools have evolved to be useful to infrastructure engineers, let's see how APIs have become easier to work with.
+Now that languages and tools have evolved to be useful for infrastructure engineers, APIs have become easier to work with.
 
 ### API Maturity
 
