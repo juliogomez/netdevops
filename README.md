@@ -1,7 +1,5 @@
 [[TOC]]
 
----
-
 # Introduction to NetDevOps
 
 Do you often ask yourself why we keep configuring our network devices in the same way we have been doing it for the last 30 years? Isn't it strange that we still have to log into each individual box and use command-line instructions to perform any changes? Do you wonder if there might be a more optimal way of configuring your infrastructure, apart from CLI? Does this way of working make you feel like any _simple_ change in your network is _complex_ to implement?
@@ -107,11 +105,11 @@ Modern programming languages like JavaScript, Python, Go, Swift, and others are 
 
 These languages, when combined with other modern developer tools (eg. Git repositories, Package management systems, Virtual environments, Integrated Development Environments) equip you with powerful development tools that enable you to automate your tasks and processes and begin creating your own set of powerful tools and workflows.
 
-While these tools are great, and are now bringing rich value to the systems engineering discipline, we are also benefiting from another maturing area of the software development industry...
+While these tools are great, and are now bringing rich value to the systems engineering discipline, we are also benefiting from another maturing area of the software development industry.
 
 ### Online Communities
 
-In the past, when you set out to create some script or program, you often had to start "from scratch," working with low-level standard libraries included with your programming language and toolset of choice. This created a high barrier to entry (and massive global repetition) as software developers had to write the same "heavy lifting" modules to get common tasks done. Take for example making a HTTPS web request (they had to write code to):
+In the past, when you set out to create some script or program, you often had to start _from scratch_, working with low-level standard libraries included with your programming language and toolset of choice. This created a high barrier to entry (and massive global repetition) as software developers had to write the same _heavy lifting_ modules to get common tasks done. Take for example making a HTTPS web request, where they had to write code to:
 
 * Open a TCP connection on port 443
 * Handle TLS negotiation and exchange certificates
@@ -124,7 +122,11 @@ That is a lot of work when all the developer wanted to do was to get or send s
 
 Now, thanks to the Open Source community, social code-sharing and collaboration sites like GitHub, and public package repositories, the developer communities around these new modern programming languages are building and sharing Open Source software libraries that help to encourage reuse and reduce duplicate work. Leveraging these community-created libraries can save you tremendous amounts of time and effort, and they enable you to focus your time and effort on what you want your code to do: your codified process.
 
-You can make an HTTPS request, without much personal investment, because of the work done by these online communities.
+<p align="center"> 
+<img src="https://media.giphy.com/media/5IqxJsqlCtkqc/giphy.gif">
+</p>
+
+You can make a HTTPS request without much personal investment, because of the work done by these online communities.
 
 ```shell
 $ pip install requests
