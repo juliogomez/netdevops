@@ -8,7 +8,9 @@ Do you often ask yourself why we keep configuring our network devices in the sam
 
 __You are not alone.__
 
-![](https://media.giphy.com/media/paN2mV7vuCXx6/giphy.gif)
+<p align="center"> 
+<img src="https://media.giphy.com/media/paN2mV7vuCXx6/giphy.gif">
+</p>
 
 There are definitely alternative and innovative ways of programming your network infrastructure. Yes, when you configure your network devices to adopt a certain behaviour, or implement a new available feature, you are _programming_ them. So one of the first things we should be looking for is more optimal ways of programming our infrastructure. 
 
@@ -68,7 +70,9 @@ If you need information from your infrastructure, ask for it. Using a machine-to
 
 _Coding_ is the process of writing down instructions, in a language a computer can understand, to complete a specific task.
 
-![](https://media.giphy.com/media/OVtqvymKkkcTu/giphy.gif)
+<p align="center"> 
+<img src="https://media.giphy.com/media/OVtqvymKkkcTu/giphy.gif">
+</p>
 
 Let's consider a simple codified process that we are asking a computer to follow:
 * For each switch in my network...
