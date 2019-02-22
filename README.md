@@ -304,4 +304,31 @@ Spinning up the whole system will take roughly 15 mins, so please look at this s
 <img src="imgs/8pendulum.gif">
 </p>
 
-Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are ready now!
+Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are now ready!
+
+Open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on Mac) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
+
+```
+ssh developer@10.10.20.20
+```
+
+Once in, clone the repository that includes all required files to build the setup into your _devbox_.
+
+```
+git clone --recurse-submodules https://github.com/DevNetSandbox/sbx_multi_ios.git
+```
+
+With that, your sandbox _devbox_ includes now all required info to start building the environment.
+
+```
+cd sbx_multi_ios/gitlab
+./setup.sh
+```
+
+`setup.sh` will start and configure a GitLab instance inside a Docker container running in your _devbox_. 
+
+The process will take like 5 minutes, so check this out.
+
+<p align="center"> 
+<img src="https://media.giphy.com/media/69FpUKMjZ1er2lc5AZ/giphy.gif">
+</p>
