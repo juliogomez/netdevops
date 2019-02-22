@@ -87,7 +87,9 @@ for switch in my_network:
 
 This is essentially the process that you, as a human, would go through to complete the same task. By taking the time to codify it (write it down in a machine interpretable language), you can now ask the computer to do the task whenever you need it done. You, the human, are providing the intelligence (what needs to be done and how it should be done), while letting the computer do the boring and repetitious work (which is what it does best). Win-Win.
 
-> That sounds great, but programming languages aren't as simple as what you showed above.
+<p align="center"> 
+<img src="imgs/6not.jpg">
+</p>
 
 While the code sample above is a snippet of a larger script, and is calling other functions (like `interface.last_change()` and `interface.shutdown()`), implementing the utility functions is straightforward and the code shown is actual valid Python code that would complete the task. The core logic is that simple.
 
@@ -241,7 +243,7 @@ Apart from a VCS we will need some additional elements to support the desired fu
 
 NetDevOps will deliver consistent version-controlled infrastructure configurations, deployed with parallel and automated provisioning.
 
-Our system will provide the following benefits _across the whole network_:
+Our wishlist for the desired system will provide the following benefits _across the whole network_:
 
 * Track the status of network configurations at any point in time
 * Track who proposed and approved each specific configuration change
@@ -250,3 +252,5 @@ Our system will provide the following benefits _across the whole network_:
 * Automate the deployment of any proposed change across different environments (eg. testing, staging, production)
 * Model simulated virtual environments to test proposed changes before going to production
 * Define and run the required tests set and passing criteria, both in testing and production, before accepting a change as successful
+* Automatically rollback any proposed configuration that does not pass the tests set
+
