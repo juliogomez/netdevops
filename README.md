@@ -216,6 +216,10 @@ Without these key engineers there is a _fear_ that network changes will go _wron
 
 Furthermore, applying network-wide policies becomes a task proportionally tedious to how big the network is. For example, consider a possible Infosec recommendation to change SNMP strings every 3 months. Doing it manually in a big network might require a number of engineers performing those changes simultaneously across the network, maybe during a maintenance window by night to make sure systems can be synchronized next morning. This manual process involves quite some manual interaction, which is definitely prone to errors.
 
+<p align="center"> 
+<img src="https://media.giphy.com/media/10PcMWwtZSYk2k/giphy.gif">
+</p>
+
 This type of considerations is very similar to the ones they had in classic software development. With their monolith architectures and bi-annual software updates, they suffered from similar challenges. And then they started doing things different, with things like Agile, DevOps, CICD pipelines and automated unit testing.
 
 Applying this same type of principles to network configuration is what we called NetDevOps, and it will provide similar benefits to the ones software developers obtained while implementing this practices in their own environment. But it will require big cultural changes, like:
@@ -274,8 +278,30 @@ Our wishlist for the desired system will provide the following benefits _across 
 * Track who proposed and approved each specific configuration change
 * Provide visibility on what are the differences of configurations at any point in time vs a previous situation
 * Enable rollback to any previous moment
+* Provide syntax-checking capabilities for network changes in your own local workstation
 * Automate the deployment of any proposed change across different environments (eg. testing, staging, production)
 * Model simulated virtual environments to test proposed changes before going to production
 * Define and run the required tests set and passing criteria, both in testing and production, before accepting a change as successful
 * Automatically rollback any proposed configuration that does not pass the tests set
 
+## NetDevOps demo
+
+What better way of understanding the real benefits of NetDevOps than building your own setup and seeing how it works? The goal will be to create a complete environment that demonstrates all features in the previous wishlist.
+
+The first thing you will need is a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for your demo. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO netsim, etc.
+
+You may find the required sandbox for our demo using [this link](https://devnetsandbox.cisco.com/RM/Diagram/Index/6b023525-4e7f-4755-81ae-05ac500d464a?diagramType=Topology), and book it for up to one week exclusively for you.
+
+<p align="center"> 
+<img src="imgs/7reserve.png">
+</p>
+
+_Note: when doing the reservation please choose 'None' for simulation, as we will be launching the required topologies as part of the setup process._
+
+Spinning up the whole system will take roughly 15 mins, so please look at this strangely satisfying pendulum while we get everything ready for you.
+
+<p align="center"> 
+<img src="https://media.giphy.com/media/kPOFVgrcD48wfgLr3P/giphy.gif">
+</p>
+
+Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are ready now!
