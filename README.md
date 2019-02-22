@@ -4,7 +4,7 @@
 
 <!-- vscode-markdown-toc -->
 * [Network Programmability](#NetworkProgrammability)
-	* [The Challenge: Dynamic applications vs Static network](#TheChallenge:DynamicapplicationsvsStaticnetwork)
+	* [The Challenge of Dynamic applications vs Static network](#TheChallengeofDynamicapplicationsvsStaticnetwork)
 	* [What is Programmability](#WhatisProgrammability)
 	* [Why Coding](#WhyCoding)
 	* [What has changed?](#Whathaschanged)
@@ -13,7 +13,7 @@
 		* [API Maturity](#APIMaturity)
 	* [Summary](#Summary)
 * [NetDevOps](#NetDevOps)
-	* [The challenge: network configuration today](#Thechallenge:networkconfigurationtoday)
+	* [The challenge of network configuration today](#Thechallengeofnetworkconfigurationtoday)
 	* [Network configuration as code](#Networkconfigurationascode)
 	* [Components](#Components)
 	* [Benefits](#Benefits)
@@ -38,7 +38,7 @@ __You are not alone.__
 
 There are definitely alternative and innovative ways of programming your network infrastructure. Yes, when you configure your network devices to adopt a certain behaviour, or implement a new available feature, you are _programming_ them. So one of the first things we should be looking for is more optimal ways of programming our infrastructure.
 
-### <a name='TheChallenge:DynamicapplicationsvsStaticnetwork'></a>The Challenge: Dynamic applications vs Static network
+### <a name='TheChallengeofDynamicapplicationsvsStaticnetwork'></a>The Challenge of Dynamic applications vs Static network
 
 Furthermore, as the network _exists_ to provide connectivity for __applications__, we should take a look at how these are evolving. Agile microservices-based cloud-native development, DevOps automation with CICD pipelines, and automated unit testing, enable really __dynamic__ application development for quick time-to-market requirements. Let's not forget that software is one of the most important assets to differentiate modern enterprises from their competition. Being able to quickly implement new features, deploy new locations, or fix issues, is absolutely __key__ to their success.
 
@@ -203,7 +203,7 @@ DevOps principles are not exclusive to software development, and some of them ca
 
 Sometimes it is referred to by different names, like _DevNetOps_, _NetOps_, or _SuperNetOps_. But in general it is related to the more generic Network Reliability Engineer (also coming from the DevOps counterpart [Site Reliability Engineering](https://en.wikipedia.org/wiki/Site_Reliability_Engineering)).
 
-### <a name='Thechallenge:networkconfigurationtoday'></a>The challenge: network configuration today
+### <a name='Thechallengeofnetworkconfigurationtoday'></a>The challenge of network configuration today
 
 Networks exist to provide connectivity for end-systems and applications, so obviously they have a critical role in any type of service. _Everything_ needs connectivity, so the network is certainly a fundamental asset in any modern enterprise these days. Its functionality has become so critical that most business nowadays would not be able to survive without connectivity.
 
