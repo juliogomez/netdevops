@@ -327,8 +327,41 @@ cd sbx_multi_ios/gitlab
 
 `setup.sh` will start and configure a GitLab instance inside a Docker container running in your _devbox_. 
 
-The process will take like 5 minutes, so check this out.
+The process will take like 5 minutes, so check this out in the meanwhile.
 
 <p align="center"> 
-<img src="https://media.giphy.com/media/69FpUKMjZ1er2lc5AZ/giphy.gif">
+<img src="imgs/9pendulum2.gif">
+</p>
+
+Once your terminal shows the process is finished, you may check with `docker ps` that your GitLab containers are running, and how they offering their service in port 80.
+
+```
+[developer@devbox ~]$docker ps
+CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS                PORTS                                                                                       NAMES
+5cd18a397811        gitlab/gitlab-ce       "/assets/wrapper"        2 days ago          Up 2 days (healthy)   0.0.0.0:80->80/tcp, 0.0.0.0:4567->4567/tcp, 0.0.0.0:32769->22/tcp, 0.0.0.0:32768->443/tcp   gitlab_gitlab_1
+182c5937b931        gitlab/gitlab-runner   "/usr/bin/dumb-init …"   2 days ago          Up 2 days
+```
+
+Please point your browser to [http://10.10.20.20](http://10.10.20.20/), the IP address of your _devbox_ (default port 80), and check that you can access the HTTP interface for your new GitLab service.
+
+Now that GitLab is ready, go back to your terminal and let's run the script to setup the complete CICD environment.
+
+```
+cd ../cicd-3tier
+./setup.sh
+```
+
+In this case `setup.sh` will perform the following actions:
+1. Launch the required VIRL simulations for two different environments: test and production
+2. Start NSO
+3. Import test and production network configurations from VIRL to NSO
+4. Synchronize devices configuration from NSO into VIRL simulations
+5. Create a new repo in GitLab and initialize it locally in your _devbox_
+6. Create locally in _devbox_ the prod and test git branches and push them to GitLab
+7. List the status of VIRL nodes in _production_ and _test_
+
+This complete process will take like 10 minutes, so time for your fix.
+
+<p align="center"> 
+<img src="imgs/10pendulum3.gif">
 </p>
