@@ -4,7 +4,7 @@
 
 <!-- vscode-markdown-toc -->
 * [Network Programmability](#NetworkProgrammability)
-	* [The Challenge of Dynamic applications vs Static network](#TheChallengeofDynamicapplicationsvsStaticnetwork)
+	* [The challenge of Dynamic applications vs Static network](#ThechallengeofDynamicapplicationsvsStaticnetwork)
 	* [What is Programmability](#WhatisProgrammability)
 	* [Why Coding](#WhyCoding)
 	* [What has changed?](#Whathaschanged)
@@ -38,7 +38,7 @@ __You are not alone.__
 
 There are definitely alternative and innovative ways of programming your network infrastructure. Yes, when you configure your network devices to adopt a certain behaviour, or implement a new available feature, you are _programming_ them. So one of the first things we should be looking for is more optimal ways of programming our infrastructure.
 
-### <a name='TheChallengeofDynamicapplicationsvsStaticnetwork'></a>The Challenge of Dynamic applications vs Static network
+### <a name='ThechallengeofDynamicapplicationsvsStaticnetwork'></a>The challenge of Dynamic applications vs Static network
 
 Furthermore, as the network _exists_ to provide connectivity for __applications__, we should take a look at how these are evolving. Agile microservices-based cloud-native development, DevOps automation with CICD pipelines, and automated unit testing, enable really __dynamic__ application development for quick time-to-market requirements. Let's not forget that software is one of the most important assets to differentiate modern enterprises from their competition. Being able to quickly implement new features, deploy new locations, or fix issues, is absolutely __key__ to their success.
 
