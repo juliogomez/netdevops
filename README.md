@@ -3,18 +3,20 @@
 </p>
 
 <!-- vscode-markdown-toc -->
-* [Dynamic applications vs Static network](#DynamicapplicationsvsStaticnetwork)
-* [What is Programmability](#WhatisProgrammability)
-* [Why Coding](#WhyCoding)
-* [What has changed?](#Whathaschanged)
-	* [Modern Programming Languages & Tools](#ModernProgrammingLanguagesTools)
-	* [Online Communities](#OnlineCommunities)
-	* [API Maturity](#APIMaturity)
-* [Summary](#Summary)
-* [The network challenge today](#Thenetworkchallengetoday)
-* [Network configuration as code](#Networkconfigurationascode)
-* [Components](#Components)
-* [Benefits](#Benefits)
+* [Network Programmability](#NetworkProgrammability)
+	* [Dynamic applications vs Static network](#DynamicapplicationsvsStaticnetwork)
+	* [What is Programmability](#WhatisProgrammability)
+	* [Why Coding](#WhyCoding)
+	* [What has changed?](#Whathaschanged)
+		* [Modern Programming Languages & Tools](#ModernProgrammingLanguagesTools)
+		* [Online Communities](#OnlineCommunities)
+		* [API Maturity](#APIMaturity)
+	* [Summary](#Summary)
+* [NetDevOps](#NetDevOps)
+	* [The network challenge today](#Thenetworkchallengetoday)
+	* [Network configuration as code](#Networkconfigurationascode)
+	* [Components](#Components)
+	* [Benefits](#Benefits)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -24,7 +26,7 @@
 
 ---
 
-# Introduction to Programmability
+## <a name='NetworkProgrammability'></a>Network Programmability
 
 Do you often ask yourself why we keep configuring our network devices in the same way we have been doing it for the last 30 years? Isn't it strange that we still have to log into each individual box and use command-line instructions to perform any changes? Do you wonder if there might be a more optimal way of configuring your infrastructure, apart from CLI? Does this way of working make you feel like any _simple_ change in your network is _complex_ to implement?
 
@@ -36,7 +38,7 @@ __You are not alone.__
 
 There are definitely alternative and innovative ways of programming your network infrastructure. Yes, when you configure your network devices to adopt a certain behaviour, or implement a new available feature, you are _programming_ them. So one of the first things we should be looking for is more optimal ways of programming our infrastructure.
 
-## <a name='DynamicapplicationsvsStaticnetwork'></a>Dynamic applications vs Static network
+### <a name='DynamicapplicationsvsStaticnetwork'></a>Dynamic applications vs Static network
 
 Furthermore, as the network _exists_ to provide connectivity for __applications__, we should take a look at how these are evolving. Agile microservices-based cloud-native development, DevOps automation with CICD pipelines, and automated unit testing, enable really __dynamic__ application development for quick time-to-market requirements. Let's not forget that software is one of the most important assets to differentiate modern enterprises from their competition. Being able to quickly implement new features, deploy new locations, or fix issues, is absolutely __key__ to their success.
 
@@ -63,7 +65,7 @@ So while Elon Musk finishes his [BMI](https://waitbutwhy.com/2017/04/neuralink.h
 <img src="https://28oa9i1t08037ue3m1l0i861-wpengine.netdna-ssl.com/wp-content/uploads/2018/04/Communication-Speed-GRAPH-1.png">
 </p>
 
-## <a name='WhatisProgrammability'></a>What is Programmability
+### <a name='WhatisProgrammability'></a>What is Programmability
 
 Computers are _great_ at bulk-work, but if you want your computer to talk to your infrastructure and do something, you will need a machine-to-machine interface or __API__ (Application Programming Interface): an interface designed for software pieces to interact with each other.
 
@@ -88,7 +90,7 @@ Sure, you could do this manually, but wouldn't it be better to codify the proce
 
 If you need information from your infrastructure, ask for it. Using a machine-to-machine API means your request will complete, your data retrieved, or you will receive notification to the contrary. All done in a way that enables you to automate the interaction. APIs make it easy to send requests to your infrastructure, but what makes it easy to codify the processes?
 
-## <a name='WhyCoding'></a>Why Coding
+### <a name='WhyCoding'></a>Why Coding
 
 _Coding_ is the process of writing down instructions, in a language a computer can understand, to complete a specific task.
 
@@ -119,13 +121,13 @@ This is essentially the process that you, as a human, would go through to comple
 
 While the code sample above is a snippet of a larger script, and is calling other functions (like `interface.last_change()` and `interface.shutdown()`), implementing the utility functions is straightforward and the code shown is actual valid Python code that would complete the task. The core logic is that simple.
 
-## <a name='Whathaschanged'></a>What has changed?
+### <a name='Whathaschanged'></a>What has changed?
 
 APIs and programming languages aren't new, so, why the recent hype?
 
 Well... they have _matured!_
 
-### <a name='ModernProgrammingLanguagesTools'></a>Modern Programming Languages & Tools
+#### <a name='ModernProgrammingLanguagesTools'></a>Modern Programming Languages & Tools
 
 Modern programming languages like JavaScript, Python, Go, Swift, and others are less cumbersome and more flexible than their predecessors. It used to be that you had to write 10,000 lines of C++ code to do anything useful, but with these modern languages (and packages and libraries available from their developer communities) you can do powerful things in less than 300 lines of code. Which is probably shorter, or on par with, most Cisco IOS configurations that you have worked with.
 
@@ -133,7 +135,7 @@ These languages, when combined with other modern developer tools (eg. Git reposi
 
 While these tools are great, and are now bringing rich value to the systems engineering discipline, we are also benefiting from another maturing area of the software development industry.
 
-### <a name='OnlineCommunities'></a>Online Communities
+#### <a name='OnlineCommunities'></a>Online Communities
 
 In the past, when you set out to create some script or program, you often had to start _from scratch_, working with low-level standard libraries included with your programming language and toolset of choice. This created a high barrier to entry (and massive global repetition) as software developers had to write the same _heavy lifting_ modules to get common tasks done. Take for example making a HTTPS web request, where they had to write code to:
 
@@ -176,13 +178,13 @@ Starting with installing the `requests` package on our machine, in four typed 
 
 Now that languages and tools have evolved to be useful for infrastructure engineers, APIs have become easier to work with.
 
-### <a name='APIMaturity'></a>API Maturity
+#### <a name='APIMaturity'></a>API Maturity
 
 Gone are the days where it took an expert programmer to work with a product's API. Previous API standards like SOAP proved themselves to be not so _simple_, and easier to use API models like RESTful APIs have taken their place.
 
 Now, thanks to RESTful APIs and standardized data formats like JSON, you can make requests of your infrastructure with the same ease these modern programming languages provide.
 
-## <a name='Summary'></a>Summary
+### <a name='Summary'></a>Summary
 
 APIs and programming languages have evolved and matured to the point of being useful and applicable to the domains of infrastructure engineers.
 
@@ -195,13 +197,13 @@ Network programmability provides consistent and dynamic infrastructure configura
 * Integration
 * Innovation
 
-# NetDevOps
+## <a name='NetDevOps'></a>NetDevOps
 
 DevOps principles are not exclusive to software development, and some of them can definitely be applied to infrastructure configuration. NetDevOps brings the culture, technical methods, strategies and best practices of DevOps to network management.
 
 Sometimes it is referred to by different names, like _DevNetOps_, _NetOps_, or _SuperNetOps_. But in general it is related to the more generic Network Reliability Engineer (also coming from the DevOps counterpart [Site Reliability Engineering](https://en.wikipedia.org/wiki/Site_Reliability_Engineering)).
 
-## <a name='Thenetworkchallengetoday'></a>The network challenge today
+### <a name='Thenetworkchallengetoday'></a>The network challenge today
 
 Networks exist to provide connectivity for end-systems and applications, so obviously they have a critical role in any type of service. _Everything_ needs connectivity, so the network is certainly a fundamental asset in any modern enterprise these days. Its functionality has become so critical that most business nowadays would not be able to survive without connectivity.
 
@@ -241,7 +243,7 @@ Now __that__ would be a game changer. Not only in the way we manage our networks
 
 Let's explore it.
 
-## <a name='Networkconfigurationascode'></a>Network configuration as code
+### <a name='Networkconfigurationascode'></a>Network configuration as code
 
 With the advent of Cloud computing we have now the capabilities to provision and manage _ephemeral_ data centre resources (compute and connectivity) via machine-readable definition files. These files can be treated as common code, utilizing the same version control systems and best practices we use for software development, with goals like providing automation, improving efficiency and reducing errors. This is called _Infrastructure as Code_, or IaC.
 
@@ -257,7 +259,7 @@ Continuing with the emulation of DevOps automation capabilities, this will lead 
 
 And considering that modern network devices support modern interfaces and APIs, let's leverage those to deploy our configurations across the network in an optimal way, instead of using the classic, slow and error-prone command-line interface.
 
-## <a name='Components'></a>Components
+### <a name='Components'></a>Components
 
 Apart from a VCS we will need some additional elements to support the desired functionality:
 * [Cisco Network Services Orchestrator](https://developer.cisco.com/site/nso/): formerly Tail-f, it provides end-to-end automation to design and deliver services much faster
@@ -265,7 +267,7 @@ Apart from a VCS we will need some additional elements to support the desired fu
 * [VIRL](http://virl.cisco.com/): network modelling and simulation environment
 * [Ansible](https://www.ansible.com/): simple automation
 
-## <a name='Benefits'></a>Benefits
+### <a name='Benefits'></a>Benefits
 
 NetDevOps will deliver consistent version-controlled infrastructure configurations, deployed with parallel and automated provisioning.
 
