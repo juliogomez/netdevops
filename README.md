@@ -301,7 +301,7 @@ _Note: when doing the reservation please choose 'None' for simulation, as we wil
 Spinning up the whole system will take roughly 15 mins, so please look at this strangely satisfying pendulum while we get everything ready for you.
 
 <p align="center"> 
-<img src="https://media.giphy.com/media/kPOFVgrcD48wfgLr3P/giphy.gif">
+<img src="imgs/8pendulum.gif">
 </p>
 
 Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are ready now!
