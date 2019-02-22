@@ -381,9 +381,11 @@ You may find VIRL definitions for these two environments at the following locati
 * `/home/developer/sbx_multi_ios/cicd-3tier/virl/test/topology.virl`
 * `/home/developer/sbx_multi_ios/cicd-3tier/virl/prod/topology.virl`
 
-Please make sure all your simulated routers are readily available in both prod and test. If they are not, your demonstration will fail in different stages.
+Please make sure all your simulated routers are readily available (_RERACHABLE_ status) in both prod and test. If they are not, your demonstration will fail in different stages.
 
 ```
+[developer@devbox test]$pwd
+/home/developer/sbx_multi_ios/cicd-3tier/virl/test
 [developer@devbox test]$virl nodes
 Here is a list of all the running nodes
 ╒══════════════╤═════════════╤═════════╤═════════════╤════════════╤══════════════════════╤════════════════════╕
@@ -415,8 +417,50 @@ Here is a list of all the running nodes
 ├─────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
 │ dist1   │ NX-OSv 9000 │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.223        │ N/A                │
 ╘═════════╧═════════════╧═════════╧═════════════╧════════════╧══════════════════════╧════════════════════╛
-[developer@devbox prod]$
 ```
+
+If any of the nodes stay in _UNREACHABLE_ status please try the following:
+
+1. Go into the environment directory (prod or test) and restart the node
+
+    ```
+    cd virl/test
+    virl stop test-dist2
+    virl start test-dist2
+    ```
+
+2. Connect into that specific node (with `virl ssh` or `virl console`) and reboot it (password is `cisco`)
+
+    ```
+    [developer@devbox prod]$virl ssh core1
+    Attemping ssh connectionto core1 at 172.16.30.221
+    Warning: Permanently added '172.16.30.221' (RSA) to the list of known hosts.
+    cisco@172.16.30.221's password:
+
+
+    core1#reload
+    ```
+
+3. If it still refuses to cooperate, stop the whole environment
+
+    ```
+    [developer@devbox cicd-3tier]$pwd
+    /home/developer/sbx_multi_ios/cicd-3tier
+    [developer@devbox cicd-3tier]$./cleanup.sh
+    ```
+
+and then restart it
+
+    ```
+    [developer@devbox cicd-3tier]$pwd
+    /home/developer/sbx_multi_ios/cicd-3tier
+    [developer@devbox cicd-3tier]$./setup.sh
+    ```
+
+
+
+
+
 
 
 
