@@ -288,6 +288,8 @@ Our wishlist for the desired system will provide the following benefits _across 
 
 What better way of understanding the real benefits of NetDevOps than building your own setup and seeing how it works? The goal will be to create a complete environment that demonstrates all features in the previous wishlist.
 
+### Book a sandbox
+
 The first thing you will need is a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for your demo. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO netsim, etc.
 
 You may find the required sandbox for our demo using [this link](https://devnetsandbox.cisco.com/RM/Diagram/Index/6b023525-4e7f-4755-81ae-05ac500d464a?diagramType=Topology), and book it for up to one week exclusively for you.
@@ -306,7 +308,9 @@ Spinning up the whole system will take roughly 15 mins, so please look at this s
 
 Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are now ready!
 
-Open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on Mac) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
+### GitLab setup
+
+Open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on OSX) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
 
 ```
 ssh developer@10.10.20.20
@@ -325,7 +329,7 @@ cd sbx_multi_ios/gitlab
 ./setup.sh
 ```
 
-`setup.sh` will start and configure a GitLab instance inside a Docker container running in your _devbox_. 
+`setup.sh` will start and configure your Version Control Server, a GitLab instance inside a Docker container running in your _devbox_. 
 
 The process will take like 5 minutes, so check this out in the meanwhile.
 
@@ -343,6 +347,8 @@ CONTAINER ID        IMAGE                  COMMAND                  CREATED     
 ```
 
 Please point your browser to [http://10.10.20.20](http://10.10.20.20/), the IP address of your _devbox_ (default port 80), and check that you can access the HTTP interface for your new GitLab service.
+
+### CICD setup
 
 Now that GitLab is ready, go back to your terminal and let's run the script to setup the complete CICD environment.
 
@@ -366,6 +372,8 @@ This complete process will take like 10 minutes, so time for your fix.
 <p align="center"> 
 <img src="imgs/10pendulum3.gif">
 </p>
+
+### VIRL verifications
 
 __Congrats, everything is installed and ready!__
 
@@ -421,7 +429,7 @@ Here is a list of all the running nodes
 
 If any of the nodes stay in _UNREACHABLE_ status please try the following:
 
-1. Go into the environment directory (prod or test) and restart the node
+1. Go into the environment directory (prod or test) and restart the node.
 
     ```
     cd virl/test
@@ -429,7 +437,7 @@ If any of the nodes stay in _UNREACHABLE_ status please try the following:
     virl start test-dist2
     ```
 
-2. Connect into that specific node (with `virl ssh` or `virl console`) and reboot it (password is `cisco`)
+2. Connect into that specific node (with `virl ssh` or `virl console`) and reboot it (password is `cisco`).
 
     ```
     [developer@devbox prod]$virl ssh core1
@@ -441,7 +449,7 @@ If any of the nodes stay in _UNREACHABLE_ status please try the following:
     core1#reload
     ```
 
-3. If it still refuses to cooperate, stop the whole environment
+3. If it still refuses to cooperate, stop the whole environment...
 
     ```
     [developer@devbox cicd-3tier]$pwd
@@ -449,15 +457,129 @@ If any of the nodes stay in _UNREACHABLE_ status please try the following:
     [developer@devbox cicd-3tier]$./cleanup.sh
     ```
 
-and then restart it
+    ... and then restart it.
 
     ```
     [developer@devbox cicd-3tier]$pwd
     /home/developer/sbx_multi_ios/cicd-3tier
     [developer@devbox cicd-3tier]$./setup.sh
     ```
+Now that both of your VIRL environments are ready, let's setup your local environment.
 
+### Local environment setup (optional)
 
+To experience and demonstrate the full NetDevOps configuration pipeline, you may want to setup a local development environment where you can test proposed configuration changes before committing and pushing them to GitLab for the full test builds to occur. This is a completely optional step you might want to skip if you are not interested in testing locally.
+
+To complete this step you will need to have a few local pre-requisites setup on your local workstation.
+
+**1. Common software**: install Java JDK, python and sed (`brew install gnu-sed` in OSX)
+
+**2. [Network Service Orchestrator](https://developer.cisco.com/site/nso/)**: in order to test the configuration pipeline locally, you'll need to have a local install of NSO on your workstation. Furthermore, you will need to have the same versions of NSO and NEDs (network element drivers) installed as the _DevBox_ within the Sandbox. Using different versions _may_ work, but for best experience matching the versions exactly is recommended.
+
+* Network Service Orchestrator 4.5.3
+* Cisco IOS NED 5.8
+* Cisco IOS XE NED 6.2.10
+* Cisco NX-OS NED 4.5.10
+
+Once downloaded, you would install NSO in OSX like this:
+
+```
+sh nso-4.5.3.darwin.x86_64.signed.bin
+sh nso-4.5.3.darwin.x86_64.installer.bin ~/ncs-4.5.3 --local-install
+```
+
+You may download the required NEDs from your sandbox _devbox_ via SCP.
+
+```
+scp developer@10.10.20.20:/usr/src/nso/ncs-4.5.3-cisco-ios-5.8.signed.bin .
+scp developer@10.10.20.20:/usr/src/nso/ncs-4.5-cisco-nx-4.5.10.signed.bin .
+scp developer@10.10.20.20:/usr/src/nso/ncs-4.5-cisco-iosxr-6.2.10.signed.bin .
+```
+
+Install those NEDs, by running the following two commands for each downloaded binary...
+
+```
+sh <bin_file>
+tar -xzvf <gz_file>
+````
+
+... and then move each uncompressed folder into `~/dev/ncs-4.5.3/packages/neds`, replacing the existing ones.
+
+Check all required NEDs are installed.
+
+```
+ll $NCS_DIR/packages/neds/
+```
+
+Once you have installed these versions, you'll need to `source` the `ncsrc` file for this version before beginning the local dev process.
+
+```
+source ~/ncs-4.5.3/ncsrc
+```
+
+_Don't forget to include this command in your startup shell (ie .zshrc)_
+
+Now you can test your local NSO installation.
+
+First setup the required structure and environment in your preferred directory.
+
+```
+ncs-setup --dest ~/ncs-run
+```
+
+Then start the NCS daemon.
+
+```
+cd ~/ncs-run
+ncs
+```
+
+Check if NCS started correctly.
+
+```
+ncs --status
+```
+
+Start the CLI to connect to NCS...
+
+```
+ncs_cli -u admin
+```
+
+... or connect via SSH (default password is `admin`).
+
+```
+ssh -l admin -p 2024 localhost
+```
+
+Point your browser to [http://localhost:8080/](http://localhost:8080/) (credentials arer `admin`/`admin`).
+
+If everything works correctly you may now stop the NCS daemon.
+
+```
+ncs --stop
+```
+
+_Congrats, your NSO local installation is complete!_
+
+**3. Python + Ansible** 
+
+The network-as-code mechanism in this demonstration leverages both Ansible and NSO, with Ansible orchestrating the execution and configuration used by NSO to deploy to the network. In order to test locally, you'll need to have a Python environment (_virtual environment_ is recommended) that meets these requirements.
+
+* [Python](https://www.python.org/downloads/) 3.6.x (3.6.5 or higher recommended). 
+Python 2.7 would likely work, but the time to move to Python 3 has arrived.
+
+* Ansible 2.6.3 or higher
+
+Once you install them, and with your virtual environment active, install the requirements.
+
+```
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+```
+
+__All pre-requisites are now complete!__
 
 
 
