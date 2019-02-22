@@ -352,6 +352,7 @@ cd ../cicd-3tier
 ```
 
 In this case `setup.sh` will perform the following actions:
+
 1. Launch the required VIRL simulations for two different environments: test and production
 2. Start NSO
 3. Import test and production network configurations from VIRL to NSO
@@ -365,3 +366,23 @@ This complete process will take like 10 minutes, so time for your fix.
 <p align="center"> 
 <img src="imgs/10pendulum3.gif">
 </p>
+
+__Congrats, everything is installed and ready!__
+
+Now you have two complete simulated environments running in your VIRL server: one for testing, and one replicating what would be a production physical network. Real world scenarios might be diverse: some customers may have a physical network in production, but only a simulated one for testing. Others might also have a real network for testing. Maybe even an additional one for staging before going to production. No matter how, the same principles apply to what we will be demonstrating. In our case the sandbox includes a couple of virtual environments, like the one depicted below, and implemented with VIRL for convenience.
+
+<p align="center"> 
+<img src="imgs/11topology.png">
+</p>
+
+As you can see each environment includes a standard 3-tier architecture, with 2x IOS-XE routers in the Core, 2x NX-OS switches in Distribution, and another 2x NX-OS switches in the Access layer.
+
+You may find VIRL definitions for these two environments at the following locations in your _devbox_:
+* `/home/developer/sbx_multi_ios/cicd-3tier/virl/test/topology.virl`
+* `/home/developer/sbx_multi_ios/cicd-3tier/virl/prod/topology.virl`
+
+
+
+
+
+You may find your new infrastructure-as-code repository by pointing your browser to [http://10.10.20.20/developer/cicd-3tier](http://10.10.20.20/developer/cicd-3tier)
