@@ -158,7 +158,7 @@ Now, thanks to RESTful APIs and standardized data formats like JSON, you can mak
 
 APIs and programming languages have evolved and matured to the point of being useful and applicable to the domains of infrastructure engineers.
 
-The net-effect being that you can get powerful things done with relatively small amounts of code. And by so doing, you can automate the repetitious and/or labor intensive parts of your job freeing you up to focus your time and effort on tasks deserving of your intellect.
+The _net-effect_ being that you can get powerful things done with relatively small amounts of code. And by so doing, you can automate the repetitious and/or labor intensive parts of your job freeing you up to focus your time and effort on tasks deserving of your intellect.
 
 Network programmability provides consistent and dynamic infrastructure configuration by automating deployments and simplifying network management, bringing the following main benefits:
 * Automation
@@ -171,7 +171,7 @@ Network programmability provides consistent and dynamic infrastructure configura
 
 DevOps principles are not exclusive to software development, and some of them can definitely be applied to infrastructure configuration. NetDevOps brings the culture, technical methods, strategies and best practices of DevOps to network management.
 
-Sometimes it is referred to by different names, like _DevNetOps_, _NetOps_, or _SuperNetOps_. But in general it is related to the more generic Network Reliability Engineer (also coming from DevOps [Site Reliability Engineering](https://en.wikipedia.org/wiki/Site_Reliability_Engineering)).
+Sometimes it is referred to by different names, like _DevNetOps_, _NetOps_, or _SuperNetOps_. But in general it is related to the more generic Network Reliability Engineer (also coming from the DevOps counterpart [Site Reliability Engineering](https://en.wikipedia.org/wiki/Site_Reliability_Engineering)).
 
 ## The network challenge today
 
@@ -189,7 +189,7 @@ Without these key engineers there is a _fear_ that network changes will go _wron
 
 Furthermore, applying network-wide policies becomes a task proportionally tedious to how big the network is. For example, consider a possible Infosec recommendation to change SNMP strings every 3 months. Doing it manually in a big network might require a number of engineers performing those changes simultaneously across the network, maybe during a maintenance window by night to make sure systems can be synchronized next morning. This manual process involves quite some manual interaction, which is definitely prone to errors.
 
-This type of considerations are very similar to the ones they had in classic software development. With their monolith architectures and bi-annual software updates, they suffered from similar challenges. And then they started doing things different, with things like Agile, DevOps, CICD pipelines and automated unit testing.
+This type of considerations is very similar to the ones they had in classic software development. With their monolith architectures and bi-annual software updates, they suffered from similar challenges. And then they started doing things different, with things like Agile, DevOps, CICD pipelines and automated unit testing.
 
 Applying this same type of principles to network configuration is what we called NetDevOps, and it will provide similar benefits to the ones software developers obtained while implementing this practices in their own environment. But it will require big cultural changes, like:
 * _Embracing failure_ and learning from it for the future
@@ -202,3 +202,51 @@ Applying this same type of principles to network configuration is what we called
 <p align="center"> 
 <img src="imgs/4culture.png">
 </p>
+
+What if network engineers started working with network configurations the same way software developers work with their code?
+
+What if we could create automated pipelines for those network configurations, that worked like CICD does for software development?
+
+What if the network could be continuously monitored for health and improvement?
+
+Now __that__ would be a game changer. Not only in the way we manage our networks, but also in how we scale up, how we automate repetitive tasks, how different teams collaborate, and how we improve the reliability of our networks.
+
+Let's explore it.
+
+## Network configuration as code
+
+With the advent of Cloud computing we have now the capabilities to provision and manage _ephemeral_ data centre resources (compute and connectivity) via machine-readable definition files. These files can be treated as common code, utilizing the same version control systems and best practices we use for software development, with goals like providing automation, improving efficiency and reducing errors. This is called _Infrastructure as Code_, or IaC.
+
+We could follow the same approach with network device configurations, and this is what we call _Network as Code_. It is based on the idea of storing all network configurations in a [Version Control System](https://en.wikipedia.org/wiki/Version_control) (VCS) that manages and tracks changes in the network. This system storing all configurations for the whole network would be considered the [Single Source of Truth](https://en.wikipedia.org/wiki/Single_source_of_truth) for all-things network configuration.
+
+In this new mode of operation, network configuration changes are proposed in code _branches_, like software code developers do. These branches are _safe_ places where network developers will be able to work _safely_ on their proposed configurations, without affecting the _master_ branch, where master configurations reside. Once these configurations are ready, developers will request their branch to be _merged_ with the master configurations, and will go through an approval process to verify there are no issues when incorporating these changes.
+
+Continuing with the emulation of DevOps automation capabilities, this will lead into using CICD (Continuous Integration and Delivery) Build Servers to automatically deploy and test the proposed configurations in testing, staging and production environments. Configurations that sucessfully pass the complete tests set, will be deployed into the production environment. In case of failure during that final deployment, the system itself will automatically rollback the proposed changes, leaving the production network in the previous state just before the change.
+
+<p align="center"> 
+<img src="imgs/5cicd.png">
+</p>
+
+And considering that modern network devices support modern interfaces and APIs, let's leverage those to deploy our configurations across the network in an optimal way, instead of using the classic, slow and error-prone command-line interface.
+
+## Components
+
+Apart from a VCS we will need some additional elements to support the desired functionality:
+* [Cisco Network Services Orchestrator](https://developer.cisco.com/site/nso/): formerly Tail-f, it provides end-to-end automation to design and deliver services much faster
+* [pyATS](https://developer.cisco.com/pyats/): automation tool to perform stateful validation of network devices operational status with reusable test cases
+* [VIRL](http://virl.cisco.com/): network modelling and simulation environment
+* [Ansible](https://www.ansible.com/): simple automation
+
+## Benefits
+
+NetDevOps will deliver consistent version-controlled infrastructure configurations, deployed with parallel and automated provisioning.
+
+Our system will provide the following benefits _across the whole network_:
+
+* Track the status of network configurations at any point in time
+* Track who proposed and approved each specific configuration change
+* Provide visibility on what are the differences of configurations at any point in time vs a previous situation
+* Enable rollback to any previous moment
+* Automate the deployment of any proposed change across different environments (eg. testing, staging, production)
+* Model simulated virtual environments to test proposed changes before going to production
+* Define and run the required tests set and passing criteria, both in testing and production, before accepting a change as successful
