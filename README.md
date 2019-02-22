@@ -381,7 +381,42 @@ You may find VIRL definitions for these two environments at the following locati
 * `/home/developer/sbx_multi_ios/cicd-3tier/virl/test/topology.virl`
 * `/home/developer/sbx_multi_ios/cicd-3tier/virl/prod/topology.virl`
 
+Please make sure all your simulated routers are readily available in both prod and test. If they are not, your demonstration will fail in different stages.
 
+```
+[developer@devbox test]$virl nodes
+Here is a list of all the running nodes
+╒══════════════╤═════════════╤═════════╤═════════════╤════════════╤══════════════════════╤════════════════════╕
+│ Node         │ Type        │ State   │ Reachable   │ Protocol   │ Management Address   │ External Address   │
+╞══════════════╪═════════════╪═════════╪═════════════╪════════════╪══════════════════════╪════════════════════╡
+│ test-dist1   │ NX-OSv 9000 │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.213        │ N/A                │
+├──────────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ test-access1 │ NX-OSv 9000 │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.215        │ N/A                │
+├──────────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ test-dist2   │ NX-OSv 9000 │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.214        │ N/A                │
+├──────────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ test-core2   │ CSR1000v    │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.212        │ N/A                │
+├──────────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ test-core1   │ CSR1000v    │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.211        │ N/A                │
+╘══════════════╧═════════════╧═════════╧═════════════╧════════════╧══════════════════════╧════════════════════╛
+[developer@devbox test]$cd ../prod
+[developer@devbox prod]$virl nodes
+Here is a list of all the running nodes
+╒═════════╤═════════════╤═════════╤═════════════╤════════════╤══════════════════════╤════════════════════╕
+│ Node    │ Type        │ State   │ Reachable   │ Protocol   │ Management Address   │ External Address   │
+╞═════════╪═════════════╪═════════╪═════════════╪════════════╪══════════════════════╪════════════════════╡
+│ core2   │ CSR1000v    │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.222        │ N/A                │
+├─────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ core1   │ CSR1000v    │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.221        │ N/A                │
+├─────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ access1 │ NX-OSv 9000 │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.225        │ N/A                │
+├─────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ dist2   │ NX-OSv 9000 │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.224        │ N/A                │
+├─────────┼─────────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ dist1   │ NX-OSv 9000 │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.223        │ N/A                │
+╘═════════╧═════════════╧═════════╧═════════════╧════════════╧══════════════════════╧════════════════════╛
+[developer@devbox prod]$
+```
 
 
 
