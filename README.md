@@ -373,9 +373,9 @@ This complete process will take like 10 minutes, so time for your fix.
 <img src="imgs/10pendulum3.gif">
 </p>
 
-### VIRL verifications
-
 __Congrats, everything is installed and ready!__
+
+### VIRL verifications
 
 Now you have two complete simulated environments running in your VIRL server: one for testing, and one replicating what would be a production physical network. Real world scenarios might be diverse: some customers may have a physical network in production, but only a simulated one for testing. Others might also have a real network for testing. Maybe even an additional one for staging before going to production. No matter how, the same principles apply to what we will be demonstrating. In our case the sandbox includes a couple of virtual environments, like the one depicted below, and implemented with VIRL for convenience.
 
@@ -488,7 +488,7 @@ sh nso-4.5.3.darwin.x86_64.signed.bin
 sh nso-4.5.3.darwin.x86_64.installer.bin ~/ncs-4.5.3 --local-install
 ```
 
-You may download the required NEDs from your sandbox _devbox_ via SCP.
+You may download the required NEDs from your sandbox _devbox_ via SCP to your own workstation.
 
 ```
 scp developer@10.10.20.20:/usr/src/nso/ncs-4.5.3-cisco-ios-5.8.signed.bin .
@@ -521,7 +521,7 @@ _Don't forget to include this command in your startup shell (ie .zshrc)_
 
 Now you can test your local NSO installation.
 
-First setup the required structure and environment in your preferred directory.
+First, setup the required structure and environment in your preferred directory.
 
 ```
 ncs-setup --dest ~/ncs-run
@@ -566,9 +566,7 @@ _Congrats, your NSO local installation is complete!_
 
 The network-as-code mechanism in this demonstration leverages both Ansible and NSO, with Ansible orchestrating the execution and configuration used by NSO to deploy to the network. In order to test locally, you'll need to have a Python environment (_virtual environment_ is recommended) that meets these requirements.
 
-* [Python](https://www.python.org/downloads/) 3.6.x (3.6.5 or higher recommended). 
-Python 2.7 would likely work, but the time to move to Python 3 has arrived.
-
+* [Python](https://www.python.org/downloads/) 3.6.5 or higher
 * Ansible 2.6.3 or higher
 
 Once you install them, and with your virtual environment active, install the requirements.
@@ -580,6 +578,195 @@ pip install -r requirements.txt
 ```
 
 __All pre-requisites are now complete!__
+
+Let's now dig into setting up the local environment in your workstation.
+
+1. Clone a copy of the repository from GitLab to your local workstation. Use this command to ensure the demo credentials are embedded in the git configuration.
+
+```
+git clone http://developer:C1sco12345@10.10.20.20/developer/cicd-3tier
+cd cicd-3tier
+```
+
+2. To simplify the setup and management of the local environment, a `Makefile` is included in the repository. Simply run `make dev` to do the following:
+
+* Use NCS NetSim to start a local simulation of the network including the core, distribution, and access devices
+* Setup a local NCS project directory within the repo
+* Start NCS and import in the netsim simulation
+* Perform an initial sync-from
+* Deploy the current network-as-code configuration to NCS and the network devices, using Ansible
+
+(to see the exact commands being executed for each of these steps, just take a look at the contents of your `Makefile`)
+
+```
+make dev
+```
+
+Let's examine what is happening here, by going through the content of the `Makefile`.
+
+```
+cat Makefile
+```
+
+You will see the first line defines the different steps that are part of the `dev` directive.
+
+```
+dev: netsim nso sync-from dev-deploy
+```
+
+These steps are defined later in the same `Makefile`. You may also run them independently if you want to execute only that special step (eg. `make netsim`).
+
+__a. Start netsim__
+
+```
+netsim:
+	-ncs-netsim --dir netsim create-device cisco-ios core1
+	-ncs-netsim --dir netsim add-device cisco-ios core2
+	-ncs-netsim --dir netsim add-device cisco-nx dist1
+	-ncs-netsim --dir netsim add-device cisco-nx dist2
+	-ncs-netsim --dir netsim add-device cisco-nx access1
+	-ncs-netsim start
+```
+
+These `ncs-netsim` commands create netsim devices in the `netsim` directory, with the specified NEDs (ie. `cisco-ios` or `cisco-nx`) and a certain name (ie. `coreX`, `distX`, `accessX`). Then the last step starts them locally in your workstation. Netsim devices are a quick and easy way to test configuration changes locally, with no risk.
+
+You may check your netsim devices started correctly and their ports configuration, with:
+
+```
+ncs-netsim is-alive
+ncs-netsim list
+```
+
+You can also connect to your netsim devices CLI, and check with `show run` that nothing is configured yet. For example, to connect to `core1`:
+
+```
+ncs-netsim cli-c core1
+```
+
+__b. Start NSO__
+
+```
+nso:
+	-ncs-setup --dest . --package cisco-ios --package cisco-nx
+	-ncs
+```
+
+This `nso` directive prepares the current directory (`--dest .`) for a local NCS project, with the NEDs it will use (ie. `cisco-ios`and `cisco-nx`), and then it starts NCS.
+
+_It is important to note that NCS will automatically detect and add existing local netsim devices._
+
+You may login into NSO CLI and check the discovered devices (your netsim devices in this case) with:
+
+```
+ncs_cli -C -u admin
+
+admin connected from 127.0.0.1 using console on JGOMEZ2-M-D2KW
+admin@ncs# show devices brief
+NAME     ADDRESS    DESCRIPTION  NED ID
+------------------------------------------
+access1  127.0.0.1  -            cisco-nx
+core1    127.0.0.1  -            cisco-ios
+core2    127.0.0.1  -            cisco-ios
+dist1    127.0.0.1  -            cisco-nx
+dist2    127.0.0.1  -            cisco-nx
+admin@ncs#
+```
+
+You may also see the devices configuration stored in NSO (not configured yet). For example, for `core1`:
+
+```
+admin@ncs# show running-config devices device core1
+```
+
+__c. Synchronize netsim and NCS__
+
+```
+sync-from:
+	-curl -X POST -u admin:admin http://localhost:8080/api/running/devices/_operations/sync-from
+```
+
+This step will synchronize initial configurations _from_ netsim devices _into_ NCS. Check the configuration of your devices in NCS again, and you will see they include interfaces definitions now (eg. Loopback, Eth, FE).
+
+__d. Apply configurations__
+
+```
+dev-deploy:
+	-ansible-playbook --syntax-check -i inventory/dev.yaml site.yaml
+	-ansible-playbook -i inventory/dev.yaml site.yaml
+```
+
+This last directive uses ansible to first check the syntax ([linting](https://en.wikipedia.org/wiki/Lint_(software))), and then executes the `site.yaml` playbook on the list of devices defined in the `dev.yaml` inventory file.
+
+The inventory file (`dev.yaml`) lists the devices that will be configured by the playbook, with their hostnames, credentials (if necessary) and management IP addresses:
+
+* NSO
+* One access switch
+* Two core routers
+* Two distribution switches
+
+<p align="center"> 
+<img src="imgs/12nsoarch.png">
+</p>
+
+If you review the playbook itself (`site.yaml`) you will find it executes the following steps:
+
+1. Synchronize _old_ configurations from NSO to devices
+2. Push _new_ configurations to NSO
+3. Synchronize _new_ configurations from NSO to devices
+
+But specifically for step 2 you might be wondering _where are those new configurations?_
+
+Take a look at this extract from `site.yaml`, describing that step 2:
+
+```
+- name: Push new configurations to NSO
+  hosts: all
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Device configuration
+      nso_config:
+        url: "{{ nso.url }}"
+        username: "{{ nso.username }}"
+        password: "{{ nso.password }}"
+        data:
+          tailf-ncs:devices:
+            device:
+            - name: "{{ nso_device_name }}"
+              tailf-ncs:config:
+                "{{ config }}"
+```
+
+That _tasks_ description uses the [`nso_config` module](https://docs.ansible.com/ansible/latest/modules/nso_config_module.html), and provides the required NCS URL, username and password, as parameters defined in the inventory file mentioned before.
+
+The `data` section is the one that describes what configuration to apply, and there you may find you need to provide the _device_name_ and _config_. Device names come again from the inventory file. BUT configurations are stored in the `host_vars` directory, where ansible looks for variables as required. That directory stores individual yaml files, one per device, with the required configuration to apply to NCS devices.
+
+These configuration files in the `host_vars` directory will be important for us throughout the demo, as they store the configuration we want to apply, and therefore we will use them to apply changes in our network.
+
+After `dev_deploy` is completed you will see configurations correctly applied (and synchronized) to your netsim devices and NCS ones. You may check it with the same commands described in previous steps. For example, for `core1`:
+
+```
+ncs-netsim cli-c core1
+
+admin connected from 127.0.0.1 using console on JGOMEZ2-M-D2KW
+core1# show running-config
+```
+
+And...
+
+```
+ncs_cli -C -u admin
+
+admin connected from 127.0.0.1 using console on JGOMEZ2-M-D2KW
+admin@ncs# show running-config devices device core1
+```
+
+
+
+
+---
+
 
 
 
