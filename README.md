@@ -588,15 +588,13 @@ Let's now dig into setting up the local environment in your workstation.
     cd cicd-3tier
     ```
 
-2. To simplify the setup and management of the local environment, a `Makefile` is included in the repository. Simply run `make dev` to do the following:
+2. To simplify the setup and management of the local environment, a `Makefile` is included in the repository. Simply run `make dev` to do the following (to see the exact commands being executed for each of these steps, just take a look at the contents of your `Makefile`):
 
-* Use NCS NetSim to start a local simulation of the network including the core, distribution, and access devices
-* Setup a local NCS project directory within the repo
-* Start NCS and import in the netsim simulation
-* Perform an initial sync-from
-* Deploy the current network-as-code configuration to NCS and the network devices, using Ansible
-
-    (to see the exact commands being executed for each of these steps, just take a look at the contents of your `Makefile`)
+    * Use NCS NetSim to start a local simulation of the network including the core, distribution, and access devices
+    * Setup a local NCS project directory within the repo
+    * Start NCS and import in the netsim simulation
+    * Perform an initial sync-from
+    * Deploy the current network-as-code configuration to NCS and the network devices, using Ansible
 
     ```
     make dev
