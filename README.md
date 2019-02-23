@@ -14,6 +14,12 @@
 	* [Network configuration as code](#Networkconfigurationascode)
 	* [Components](#Components)
 	* [Benefits](#Benefits)
+* [NetDevOps demo](#NetDevOpsdemo)
+	* [Book a sandbox](#Bookasandbox)
+	* [GitLab setup](#GitLabsetup)
+	* [CICD setup](#CICDsetup)
+	* [VIRL verifications](#VIRLverifications)
+	* [Local environment setup (optional)](#Localenvironmentsetupoptional)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -284,11 +290,11 @@ Our wishlist for the desired system will provide the following benefits _across 
 * Define and run the required tests set and passing criteria, both in testing and production, before accepting a change as successful
 * Automatically rollback any proposed configuration that does not pass the tests set
 
-## NetDevOps demo
+## <a name='NetDevOpsdemo'></a>NetDevOps demo
 
 What better way of understanding the real benefits of NetDevOps than building your own setup and seeing how it works? The goal will be to create a complete environment that demonstrates all features in the previous wishlist.
 
-### Book a sandbox
+### <a name='Bookasandbox'></a>Book a sandbox
 
 The first thing you will need is a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for your demo. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO netsim, etc.
 
@@ -308,7 +314,7 @@ Spinning up the whole system will take roughly 15 mins, so please look at this s
 
 Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are now ready!
 
-### GitLab setup
+### <a name='GitLabsetup'></a>GitLab setup
 
 Open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on OSX) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
 
@@ -348,7 +354,7 @@ CONTAINER ID        IMAGE                  COMMAND                  CREATED     
 
 Please point your browser to [http://10.10.20.20](http://10.10.20.20/), the IP address of your _devbox_ (default port 80), and check that you can access the HTTP interface for your new GitLab service.
 
-### CICD setup
+### <a name='CICDsetup'></a>CICD setup
 
 Now that GitLab is ready, go back to your terminal and let's run the script to setup the complete CICD environment.
 
@@ -375,7 +381,7 @@ This complete process will take like 10 minutes, so time for your fix.
 
 __Congrats, everything is installed and ready!__
 
-### VIRL verifications
+### <a name='VIRLverifications'></a>VIRL verifications
 
 Now you have two complete simulated environments running in your VIRL server: one for testing, and one replicating what would be a production physical network. Real world scenarios might be diverse: some customers may have a physical network in production, but only a simulated one for testing. Others might also have a real network for testing. Maybe even an additional one for staging before going to production. No matter how, the same principles apply to what we will be demonstrating. In our case the sandbox includes a couple of virtual environments, like the one depicted below, and implemented with VIRL for convenience.
 
@@ -466,7 +472,7 @@ If any of the nodes stay in _UNREACHABLE_ status please try the following:
     ```
 Now that both of your VIRL environments are ready, let's setup your local environment.
 
-### Local environment setup (optional)
+### <a name='Localenvironmentsetupoptional'></a>Local environment setup (optional)
 
 To experience and demonstrate the full NetDevOps configuration pipeline, you may want to setup a local development environment where you can test proposed configuration changes before committing and pushing them to GitLab for the full test builds to occur. This is a completely optional step you might want to skip if you are not interested in testing locally.
 
