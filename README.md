@@ -20,6 +20,8 @@
 	* [CICD setup](#CICDsetup)
 	* [VIRL verifications](#VIRLverifications)
 	* [Local environment setup (optional)](#Localenvironmentsetupoptional)
+	* [Running the demo](#Runningthedemo)
+	* [Summary](#Summary-1)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -767,7 +769,7 @@ Let's now dig into setting up the local environment in your workstation.
 
     _(Note: after you complete the rest of this demo, when you don't need the local environment anymore, you can easily delete everything by running `make clean`. It will shutdown netsim devices, NSO, and delete any related remnants.)_
 
-### Running the demo
+### <a name='Runningthedemo'></a>Running the demo
 
 Our demonstration will include the following architecture and elements, to show how a completely automated CICD pipeline could be applied to a network configuration environment across a complete network, including test and production environments.
 
@@ -983,6 +985,6 @@ After 5 minutes, by the end of this process you should see the complete pipeline
 
 __CONGRATULATIONS! You have completed the NetDevOps demo!__ 
 
-### Summary
+### <a name='Summary-1'></a>Summary
 
 In this NetDevOps demo you have seen a modern approach into version-controlled automated network configuration and testing. The scenario describes how multiple network operators would be able to propose configuration changes, in the same way developers do it for code: by mean of git branches. A standard version control server provides multiple benefits, like automated pipelines, version control and tracking, rollback cababilities, etc. During the demo you have also experienced the benefits of being able to locally verify syntax for proposed changes before submitting them. Also how a simulated environment helps verifying proposed changes are correct, before applying them into the production network. Finally, the set of automated tests helps making sure proposed changes have not had unexpected results on critical business-relevant functionality. This way you have experienced end-to-end automation and testing in a scalable and error-free approach.
