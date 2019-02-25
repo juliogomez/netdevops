@@ -779,6 +779,8 @@ Our demonstration will include the following architecture and elements, to show 
 
 The flow will be as follows: our network operator will interact with GitLab to perform any configuration changes. Ansible and NSO will deploy those changes into a virtual _test_ environment (with VIRL), and run automated tests (with pyATS) to verify the expected results after the change. If everything goes well, then our VCS will run the same process in the _production_ environment to implement those changes in the real network.
 
+Integrating that environment with the local setup we built in the previous section, results in a comprehensive architecture where the local environment uses the same tools (NSO & Ansible) as the remote one. Locally it will only do the syntax checking, and once configurations are pushed to the remote GitLab, the same set of tools will also deploy and test the proposed changes, first into a _test_ environment and then into _production_.
+
 <p align="center"> 
 <img src="imgs/33cicd_arch.png">
 </p>
