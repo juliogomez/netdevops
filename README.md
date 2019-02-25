@@ -501,7 +501,7 @@ You may download the required NEDs from your sandbox _devbox_ via SCP to your ow
 ```
 $ scp developer@10.10.20.20:/usr/src/nso/ncs-4.5.3-cisco-ios-5.8.signed.bin .
 $ scp developer@10.10.20.20:/usr/src/nso/ncs-4.5-cisco-nx-4.5.10.signed.bin .
-$  scp developer@10.10.20.20:/usr/src/nso/ncs-4.5-cisco-iosxr-6.2.10.signed.bin .
+$ scp developer@10.10.20.20:/usr/src/nso/ncs-4.5-cisco-iosxr-6.2.10.signed.bin .
 ```
 
 Install those NEDs, by running the following two commands for each downloaded binary...
@@ -925,7 +925,7 @@ Clicking on each one of these stages will show you the specific steps followed i
 <img src="imgs/24gitlab_pipeline_validate.png">
 </p>
 
-    This stage starts a container running Ansible and do the syntax checking of proposed configurations, including changes, in all 3 environments: _dev_ (local), _test_ and _prod_.
+This stage starts a container running Ansible and do the syntax checking of proposed configurations, including changes, in all 3 environments: _dev_ (local), _test_ and _prod_.
 
 2. _deploy_to_test_
 
@@ -933,7 +933,7 @@ Clicking on each one of these stages will show you the specific steps followed i
 <img src="imgs/25gitlab_pipeline_deploy.png">
 </p>
 
-    Second stage starts a container running Ansible to sync existing configs from NSO to devices, then apply configuration changes to NSO, and finally sync again configs from NSO to devices.
+Second stage starts a container running Ansible to sync existing configs from NSO to devices, then apply configuration changes to NSO, and finally sync again configs from NSO to devices.
 
 3. _verify_deploy_to_test_
 
@@ -941,7 +941,7 @@ Clicking on each one of these stages will show you the specific steps followed i
 <img src="imgs/26gitlab_pipeline_test.png">
 </p>
 
-    The final stage starts a container running a pyATS image and run automated tests based on the content of `tests/validation_tasks.robot` and `tests/test_testbed.yml`. The defined set of tests includes not only reachability, but also number of expected OSPF neighbors and interfaces in each network device after the applied changes. 
+The final stage starts a container running a pyATS image and run automated tests based on the content of `tests/validation_tasks.robot` and `tests/test_testbed.yml`. The defined set of tests includes not only reachability, but also number of expected OSPF neighbors and interfaces in each network device after the applied changes. 
 
 The whole process will take like 5 minutes, until you can see the 3 stages completed successfully in the _test_ environment.
 
