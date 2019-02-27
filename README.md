@@ -656,7 +656,7 @@ Let's now dig into setting up the local environment in your workstation.
 
     This `nso` directive prepares the current directory (`--dest .`) for a local NCS project, with the NEDs it will use (ie. `cisco-ios`and `cisco-nx`), and then it starts NCS.
 
-    _It is important to note that NCS will automatically detect and add existing local netsim devices._
+    _It is important to note that _ncs-setup_ will automatically detect and add existing local netsim devices to NSO, with some initial configuration required to communicate with them._
 
     You may login into NSO CLI and check the discovered devices (your netsim devices in this case) with:
 
