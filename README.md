@@ -325,14 +325,14 @@ $ ssh developer@10.10.20.20
 Once in, clone the repository that includes all required files to build the setup into your _devbox_.
 
 ```
-[developer@devbox prod]$git clone --recurse-submodules https://github.com/DevNetSandbox/sbx_multi_ios.git
+[developer@devbox ~]$git clone --recurse-submodules https://github.com/DevNetSandbox/sbx_multi_ios.git
 ```
 
 With that, your sandbox _devbox_ includes now all required info to start building the environment.
 
 ```
-[developer@devbox prod]$cd sbx_multi_ios/gitlab
-[developer@devbox prod]$./setup.sh
+[developer@devbox ~]$cd sbx_multi_ios/gitlab
+[developer@devbox gitlab]$./setup.sh
 ```
 
 `setup.sh` will start and configure your Version Control Server, a GitLab instance inside a Docker container running in your _devbox_. 
@@ -346,7 +346,7 @@ The process will take like 5 minutes, so check this out in the meanwhile.
 Once your terminal shows the process is finished, you may check with `docker ps` that your GitLab containers are running, and how they offering their service in port 80.
 
 ```
-[developer@devbox ~]$docker ps
+[developer@devbox gitlab]$docker ps
 CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS                PORTS                                                                                       NAMES
 5cd18a397811        gitlab/gitlab-ce       "/assets/wrapper"        2 days ago          Up 2 days (healthy)   0.0.0.0:80->80/tcp, 0.0.0.0:4567->4567/tcp, 0.0.0.0:32769->22/tcp, 0.0.0.0:32768->443/tcp   gitlab_gitlab_1
 182c5937b931        gitlab/gitlab-runner   "/usr/bin/dumb-init …"   2 days ago          Up 2 days
@@ -359,8 +359,8 @@ Please point your browser to [http://10.10.20.20](http://10.10.20.20/), the IP a
 Now that GitLab is ready, go back to your terminal and let's run the script to setup the complete CICD environment.
 
 ```
-[developer@devbox prod]$cd ../cicd-3tier
-[developer@devbox prod]$./setup.sh
+[developer@devbox gitlab]$cd ../cicd-3tier
+[developer@devbox cicd-3tier]$./setup.sh
 ```
 
 In this case `setup.sh` will perform the following actions:
@@ -438,15 +438,15 @@ Here is a list of all the running nodes
 1. Go into the environment directory (prod or test) and restart the node.
 
     ```
-    [developer@devbox prod]$cd virl/test
-    [developer@devbox prod]$virl stop test-dist2
-    [developer@devbox prod]$virl start test-dist2
+    [developer@devbox cicd-3tier]$cd virl/test
+    [developer@devbox test]$virl stop test-dist2
+    [developer@devbox test]$virl start test-dist2
     ```
 
 2. Connect into that specific node (with `virl ssh` or `virl console`) and reboot it (password is `cisco`).
 
     ```
-    [developer@devbox prod]$virl ssh core1
+    [developer@devbox test]$virl ssh core1
     Attemping ssh connectionto core1 at 172.16.30.221
     Warning: Permanently added '172.16.30.221' (RSA) to the list of known hosts.
     cisco@172.16.30.221's password:
@@ -458,18 +458,16 @@ Here is a list of all the running nodes
 3. If it still refuses to cooperate, stop the whole environment...
 
     ```
-    [developer@devbox cicd-3tier]$pwd
-    /home/developer/sbx_multi_ios/cicd-3tier
+    [developer@devbox test]$cd /home/developer/sbx_multi_ios/cicd-3tier
     [developer@devbox cicd-3tier]$./cleanup.sh
     ```
 
     ... and then restart it.
 
     ```
-    [developer@devbox cicd-3tier]$pwd
-    /home/developer/sbx_multi_ios/cicd-3tier
     [developer@devbox cicd-3tier]$./setup.sh
     ```
+
 Now that both of your VIRL environments are ready, let's setup your local environment.
 
 ### <a name='Localenvironmentsetupoptional'></a>Local environment setup (optional)
@@ -656,7 +654,7 @@ Let's now dig into setting up the local environment in your workstation.
 
     This `nso` directive prepares the current directory (`--dest .`) for a local NCS project, with the NEDs it will use (ie. `cisco-ios`and `cisco-nx`), and then it starts NCS.
 
-    _It is important to note that _ncs-setup_ will automatically detect and add existing local netsim devices to NSO, with some initial configuration required to communicate with them._
+    _It is important to note that NCS will automatically detect and add existing local netsim devices._
 
     You may login into NSO CLI and check the discovered devices (your netsim devices in this case) with:
 
