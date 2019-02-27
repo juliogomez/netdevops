@@ -12,8 +12,6 @@
 * [NetDevOps](#NetDevOps)
 	* [The challenge of network configuration today](#Thechallengeofnetworkconfigurationtoday)
 	* [Network configuration as code](#Networkconfigurationascode)
-	* [Components](#Components)
-	* [Benefits](#Benefits)
 * [Demo - Network Configuration with NetDevOps](#Demo-NetworkConfigurationwithNetDevOps)
 	* [Book a sandbox](#Bookasandbox)
 	* [GitLab setup](#GitLabsetup)
@@ -33,7 +31,7 @@
 
 ## <a name='NetworkProgrammability'></a>Network Programmability
 
-Do you often ask yourself why we keep configuring our network devices in the same way we have been doing it for the last 30 years? Isn't it strange that we still have to log into each individual box and use command-line instructions to perform any changes? Do you wonder if there might be a more optimal way of configuring your infrastructure, apart from CLI? Does this way of working make you feel like any _simple_ change in your network is _complex_ to implement?
+Do you often ask yourself why we keep configuring our network devices in the same way we have been doing it for the last 30 years? Isn't it strange that we still have to log into each individual box and use command-line instructions to perform any changes? Do you wonder if there might be a more optimal way of configuring your infrastructure, instead of CLI? Does this way of working make you feel like any _simple_ change in your network is _complex_ to implement?
 
 __You are not alone.__
 
@@ -72,7 +70,7 @@ So while Elon Musk finishes his [BMI](https://waitbutwhy.com/2017/04/neuralink.h
 
 ### <a name='WhatisProgrammability'></a>What is Programmability
 
-Computers are _great_ at bulk-work, but if you want your computer to talk to your infrastructure and do something, you will need a machine-to-machine interface or __API__ (Application Programming Interface): an interface designed for software pieces to interact with each other.
+Computers are _great_ at bulk-work, but if you want your computer to talk to your infrastructure and do something, you will need a machine-to-machine interface or __API__ ([Application Programming Interface](https://en.wikipedia.org/wiki/Application_programming_interface)): an interface designed for software pieces to interact with each other.
 
 _Network Programmability_ uses a set of software tools to deploy, manage and troubleshoot network devices and controllers _via APIs_, gathering data and driving configurations to enhance and secure application delivery. This software can on-box or off-box, and work on-demand or event-driven.
 
@@ -118,7 +116,7 @@ for switch in my_network:
             interface.set_description("Interface disabled per Policy")
 ```
 
-This is essentially the process that you, as a human, would go through to complete the same task. By taking the time to codify it (write it down in a machine interpretable language), you can now ask the computer to do the task whenever you need it done. You, the human, are providing the intelligence (what needs to be done and how it should be done), while letting the computer do the boring and repetitious work (which is what it does best). Win-Win.
+This is essentially the process that you, as a human, would go through to complete the same task. By taking the time to codify it (write it down in a machine interpretable language), you can now ask the computer to do the task whenever you need it done. You, the human, are providing the intelligence (what needs to be done and how it should be done), while letting the computer do the boring and repetitious work (which is what it does best).
 
 <p align="center"> 
 <img src="imgs/6not.jpg">
@@ -206,7 +204,7 @@ Network programmability provides consistent and dynamic infrastructure configura
 
 DevOps principles are not exclusive to software development, and some of them can definitely be applied to infrastructure configuration. NetDevOps brings the culture, technical methods, strategies and best practices of DevOps to network management.
 
-Sometimes it is referred to by different names, like _DevNetOps_, _NetOps_, or _SuperNetOps_. But in general it is related to the more generic Network Reliability Engineer (also coming from the DevOps counterpart [Site Reliability Engineering](https://en.wikipedia.org/wiki/Site_Reliability_Engineering)).
+Sometimes it is referred to by different names, like _DevNetOps_, _NetOps_, or _SuperNetOps_. But in general it is related to the more generic term _Network Reliability Engineer_ (also coming from the DevOps counterpart [Site Reliability Engineering](https://en.wikipedia.org/wiki/Site_Reliability_Engineering)).
 
 ### <a name='Thechallengeofnetworkconfigurationtoday'></a>The challenge of network configuration today
 
@@ -268,19 +266,14 @@ Continuing with the emulation of DevOps automation capabilities, this will lead 
 
 And considering that modern network devices support modern interfaces and APIs, let's leverage those to deploy our configurations across the network in an optimal way, instead of using the classic, slow and error-prone command-line interface.
 
-### <a name='Components'></a>Components
+Following this strategy, we are now ready to start building a completely automated environment to deploy and test configuration changes across the network.
 
-Apart from a VCS we will need some additional elements to support the desired functionality:
-* [Cisco Network Services Orchestrator](https://developer.cisco.com/site/nso/): formerly Tail-f, it provides end-to-end automation to design and deliver services much faster
-* [pyATS](https://developer.cisco.com/pyats/): automation tool to perform stateful validation of network devices operational status with reusable test cases
-* [VIRL](http://virl.cisco.com/): network modelling and simulation environment
-* [Ansible](https://www.ansible.com/): simple automation
 
-### <a name='Benefits'></a>Benefits
+## <a name='Demo-NetworkConfigurationwithNetDevOps'></a>Demo - Network Configuration with NetDevOps
 
-NetDevOps will deliver consistent version-controlled infrastructure configurations, deployed with parallel and automated provisioning.
+NetDevOps will deliver consistent version-controlled infrastructure configurations, deployed with parallel and automated provisioning. 
 
-Our wishlist for the desired system will provide the following benefits _across the whole network_:
+And what better way of understanding the real benefits of NetDevOps than building your own setup and seeing how it works? The goal will be to create a complete environment that demonstrates the following benefits _across the whole network_:
 
 * Track the status of network configurations at any point in time
 * Track who proposed and approved each specific configuration change
@@ -292,9 +285,14 @@ Our wishlist for the desired system will provide the following benefits _across 
 * Define and run the required tests set and passing criteria, both in testing and production, before accepting a change as successful
 * Automatically rollback any proposed configuration that does not pass the tests set
 
-## <a name='Demo-NetworkConfigurationwithNetDevOps'></a>Demo - Network Configuration with NetDevOps
+These are the building blocks we will use to provide such a comprehensive demonstration:
 
-What better way of understanding the real benefits of NetDevOps than building your own setup and seeing how it works? The goal will be to create a complete environment that demonstrates all features in the previous wishlist.
+* [GitLab](https://about.gitlab.com/): Version Control Server (VCS) with integration capabilities to provide automated pipelines 
+* [Cisco Network Services Orchestrator](https://developer.cisco.com/site/nso/): formerly Tail-f, it provides end-to-end automation to design and deliver services much faster
+* [pyATS](https://developer.cisco.com/pyats/): automation tool to perform stateful validation of network devices operational status with reusable test cases
+* [VIRL](http://virl.cisco.com/): network modelling and simulation environment
+* [Ansible](https://www.ansible.com/): simple automation
+
 
 ### <a name='Bookasandbox'></a>Book a sandbox
 
@@ -381,7 +379,7 @@ This complete process will take like 10 minutes, so time for your fix.
 <img src="imgs/10pendulum3.gif">
 </p>
 
-__Congrats, everything is installed and ready!__
+__Congrats, everything is now installed and ready!__
 
 ### <a name='VIRLverifications'></a>VIRL verifications
 
