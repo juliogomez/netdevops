@@ -250,15 +250,15 @@ YANG is based on standards from IETF, OpenConfig and others. It is supported by 
 <img src="imgs/40yangdatamodel.png">
 </p>
 
-YANG data models are publicly available at: https://github.com/YangModels/yang. As you browse through the hundreds of them, you might soon realize that finding the model you are looking for may be quite _time-consuming_. To make your life easier please take a look at [Cisco YANG Explorer](https://github.com/CiscoDevNet/yang-explorer), an open-source YANG browser and RPC builder application to experiment with YANG data models.
+YANG data models are publicly available [here](https://github.com/YangModels/yang). As you browse through the hundreds of them, you might soon realize that finding the model you are looking for may be quite _time-consuming_. To make your life easier please take a look at [Cisco YANG Explorer](https://github.com/CiscoDevNet/yang-explorer), an open-source YANG browser and RPC builder application to experiment with YANG data models.
 
 <p align="center"> 
 <img src="imgs/41yangexplorer.png">
 </p>
 
-Once you decide to include YANG data models in your code, you will need to use libraries for your preferred programming language. If your choice is Python, as it is for many network engineers, you should definitely checkout [pyang](https://github.com/mbj4668/pyang). This Python library can be used to validate YANG modules for correctness, to transform YANG modules into other formats, and even to generate code from the modules.
+Once you decide to use YANG data models in your code, you will need to use libraries for your preferred programming language. If your choice is Python, as it is for many network engineers, you should definitely checkout [pyang](https://github.com/mbj4668/pyang). This Python library can be used to validate YANG modules for correctness, to transform YANG modules into other formats, and even to generate code from the modules.
 
-Finally you might also be interested in taking a look at the capabilities offered by [YANG Catalog](https://yangcatalog.org/). It is a registry that allows users to find models relevant to their use cases from the large and growing number of YANG modules being published. You may read-access it via NETCONF or REST, to validate YANG modules, search the catalog, view module's details, browse modules and much more.
+Finally you might also be interested in taking a look at the capabilities offered by the [YANG Catalog](https://yangcatalog.org/), a registry that allows users to find models relevant to their use cases from the large and growing number of YANG modules being published. You may read-access it via NETCONF or REST, to validate YANG modules, search the catalog, view module's details, browse modules and much more.
 
 #### <a name='JSONandXML'></a>JSON and XML
 
@@ -290,13 +290,13 @@ Considering that we have defined a common data model, let's also agree on a comm
 }
 ```
 
-This is an example of data in _structured format_, and is critical for our systems to easily process information exchanged between machines. 
+This is an example of data in _structured format_, and it is critical for our systems to easily process information exchanged between machines. 
 
 There are two common formats for data interchange being used these days: JSON and XML.
 
 ##### JSON
 
-[JSON](http://json.org/) (JavaScript Object Notation) is more modern and commonly used by new APIs. With its simple _key:value_ approach it is very lightweight, easy for systems to generate and parse, but also easy for humans to read. 
+[JSON](http://json.org/) (JavaScript Object Notation) is more _modern_ and commonly used by new APIs. With its simple _key:value_ approach, it is very lightweight, easy for systems to generate and parse, but also easy for humans to read. 
 
 ```
 {
@@ -309,7 +309,7 @@ There are two common formats for data interchange being used these days: JSON an
 }
 ```
 
-> No, you don't need to know any JavaScript to work JSON. They just happen to share the syntax, but no need at all to be a JavaScript developer when using JSON as the data transfer format between systems.
+> No, you don't need to know any JavaScript to work with JSON. They just happen to share the syntax, but no need at all to be a JavaScript developer when using JSON as the data transfer format between systems.
 
 Python users can easily work with JSON, using its own standard library:
 
@@ -317,13 +317,13 @@ Python users can easily work with JSON, using its own standard library:
 import json
 ```
 
-This library allows you to easily work with JSON as native Python objects. Very often you will import JSON into Python dictionaries, with an array of _key:value_ pairs that enables you to search for the field you require by just running a standard search for a certain _key_.
+This library allows you to easily work with JSON as native Python objects. Very often you will import JSON data into Python dictionaries, with an array of _key:value_ pairs that enables you to search for the field you require by just running a standard search for a certain _key_.
 
 Later we will discuss communication protocols, but for your reference please make a note that both __REST APIs__ and __RESTCONF__ support JSON and XML.
 
 ##### XML
 
-[XML]() (eXtensible Markup Language) is a bit older, but still used by a lot of APIs. It is used for data transfer, but sometimes also to store info. It is language-independent and designed to be self-descriptive, although, compared to JSON, _tagging_ makes it a little bit more difficult to read for humans.
+[XML]() (eXtensible Markup Language) is a bit older, but still used by a lot of APIs. It is used for data transfer, but sometimes also to store info. It is language-independent and designed to be self-descriptive, although, compared to JSON, _tagging_ makes it a little bit more _difficult_ to read for humans.
 
 ```
 {
@@ -376,16 +376,16 @@ from ncclient import manager
 import xml
 import xml.dom.minidom
 
-with manager.connect(host=RW_HOST, port=PORT, username=USER, password=PASS, hostkey_verify=False, device_params={'name': 'default'}, allow_agent=False, look_for_keys=False) as m:
-    # XML filter to issue with the get operation
+with manager.connect(host=RW_HOST, port=PORT, username=USER, password=PASS, hostkey_verify=False, device_params={'name': 'default'}, allow_agent=False, look_for_keys=False) as m:
+    # XML filter to issue with the get operation
     # IOS-XE 16.6.2+        YANG model called "ietf-interfaces"
     interface_filter = '''
-        <filter xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-            <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
-                    <interface>
-                        <name>GigabitEthernet1</name>
+        <filter xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+                    <interface>
+                        <name>GigabitEthernet1</name>
                     </interface>
-            </interfaces-state>
+            </interfaces-state>
         </filter>
     '''
     result = m.get(interface_filter)
@@ -439,13 +439,13 @@ Being based on REST, RESTCONF supports the following methods:
 Let's take a look at how to use it. 
 
 ```
-url = 'https://RO_HOST/restconf/data/interfaces-state/interface=GigabitEthernet1'
+url = 'https://RO_HOST/restconf/data/interfaces-state/interface=GigabitEthernet1'
 
 header = {'Content-type': 'application/yang-data+json',
-          'accept': 'application/yang-data+json'}
+          'accept': 'application/yang-data+json'}
 
-response = requests.get(url, headers=header, verify=False, auth=ROUTER_AUTH)
-interface_info = response.json()
+response = requests.get(url, headers=header, verify=False, auth=ROUTER_AUTH)
+interface_info = response.json()
 oper_data = interface_info['ietf-interfaces:interface']
 ```
 
@@ -481,9 +481,9 @@ Network devices information is modelled in YANG to make it consistent, independe
 
 #### <a name='RESTAPIs'></a>REST APIs
 
-By now you might be wondering what is REST? It stands for Representational State Transfer, and [it was born](https://www.ics.uci.edu/~fielding/pubs/dissertation/fielding_dissertation.pdf) from the need to create a scalable Internet, where software systems could interact with each other, in an uniform and efficient approach.
+By now you might be wondering _what is REST?_ It stands for Representational State Transfer, and [it was born](https://www.ics.uci.edu/~fielding/pubs/dissertation/fielding_dissertation.pdf) from the need to create a scalable Internet, where software systems could interact with each other, in an uniform and efficient approach.
 
-It is a simple-to-use communications architecture style (not a standard) for networked applications, based on the client-server model. It expects all information required for the transaction to be provided at the time of the request. Client could be an application or a REST client, like Postman for development and testing. Server could be a system, network device, or network management application.
+It is a simple-to-use communications architecture style (not a standard) for networked applications, based on the client-server model. It expects all information required for the transaction to be provided at the time of the request. Client could be an application or a REST client, like [Postman](https://www.getpostman.com/) for development and testing. Server could be a system, network device, or network management application.
 
 REST is stateless, so the server will close the connection after the specified exchange is completed, and no state will be maintained on the server side. This way it makes transactions very efficient.
 
@@ -509,14 +509,14 @@ It includes five components that may be required in each Request:
 Let's take a look at the format in this example:
 
 ```
-    url = DNAC_IP + '/api/v1/host?hostIp=' + client_ip
-    header = {'content-type': 'application/json', 'Cookie': dnac_jwt_token} 
-    response = requests.get(url, headers=header, verify=False)
+    url = DNAC_IP + '/api/v1/host?hostIp=' + client_ip
+    header = {'content-type': 'application/json', 'Cookie': dnac_jwt_token} 
+    response = requests.get(url, headers=header, verify=False)
     client_json = response.json()
     client_info = client_json['response'][0]
 ```
 
-First we need to define the URL with the IP address of the end system (ie. DNAC_IP) and the route to the required resource (ie. /api/v1/host?hostIp= combined with the IP of an end system). Then we specify the required headers, defining what is the format we are sending (JSON) and the required auth cookie. With that info we open the connection, make the request and store the response to parse it.
+First we need to define the URL with the IP address of the end system (ie. `DNAC_IP`) and the route to the required resource (ie. `/api/v1/host?hostIp=` combined with the IP of an end system). Then we specify the required headers, defining what is the format we are sending (JSON) and the required auth cookie. With that info we open the connection, make the request and store the response to parse it.
 
 As long as these are HTTP requests we are sending, server will answer with a HTTP status code, headers and a response body.
 
@@ -566,7 +566,7 @@ APIs are very often documented in the platform itself, offering you the option t
 It is also common for them to offer you the option to automatically generate sample code in different programming languages, so you can directly use it in your developments.
 
 <p align="center"> 
-<img src="imgs/46dnacapi2.png">
+<img src="imgs/47dnacapi2.png">
 </p>
 
 #### <a name='Python'></a>Python
