@@ -205,11 +205,15 @@ Now, thanks to RESTful APIs and standardized data formats like JSON, you can mak
 
 Let's do a quick review of the different foundational coding building blocks that network engineers will need to understand and use when entering the programmability world.
 
+<p align="center"> 
+<img src="https://media.giphy.com/media/T7Cp4PlpEUshi/giphy.gif">
+</p>
+
 #### <a name='YANGdatamodels'></a>YANG data models
 
 Data models are conceptual representations of data, that define what specific information needs to be included and the format to represent it. A data model can be accessed by multiple source applications, via different communication protocols.
 
-[YANG](https://en.wikipedia.org/wiki/YANG) (_Yet Another Next Generation_) is a data modelling language defined originally in [RFC 6020](https://tools.ietf.org/html/rfc6020) and updated later in [RFC 7950](https://tools.ietf.org/html/rfc7950). It uses XML to describe the data model for _network devices_, and is composed of modules and sub-modules that represent individual YANG files. YANG modules are _self-documenting_ hierarchical tree structures for organizing data.
+[YANG](https://en.wikipedia.org/wiki/YANG) (_Yet Another Next Generation_) is a data modelling language defined originally in [RFC 6020](https://tools.ietf.org/html/rfc6020) and updated later in [RFC 7950](https://tools.ietf.org/html/rfc7950). It uses XML to describe the data model for _network devices_, and it is composed of modules and sub-modules that represent individual YANG files. YANG modules are _self-documenting_ hierarchical tree structures for organizing data.
 
 ```
 +--rw interfaces
