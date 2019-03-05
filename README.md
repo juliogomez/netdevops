@@ -8,6 +8,16 @@
 	* [What is Programmability](#WhatisProgrammability)
 	* [Why Coding](#WhyCoding)
 	* [What has changed?](#Whathaschanged)
+		* [Modern Programming Languages & Tools](#ModernProgrammingLanguagesTools)
+		* [Online Communities](#OnlineCommunities)
+		* [API Maturity](#APIMaturity)
+	* [Coding essentials](#Codingessentials)
+		* [YANG data models](#YANGdatamodels)
+		* [JSON and XML](#JSONandXML)
+		* [NETCONF and RESTCONF](#NETCONFandRESTCONF)
+		* [REST APIs](#RESTAPIs)
+		* [API Documentation](#APIDocumentation)
+		* [Python](#Python)
 	* [Summary](#Summary)
 * [NetDevOps](#NetDevOps)
 	* [The challenge of network configuration today](#Thechallengeofnetworkconfigurationtoday)
@@ -72,6 +82,8 @@ So while Elon Musk finishes his [BMI](https://waitbutwhy.com/2017/04/neuralink.h
 
 Computers are _great_ at bulk-work, but if you want your computer to talk to your infrastructure and do something, you will need a machine-to-machine interface or __API__ ([Application Programming Interface](https://en.wikipedia.org/wiki/Application_programming_interface)): an interface designed for software pieces to interact with each other.
 
+> _By 2020, only 40% of network operations teams will use the command line interface (CLI) as their primary interface, which is a decrease from 75% in 2Q18._ (Gartner, 2018 Strategic Roadmap for Networking)
+
 _Network Programmability_ uses a set of software tools to deploy, manage and troubleshoot network devices and controllers _via APIs_, gathering data and driving configurations to enhance and secure application delivery. This software can on-box or off-box, and work on-demand or event-driven.
 
 We can ask an API to:
@@ -89,9 +101,11 @@ For example, you might use APIs to make simple requests like...
 
 ... and that way complete a powerful task like: _"Disable all ports that have been inactive for 30 days."_
 
-Sure, you could do this manually, but wouldn't it be better to codify the process (write it once) and then let your computer run this task whenever you need it done? 
+Sure, you could do this manually, but wouldn't it be better to codify the process (write it once) and then let your computer run this task whenever you need it done?
 
-If you need information from your infrastructure, ask for it. Using a machine-to-machine API means your request will complete, your data retrieved, or you will receive notification to the contrary. All done in a way that enables you to automate the interaction. APIs make it easy to send requests to your infrastructure, but what makes it easy to codify the processes?
+Besides this, information included in API responses should be formed by data structures that can be programmatically _readable_ by machines (and ideally also by humans). Classic CLI responses are human-readable text, but very difficult to be interpreted by a machine, that needs to be parsed with great difficulty before being able to leverage the included information.
+
+If you need information from your infrastructure, ask for it. Using a machine-to-machine API means your request will complete, your data retrieved in a programmatic data structure, or you will receive notification to the contrary. All done in a way that enables you to automate the interaction. APIs make it easy to send requests to your infrastructure, but what makes it easy to codify the processes?
 
 ### <a name='WhyCoding'></a>Why Coding
 
@@ -187,6 +201,391 @@ Gone are the days where it took an expert programmer to work with a product's AP
 
 Now, thanks to RESTful APIs and standardized data formats like JSON, you can make requests of your infrastructure with the same ease these modern programming languages provide.
 
+### <a name='Codingessentials'></a>Coding essentials
+
+Let's do a quick review of the different foundational coding building blocks that network engineers will need to understand and use when entering the programmability world.
+
+#### <a name='YANGdatamodels'></a>YANG data models
+
+Data models are conceptual representations of data, that define what specific information needs to be included and the format to represent it. A data model can be accessed by multiple source applications, via different communication protocols.
+
+[YANG](https://en.wikipedia.org/wiki/YANG) (_Yet Another Next Generation_) is a data modelling language defined originally in [RFC 6020](https://tools.ietf.org/html/rfc6020) and updated later in [RFC 7950](https://tools.ietf.org/html/rfc7950). It uses XML to describe the data model for _network devices_, and is composed of modules and sub-modules that represent individual YANG files. YANG modules are _self-documenting_ hierarchical tree structures for organizing data.
+
+```
++--rw interfaces
+      |  +--rw interface* [name]
+      |     +--rw name                        string
+      |     +--rw description?                string
+      |     +--rw type                        identityref
+      |     +--rw enabled?                    boolean
+      |     +--rw link-up-down-trap-enable?   enumeration
+      +--ro interfaces-state
+         +--ro interface* [name]
+            +--ro name               string
+            +--ro type               identityref
+            +--ro admin-status       enumeration
+            +--ro oper-status        enumeration
+            +--ro last-change?       yang:date-and-time
+            +--ro if-index           int32
+            +--ro phys-address?      yang:phys-address
+            +--ro higher-layer-if*   interface-state-ref
+            +--ro lower-layer-if*    interface-state-ref
+            +--ro speed?             yang:gauge64
+            +--ro statistics
+               +--ro discontinuity-time    yang:date-and-time
+               +--ro in-octets?            yang:counter64
+               +--ro in-unicast-pkts?      yang:counter64
+               +--ro in-broadcast-pkts?    yang:counter64
+               +--ro in-multicast-pkts?    yang:counter64
+               +--ro in-discards?          yang:counter32
+               +--ro in-errors?            yang:counter32
+               +--ro in-unknown-protos?    yang:counter32
+```
+
+As you can see in the previous example, YANG modules are used to model _configuration_ and _state_ data. Configuration data can be modified (_rw_), while State data can only be read (_ro_).
+
+YANG is based on standards from IETF, OpenConfig and others. It is supported by most networking vendors in their own devices, and allows them to augment or deviate models, in order to include vendor / platform specific information.
+
+<p align="center"> 
+<img src="imgs/40yangdatamodel.png">
+</p>
+
+YANG data models are publicly available at: https://github.com/YangModels/yang. As you browse through the hundreds of them, you might soon realize that finding the model you are looking for may be quite _time-consuming_. To make your life easier please take a look at [Cisco YANG Explorer](https://github.com/CiscoDevNet/yang-explorer), an open-source YANG browser and RPC builder application to experiment with YANG data models.
+
+<p align="center"> 
+<img src="imgs/41yangexplorer.png">
+</p>
+
+Once you decide to include YANG data models in your code, you will need to use libraries for your preferred programming language. If your choice is Python, as it is for many network engineers, you should definitely checkout [pyang](https://github.com/mbj4668/pyang). This Python library can be used to validate YANG modules for correctness, to transform YANG modules into other formats, and even to generate code from the modules.
+
+Finally you might also be interested in taking a look at the capabilities offered by [YANG Catalog](https://yangcatalog.org/). It is a registry that allows users to find models relevant to their use cases from the large and growing number of YANG modules being published. You may read-access it via NETCONF or REST, to validate YANG modules, search the catalog, view module's details, browse modules and much more.
+
+#### <a name='JSONandXML'></a>JSON and XML
+
+Now that we know how to model data and store it locally, we need to start considering how to communicate it machine-to-machine. It is critical that our system knows how to send requests to network devices, and what format to expect when receiving responses. 
+
+The classic approach with CLI provides us with structured data:
+
+```
+GigabitEthernet1 is up, line protocol is up
+Description: TO_vSWITCH0
+  Internet address is 172.16.11.11/24
+  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,
+      reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Full Duplex, 1Gbps, media type is RJ45
+```
+
+This type of text output is great for human-machine interaction, because our brain easily understands the information reading through it. However this is not a good format for machine-to-machine communication, because the system receiving this text would need to be programmed to _parse_ through it, in order to extract the values for the different included fields. Yes, we could program the system to do it, using [regular expressions](https://en.wikipedia.org/wiki/Regular_expression). But there would be important drawbacks: not only implementing how to extract the relevant keys and values, but also how to do it for different platforms and vendors. Please consider that each OS will provide a slightly / largely different text output to show the same kind of info. So we would need to parse things differently for each case... definitely not the best approach.
+
+Considering that we have defined a common data model, let's also agree on a common format to exchange that data. Instead of the previous text we would like to receive something like the following:
+
+```
+{
+    "description": " TO_vSWITCH0",
+    "ipv4Address": "172.16.11.11",
+    "ipv4Mask": "255.255.255.0",
+    "portName": "GigabitEthernet1",
+}
+```
+
+This is an example of data in _structured format_, and is critical for our systems to easily process information exchanged between machines. 
+
+There are two common formats for data interchange being used these days: JSON and XML.
+
+##### JSON
+
+[JSON](http://json.org/) (JavaScript Object Notation) is more modern and commonly used by new APIs. With its simple _key:value_ approach it is very lightweight, easy for systems to generate and parse, but also easy for humans to read. 
+
+```
+{
+    "className": "GRETunnelInterface", 
+    "status": "up",
+    "interfaceType": "Virtual"
+    "pid": "C9300-48U",
+    "serialNo": "FCW2123L0N3",
+    "portName": "Tunnel201"
+}
+```
+
+> No, you don't need to know any JavaScript to work JSON. They just happen to share the syntax, but no need at all to be a JavaScript developer when using JSON as the data transfer format between systems.
+
+Python users can easily work with JSON, using its own standard library:
+
+```
+import json
+```
+
+This library allows you to easily work with JSON as native Python objects. Very often you will import JSON into Python dictionaries, with an array of _key:value_ pairs that enables you to search for the field you require by just running a standard search for a certain _key_.
+
+Later we will discuss communication protocols, but for your reference please make a note that both __REST APIs__ and __RESTCONF__ support JSON and XML.
+
+##### XML
+
+[XML]() (eXtensible Markup Language) is a bit older, but still used by a lot of APIs. It is used for data transfer, but sometimes also to store info. It is language-independent and designed to be self-descriptive, although, compared to JSON, _tagging_ makes it a little bit more difficult to read for humans.
+
+```
+{
+    <interface>
+        <name>GigabitEthernet1</name>
+        <description>TO_vSWITCH0</description>
+        <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:
+                  iana-if-type">ianaift:ethernetCsmacd</type>
+            <enabled>true</enabled>
+            <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+                <address>
+                    <ip>172.16.11.11</ip>
+                    <netmask>255.255.255.0</netmask>
+                </address>
+            </ipv4>
+    </interface>
+}
+```
+
+> XML is _not_ the same as HTML: XML carries data, while HTML represents it.
+
+Python users also benefit from multiple available resources to work with XML, like [ElementTree](https://docs.python.org/2/library/xml.etree.elementtree.html) objects, [Document Object Model (DOM)](https://docs.python.org/3/library/xml.dom.html), [Minimal DOM Implementation (minidom)](https://docs.python.org/2/library/xml.dom.minidom.html), and [xmltodict](hhttps://github.com/martinblech/xmltodict).
+
+You may learn more about XML in [this tutorial](https://www.w3schools.com/xml/).
+
+By now you should have a clearer view on the relationship between YANG and JSON/XML. YANG is the data model that shows information about network devices configuration and status. JSON and XML are data exchange formats to represent the information stored in the data model, so it can easily be understood by both machines and humans.
+
+<p align="center"> 
+<img src="imgs/42yangjsonxml.png">
+</p>
+
+JSON displays information in a _clearer_ way and will be used more frequently by modern systems. However XML is still required for multiple systems that support it exclusively.
+
+#### <a name='NETCONFandRESTCONF'></a>NETCONF and RESTCONF
+
+Now that we understand data models and data transfer formats, we need to consider what protocol to use in order to exchange that information. NETCONF and RESTCONF are different protocols that you will need to use depending on the availability provided by your platform.
+
+##### NETCONF
+
+Network Configuration Protocol ([RFC 6241](https://tools.ietf.org/html/rfc6241)), is a network management protocol developed and standardized by the Internet Engineering Task Force (IETF). It supports a rich set of functionality to manage _configuration_ and _operational_ data, being able to manage network devices _running_, _candidate_ and _startup_ configurations. The NETCONF protocol defines a simple mechanism through which a network device can be managed, configuration data can be retrieved, and new configuration data can be uploaded and manipulated. The NETCONF protocol uses Remote Procedure Calls (RPCs) for its paradigm, such as `get-config`, `edit-config`, or `get`. A client encodes an RPC in XML and sends it to a server using a secure, connection-oriented session (such as Secure Shell Protocol [SSH]). The client (application) initiates a connection using SSH port 830 towards the server (network device). The server responds with a reply encoded in XML, and there is a capability exchange during session initiation, using XML encoding.
+
+<p align="center"> 
+<img src="imgs/43netconf.png">
+</p>
+
+Let' take a look at an example on how we could use Python to connect to a device via NETCONF.
+
+```
+from ncclient import manager
+import xml
+import xml.dom.minidom
+
+with manager.connect(host=RW_HOST, port=PORT, username=USER, password=PASS, hostkey_verify=False, device_params={'name': 'default'}, allow_agent=False, look_for_keys=False) as m:
+    # XML filter to issue with the get operation
+    # IOS-XE 16.6.2+        YANG model called "ietf-interfaces"
+    interface_filter = '''
+        <filter xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+                    <interface>
+                        <name>GigabitEthernet1</name>
+                    </interface>
+            </interfaces-state>
+        </filter>
+    '''
+    result = m.get(interface_filter)
+    xml_doc = xml.dom.minidom.parseString(result.xml)
+```
+
+We start by importing the NETCONF and XML libraries we will be using (`ncclient` is a Python library that facilitates client-side scripting and application development around the NETCONF protocol). Then we connect to the device IP (`RW_HOST`), using the specified port for SSH (`PORT`) and the required credentials (`USER`/`PASS`). Once connected we define specifically what we want to receive (`interface_filter`) and make the request (`m.get`). `get` is the method used to request _operational_ data, but you could also ask for _configuration_ data using `get-config`, or modify that configuration using `edit-config`. Final step is just to parse the result into a Python dictionary, using the minidom library, to be able to work it.
+
+And _voilá_, you get an XML response showing _operational_ data for the requested interface.
+
+```
+<rpc-reply message-id="urn:uuid:50bf9d6e-7e5c-4182-ae6b-972a055ceef7" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <data>
+    <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+      <interface>
+        <name>GigabitEthernet1</name>
+        <admin-status>up</admin-status>
+        <oper-status>up</oper-status>
+        <phys-address>00:0c:29:6c:81:06</phys-address>
+        <speed>1024000000</speed>
+        <statistics>
+          <in-octets>5432293472</in-octets>
+          <in-unicast-pkts>28518075</in-unicast-pkts>
+          ……………
+          <out-octets>2901845514</out-octets>
+          <out-unicast-pkts>18850398</out-unicast-pkts>
+        </statistics>
+      </interface>
+    </interfaces-state>
+  </data></rpc-reply>
+```
+
+##### RESTCONF
+
+RESTCONF ([RFC 8040](https://tools.ietf.org/html/rfc8040)) is based on the idea of adding a REST API to NETCONF. It can manage manage configuration and operational data defined in YANG models, and the URLs, HTTP verbs, and Request bodies are automatically generated from those associated YANG models. RESTCONF uses HTTP(S) as transport, and supports both XML and JSON as data transfer formats, while NETCONF only supports XML. Also, RESTCONF supports only a _sub-set_ of NETCONF, so not all operations are supported. 
+
+<p align="center"> 
+<img src="imgs/44restconf.png">
+</p>
+
+Remember that since REST principles are being used, RESTCONF is based on _stateless_ connections. As such, every application using RESTCONF writes directly to the _running configuration_, with no support for _candidate configuration_.
+
+Being based on REST, RESTCONF supports the following methods:
+
+* GET, to read/retrieve info
+* POST, to create a new record
+* PATCH, to update only some values of an existing record
+* PUT, to update all values of an existing record
+* DELETE, to erase an existing record
+
+Let's take a look at how to use it. 
+
+```
+url = 'https://RO_HOST/restconf/data/interfaces-state/interface=GigabitEthernet1'
+
+header = {'Content-type': 'application/yang-data+json',
+          'accept': 'application/yang-data+json'}
+
+response = requests.get(url, headers=header, verify=False, auth=ROUTER_AUTH)
+interface_info = response.json()
+oper_data = interface_info['ietf-interfaces:interface']
+```
+
+In this case we are sending an HTTP(S) request to our network device REST API. The URL structure will include the network device IP address (`RO_HOST`) and the resource we are asking about (`interface=GigabitEthernet1`). Then we will have to define the HTTP headers to send, specifying in this case what is the content type we are sending (YANG encoded in JSON) and the content we expect to receive in the response (YANG encoded in JSON). Finally we parse the JSON into a Python dictionary and extract the relevant info from the structured data.
+
+```
+{
+    "ietf-interfaces:interface": {
+        "name": "GigabitEthernet1",
+        "admin-status": "up",
+        "oper-status": "up",
+        "last-change": "2018-01-17T21:49:17.000387+00:00",
+        "phys-address": "00:0c:29:6c:81:06",
+        "speed": 1024000000,
+        "statistics": {
+            "in-octets": 5425386232,
+            "in-unicast-pkts": 28489134,
+            ……………
+            "out-octets": 2899535736,
+            "out-unicast-pkts": 18844784
+        }
+    }
+}
+```
+
+So the overall picture looks like this now:
+
+<p align="center"> 
+<img src="imgs/45netconfrestconf.png">
+</p>
+
+Network devices information is modelled in YANG to make it consistent, independent of the underlying infrastructure. Then than information can be represented with JSON or XML, and accessed by mean of NETCONF or RESTCONF from a remote client.
+
+#### <a name='RESTAPIs'></a>REST APIs
+
+By now you might be wondering what is REST? It stands for Representational State Transfer, and [it was born](https://www.ics.uci.edu/~fielding/pubs/dissertation/fielding_dissertation.pdf) from the need to create a scalable Internet, where software systems could interact with each other, in an uniform and efficient approach.
+
+It is a simple-to-use communications architecture style (not a standard) for networked applications, based on the client-server model. It expects all information required for the transaction to be provided at the time of the request. Client could be an application or a REST client, like Postman for development and testing. Server could be a system, network device, or network management application.
+
+REST is stateless, so the server will close the connection after the specified exchange is completed, and no state will be maintained on the server side. This way it makes transactions very efficient.
+
+The same as you use an HTTP _get_ method when browsing the internet and the server provides you with a website in HTML format that your browser decodes to make it human readable, REST APIs answer to _get_ requests from other systems with structured data (in JSON or XML) specifically addressed to them.
+
+Think about SDN and NFV, where different types of controllers need to communicate and exchange information with multiple devices. Applications sitting on top of those controllers can actually query anything that the controller knows about the network below it. This can be operational data, configuration data stats about a single device with a 10GE interface, etc. Applications then take this information, process it and then program the controller by sending a _post_ instead of a _get_ request.
+
+RESTful APIs are REST-based APIs, based on response-request communications using the HTTP protocol for the following operations (CRUD): 
+
+* Post: Create a new resource
+* Get: Retrieve/Read a resource
+* Put: Update an existing resource
+* Delete: Delete a resource
+
+It includes five components that may be required in each Request: 
+
+* URL: application server and the API resource
+* Auth: there are few different authentication methods, not standardized, required to identify who is making the request (HTTP Basic, Custom, OAuth, none)
+* Headers: define _content-type_ and _accept-type_, communicating to the server the format of data we will send and expect to receive (JSON or XML)
+* Request Body (optional): may be missing if no data is required to be sent with the request
+* Method: What is the task we ask the server to perform (ie. use POST to create a new record, or PUT to update an existing one)
+
+Let's take a look at the format in this example:
+
+```
+    url = DNAC_IP + '/api/v1/host?hostIp=' + client_ip
+    header = {'content-type': 'application/json', 'Cookie': dnac_jwt_token} 
+    response = requests.get(url, headers=header, verify=False)
+    client_json = response.json()
+    client_info = client_json['response'][0]
+```
+
+First we need to define the URL with the IP address of the end system (ie. DNAC_IP) and the route to the required resource (ie. /api/v1/host?hostIp= combined with the IP of an end system). Then we specify the required headers, defining what is the format we are sending (JSON) and the required auth cookie. With that info we open the connection, make the request and store the response to parse it.
+
+As long as these are HTTP requests we are sending, server will answer with a HTTP status code, headers and a response body.
+
+Some possible HTTP status codes:
+
+* 2xx Success: 200 OK, 201 Created
+* 4xx Client Error: 400 Bad Request, 401 Unauthorized (something is wrong the authentication), 404 Not Found (most likely URL is wrong, or payload is wrongly formatted)
+* 5xx Server Error: 500 Internal Server Error
+
+Headers will will define the _content-type_ (JSON or XML), cache control, date and enconding.
+
+The response body will be the payload, including the requested data in JSON or XML, depending on the headers provided during the request.
+
+```
+Response 200 / success
+Cache-Control →no-cache
+Content-Type →application/json;charset=UTF-8
+…
+{
+    "hostIp" : "10.93.140.35" , 
+    "hostMac" : "00:0c:29:6d:df:40" , 
+    "hostType" : "wired" , 
+    "connectedNetworkDeviceId" : "601c9ead-576c-402d-bcb1-224235b1e020" , 
+    "connectedNetworkDeviceIpAddress" : "10.93.140.50" , 
+    "connectedInterfaceId" : "eb613db0-0994-44ec-9146-1b65346f3d07" , 
+    "connectedInterfaceName" : "GigabitEthernet1/0/13" , 
+    "connectedNetworkDeviceName" : "NYC-9300" , 
+    "vlanId" : "123" , 
+    "lastUpdated" : "1528324633014" , 
+    "accessVLANId" : "123" , 
+    "id" : "841f9433-0d2c-4735-afe8-beb7547b7883"
+}
+```
+
+#### <a name='APIDocumentation'></a>API Documentation
+
+Documentation is always essential, but in this case even more, because REST APIs are an architectural style, not a standard. So docs will define specifically what you need to send to your network device, and what you should expect in return. 
+
+Quality of the API documentation is the most important factor in API adoption, because it determines how difficult is to work with your APIs. You might have the most powerful APIs, but if they are not documented correctly nobody will be able to leverage them.
+
+APIs are very often documented in the platform itself, offering you the option to test them directly there without needing to write any code, or even know a programming language. 
+
+<p align="center"> 
+<img src="imgs/46dnacapi.png">
+</p>
+
+It is also common for them to offer you the option to automatically generate sample code in different programming languages, so you can directly use it in your developments.
+
+<p align="center"> 
+<img src="imgs/46dnacapi2.png">
+</p>
+
+#### <a name='Python'></a>Python
+
+When talking about programmability and APIs you need to pick your favorite programming language to let your system know what you want it to do, and how it needs to communicate with your network devices APIs. The goal will be to automate and script actions using the APIs provided by network devices, controllers, and applications. There are a myriad of different options when choosing your programming language (Python, Ruby, Go, JavaScript, C#, etc) and each developer will have his/her own preferences.
+
+One very good option for network engineers to get started with programming is Python. It is one of the most popular programming languages across the globe for several reasons:
+
+* Lots of available resources
+* Extensive libraries
+* Most SDKs developed in Python
+* Powerful and fast
+* Ubiquitous
+* Easy to learn and friendly
+* Open
+* Wide support on different devices and platforms
+* Rich and active support communities
+* Most wanted language in 2017 & 2018
+
 ### <a name='Summary'></a>Summary
 
 APIs and programming languages have evolved and matured to the point of being useful and applicable to the domains of infrastructure engineers.
@@ -194,6 +593,7 @@ APIs and programming languages have evolved and matured to the point of being us
 The _net-effect_ being that you can get powerful things done with relatively small amounts of code. And by so doing, you can automate the repetitious and/or labor intensive parts of your job freeing you up to focus your time and effort on tasks deserving of your intellect.
 
 Network programmability provides consistent and dynamic infrastructure configuration by automating deployments and simplifying network management, bringing the following main benefits:
+
 * Automation
     * Time and cost optimization
     * Reduce errors
