@@ -206,7 +206,7 @@ Now, thanks to RESTful APIs and standardized data formats like JSON, you can mak
 Let's do a quick review of the different foundational coding building blocks that network engineers will need to understand and use when entering the programmability world.
 
 <p align="center"> 
-<img src="https://media.giphy.com/media/T7Cp4PlpEUshi/giphy.gif">
+<img src="imgs/39codingessentials.gif">
 </p>
 
 #### <a name='YANGdatamodels'></a>YANG data models
