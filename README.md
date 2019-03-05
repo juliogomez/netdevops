@@ -22,7 +22,7 @@
 * [NetDevOps](#NetDevOps)
 	* [The challenge of network configuration today](#Thechallengeofnetworkconfigurationtoday)
 	* [Network configuration as code](#Networkconfigurationascode)
-* [Demo - Network Configuration with NetDevOps](#Demo-NetworkConfigurationwithNetDevOps)
+* [NetDevOps Demo - Automating network configuration from testing to production](#NetDevOpsDemo-Automatingnetworkconfigurationfromtestingtoproduction)
 	* [Book a sandbox](#Bookasandbox)
 	* [GitLab setup](#GitLabsetup)
 	* [CICD setup](#CICDsetup)
@@ -669,7 +669,7 @@ And considering that modern network devices support modern interfaces and APIs, 
 Following this strategy, we are now ready to start building a completely automated environment to deploy and test configuration changes across the network.
 
 
-## <a name='Demo-NetworkConfigurationwithNetDevOps'></a>Demo - Network Configuration with NetDevOps
+## <a name='NetDevOpsDemo-Automatingnetworkconfigurationfromtestingtoproduction'></a>NetDevOps Demo - Automating network configuration from testing to production
 
 NetDevOps will deliver consistent version-controlled infrastructure configurations, deployed with parallel and automated provisioning. 
 
