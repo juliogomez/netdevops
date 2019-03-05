@@ -1394,3 +1394,21 @@ In this NetDevOps demo you have seen a modern approach into version-controlled a
 <p align="center"> 
 <img src="imgs/34netdevops_overview.png">
 </p>
+
+# Author
+
+* [Julio Gomez](https://www.linkedin.com/in/juliogomezsanchez/) - Initial work - [Blog](cs.co/julioblog)
+
+# License
+
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/juliogomez/netdevops/LICENSE.md) file for details
+
+# Acknowledgements
+
+Many thanks the following programmability and NetDevOps gurus for their contributions and source materials that helped building this document:
+
+* Kevin Corbin
+* Hank Preston
+* Chris Lunsford
+* Jason Gooley
+* Gabi Zapodeanu
