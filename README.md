@@ -189,9 +189,9 @@ What you are seeing here:
 * We installed a community library from a public package repository ( `pip install requests` )
 * We entered a Python interactive shell ( `python` )
 * We imported the library into our Python code ( `import requests` )
-* We made an HTTPS request to https://api.github.com and it was successful ( `<Response [200]>` )
+* We made a HTTPS request to https://api.github.com and it was successful ( `<Response [200]>` )
 
-Starting with installing the `requests` package on our machine, in four typed lines in a terminal we were able to download and install the package and use it to make an HTTPS request (without having to think about the steps involved with making the HTTPS request).
+Starting with installing the `requests` package on our machine, in four typed lines in a terminal we were able to download and install the package and use it to make a HTTPS request (without having to think about the steps involved with making the HTTPS request).
 
 Now that languages and tools have evolved to be useful for infrastructure engineers, APIs have become easier to work with.
 
@@ -453,7 +453,7 @@ interface_info = response.json()
 oper_data = interface_info['ietf-interfaces:interface']
 ```
 
-In this case we are sending an HTTP(S) request to our network device REST API. The URL structure will include the network device IP address (`RO_HOST`) and the resource we are asking about (`interface=GigabitEthernet1`). Then we will have to define the HTTP headers to send, specifying in this case what is the content type we are sending (YANG encoded in JSON) and the content we expect to receive in the response (YANG encoded in JSON). Finally we parse the JSON into a Python dictionary and extract the relevant info from the structured data.
+In this case we are sending a HTTP(S) request to our network device REST API. The URL structure will include the network device IP address (`RO_HOST`) and the resource we are asking about (`interface=GigabitEthernet1`). Then we will have to define the HTTP headers to send, specifying in this case what is the content type we are sending (YANG encoded in JSON) and the content we expect to receive in the response (YANG encoded in JSON). Finally we parse the JSON into a Python dictionary and extract the relevant info from the structured data.
 
 ```
 {
@@ -491,7 +491,7 @@ It is a simple-to-use communications architecture style (not a standard) for net
 
 REST is stateless, so the server will close the connection after the specified exchange is completed, and no state will be maintained on the server side. This way it makes transactions very efficient.
 
-The same as you use an HTTP _get_ method when browsing the internet and the server provides you with a website in HTML format that your browser decodes to make it human readable, REST APIs answer to _get_ requests from other systems with structured data (in JSON or XML) specifically addressed to them.
+The same as you use a HTTP _get_ method when browsing the internet and the server provides you with a website in HTML format that your browser decodes to make it human readable, REST APIs answer to _get_ requests from other systems with structured data (in JSON or XML) specifically addressed to them.
 
 Think about SDN and NFV, where different types of controllers need to communicate and exchange information with multiple devices. Applications sitting on top of those controllers can actually query anything that the controller knows about the network below it. This can be operational data, configuration data stats about a single device with a 10GE interface, etc. Applications then take this information, process it and then program the controller by sending a _post_ instead of a _get_ request.
 
@@ -1389,7 +1389,7 @@ After 5 minutes, by the end of this process you should see the complete pipeline
 <img src="imgs/32gitlab_pipeline_prod_complete.png">
 </p>
 
-__CONGRATULATIONS! You have completed the NetDevOps demo!__ 
+__CONGRATULATIONS! You have completed your first NetDevOps demo on how to automate network configuration changes from testing to production!__ 
 
 <p align="center"> 
 <img src="imgs/100congrats.gif">
@@ -1413,7 +1413,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 
 # Acknowledgements
 
-Many thanks the following programmability and NetDevOps gurus for their contributions and source materials that helped building this document:
+Many thanks to the following programmability and NetDevOps gurus for their contributions and source materials that helped building this document:
 
 * Kevin Corbin
 * Hank Preston
