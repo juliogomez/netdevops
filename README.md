@@ -999,8 +999,11 @@ Let's now dig into setting up the local environment in your workstation.
 2. To simplify the setup and management of the local environment, a `Makefile` is included in the repository. Simply run `make dev` to do the following (to see the exact commands being executed for each of these steps, just take a look at the contents of your `Makefile`):
 
     a. Use NCS netsim to start a local simulation of the network including the core, distribution, and access devices
+
     b. Setup a local NCS project directory within the repo, start NCS and import in the netsim simulation
+    
     c. Synchronize netsim and NCS
+    
     d. Deploy the current network-as-code configuration to NCS and the network devices, using Ansible
 
     ```
