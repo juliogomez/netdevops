@@ -996,7 +996,7 @@ Let's now dig into setting up the local environment in your workstation.
     $ cd cicd-3tier
     ```
 
-2. To simplify the setup and management of the local environment, a `Makefile` is included in the repository. Simply run `make dev` to do the following (to see the exact commands being executed for each of these steps, just take a look at the contents of your `Makefile`):
+2. To simplify the setup and management of the local environment, a `Makefile` is included in the repository. Simply run `make dev` to do the following (to see the exact commands being executed for each of these steps, just take a look at the content of your `Makefile`):
 
     a. Use NCS netsim to start a local simulation of the network including the core, distribution, and access devices
 
@@ -1103,7 +1103,7 @@ Let's now dig into setting up the local environment in your workstation.
         -ansible-playbook -i inventory/dev.yaml site.yaml
     ```
 
-    This last directive uses ansible to first check the syntax ([linting](https://en.wikipedia.org/wiki/Lint_(software))), and then executes the `site.yaml` playbook on the list of devices defined in the `dev.yaml` inventory file.
+    This last directive uses Ansible to first check the syntax ([linting](https://en.wikipedia.org/wiki/Lint_(software))), and then executes the `site.yaml` playbook on the list of devices defined in the `dev.yaml` inventory file.
 
     The inventory file (`dev.yaml`) lists the devices that will be configured by the playbook, with their hostnames, credentials (if necessary) and management IP addresses:
 
@@ -1122,9 +1122,9 @@ Let's now dig into setting up the local environment in your workstation.
     2. Push _new_ configurations to NSO
     3. Synchronize _new_ configurations from NSO to devices
 
-    But specifically for step 2 you might be wondering _where are those new configurations?_
+    But specifically for the second step you might be wondering _where are those new configurations?_
 
-    Take a look at this extract from `site.yaml`, describing that step 2:
+    Take a look at this extract from `site.yaml`, describing that second step:
 
     ```
     - name: Push new configurations to NSO
@@ -1148,11 +1148,11 @@ Let's now dig into setting up the local environment in your workstation.
 
     That _tasks_ description uses the [`nso_config` module](https://docs.ansible.com/ansible/latest/modules/nso_config_module.html), and provides the required NCS URL, username and password, as parameters defined in the inventory file mentioned before.
 
-    The `data` section is the one that describes what configuration to apply, and there you may find you need to provide the _device_name_ and _config_. Device names come again from the inventory file. BUT configurations are stored in the `host_vars` directory, where ansible looks for variables as required. That directory stores individual yaml files, one per device, with the required configuration to apply to NCS devices.
+    The `data` section is the one that describes what configuration to apply, and there you may find you need to provide the _device_name_ and _config_. Device names come again from the inventory file. BUT configurations are stored in the `host_vars` directory, where Ansible looks for variables as required. That directory stores individual yaml files, one per device, with the required configuration to apply to NCS devices.
 
-    These configuration files in the `host_vars` directory will be important for us throughout the demo, as they store the configuration we want to apply, and therefore we will use them to apply changes in our network.
+    These configuration files in the `host_vars` directory will be important for us throughout the demo, as they store the configuration we want to apply, and therefore we will use them to apply changes to our network.
 
-    After `dev_deploy` is completed you will see configurations correctly applied (and synchronized) to your netsim devices and NCS ones. You may check it with the same commands described in previous steps. For example, for `core1`:
+    After `dev_deploy` is completed you will see configurations correctly applied (and synchronized) to your netsim devices and NCS ones. You may check it worked fine with the same commands described in previous steps. For example, for `core1`:
 
     ```
     $ ncs-netsim cli-c core1
