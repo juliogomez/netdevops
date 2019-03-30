@@ -22,14 +22,20 @@
 * [NetDevOps](#NetDevOps)
 	* [The challenge of network configuration today](#Thechallengeofnetworkconfigurationtoday)
 	* [Network configuration as code](#Networkconfigurationascode)
-* [NetDevOps Demo - Automating network configuration from testing to production](#NetDevOpsDemo-Automatingnetworkconfigurationfromtestingtoproduction)
-	* [Book a sandbox](#Bookasandbox)
-	* [GitLab setup](#GitLabsetup)
-	* [CICD setup](#CICDsetup)
-	* [VIRL verifications](#VIRLverifications)
-	* [Local environment setup (optional)](#Localenvironmentsetupoptional)
-	* [Running the demo](#Runningthedemo)
-	* [Summary](#Summary-1)
+* [NetDevOps Demonstrations](#NetDevOpsDemonstrations)
+	* [NetDevOps Demo 1 - Automating network configuration from testing to production](#NetDevOpsDemo1-Automatingnetworkconfigurationfromtestingtoproduction)
+		* [GitLab setup](#GitLabsetup)
+		* [CICD setup](#CICDsetup)
+		* [VIRL verifications](#VIRLverifications)
+		* [Local environment setup (optional)](#Localenvironmentsetupoptional)
+		* [Demo overview](#Demooverview)
+		* [Summary](#Summary-1)
+	* [NetDevOps Demo 2 - VPN Head End Management Platform (HEMP)](#NetDevOpsDemo2-VPNHeadEndManagementPlatformHEMP)
+		* [Topology](#Topology)
+		* [Building blocks](#Buildingblocks)
+		* [Environment setup](#Environmentsetup)
+		* [Demo overview](#Demooverview-1)
+		* [Summary](#Summary-1)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -672,8 +678,27 @@ And considering that modern network devices support modern interfaces and APIs, 
 
 Following this strategy, we are now ready to start building a completely automated environment to deploy and test configuration changes across the network.
 
+## <a name='NetDevOpsDemonstrations'></a>NetDevOps Demonstrations
 
-## <a name='NetDevOpsDemo-Automatingnetworkconfigurationfromtestingtoproduction'></a>NetDevOps Demo - Automating network configuration from testing to production
+The following set of demos requires a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for your demo. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO netsim, etc.
+
+You may find the required sandbox for our demo using [this link](https://devnetsandbox.cisco.com/RM/Diagram/Index/6b023525-4e7f-4755-81ae-05ac500d464a?diagramType=Topology), and book it for up to one week exclusively for you.
+
+<p align="center"> 
+<img src="imgs/7reserve.png">
+</p>
+
+_Note: when doing the reservation please choose 'None' for simulation, as we will be launching the required topologies as part of the setup process._
+
+Spinning up the whole system will take roughly 15 mins, so please look at this strangely satisfying pendulum while we get everything ready for you.
+
+<p align="center"> 
+<img src="imgs/8pendulum.gif">
+</p>
+
+Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are now ready to start working on your demos!
+
+### <a name='NetDevOpsDemo1-Automatingnetworkconfigurationfromtestingtoproduction'></a>NetDevOps Demo 1 - Automating network configuration from testing to production
 
 NetDevOps will deliver consistent version-controlled infrastructure configurations, deployed with parallel and automated provisioning. 
 
@@ -697,28 +722,7 @@ These are the building blocks we will use to provide such a comprehensive demons
 * [VIRL](http://virl.cisco.com/): network modelling and simulation environment
 * [Ansible](https://www.ansible.com/): simple automation
 
-
-### <a name='Bookasandbox'></a>Book a sandbox
-
-The first thing you will need is a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for your demo. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO netsim, etc.
-
-You may find the required sandbox for our demo using [this link](https://devnetsandbox.cisco.com/RM/Diagram/Index/6b023525-4e7f-4755-81ae-05ac500d464a?diagramType=Topology), and book it for up to one week exclusively for you.
-
-<p align="center"> 
-<img src="imgs/7reserve.png">
-</p>
-
-_Note: when doing the reservation please choose 'None' for simulation, as we will be launching the required topologies as part of the setup process._
-
-Spinning up the whole system will take roughly 15 mins, so please look at this strangely satisfying pendulum while we get everything ready for you.
-
-<p align="center"> 
-<img src="imgs/8pendulum.gif">
-</p>
-
-Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are now ready!
-
-### <a name='GitLabsetup'></a>GitLab setup
+#### <a name='GitLabsetup'></a>GitLab setup
 
 Open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on OSX) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
 
@@ -758,7 +762,7 @@ CONTAINER ID        IMAGE                  COMMAND                  CREATED     
 
 Please point your browser to [http://10.10.20.20](http://10.10.20.20/), the IP address of your _devbox_ (default port 80), and check that you can access the HTTP interface for your new GitLab service.
 
-### <a name='CICDsetup'></a>CICD setup
+#### <a name='CICDsetup'></a>CICD setup
 
 Now that GitLab is ready, go back to your terminal and let's run the script to setup the complete CICD environment.
 
@@ -774,7 +778,7 @@ In this case `setup.sh` will perform the following actions:
 3. Import test and production network configurations from VIRL to NSO
 4. Synchronize devices configuration from NSO into VIRL simulations
 5. Create a new repo in GitLab and initialize it locally in your _devbox_
-6. Create locally in _devbox_ the prod and test git branches and push them to GitLab
+6. Create locally in _devbox_ the _prod_ and _test_ git branches and push them to GitLab
 7. List the status of VIRL nodes in _production_ and _test_
 
 This complete process will take like 10 minutes, so time for your fix.
@@ -785,7 +789,7 @@ This complete process will take like 10 minutes, so time for your fix.
 
 __Congrats, everything is now installed and ready!__
 
-### <a name='VIRLverifications'></a>VIRL verifications
+#### <a name='VIRLverifications'></a>VIRL verifications
 
 Now you have two complete simulated environments running in your VIRL server: one for testing, and one replicating what would be a production physical network. Real world scenarios might be diverse: some customers may have a physical network in production, but only a simulated one for testing. Others might also have a real network for testing. Maybe even an additional one for staging before going to production. No matter how, the same principles apply to what we will be demonstrating. In our case the sandbox includes a couple of virtual environments, like the one depicted below, and implemented with VIRL for convenience.
 
@@ -874,7 +878,7 @@ Here is a list of all the running nodes
 
 Now that both of your VIRL environments are ready, let's setup your local environment.
 
-### <a name='Localenvironmentsetupoptional'></a>Local environment setup (optional)
+#### <a name='Localenvironmentsetupoptional'></a>Local environment setup (optional)
 
 To experience and demonstrate the full NetDevOps configuration pipeline, you may want to setup a local development environment where you can test proposed configuration changes before committing and pushing them to GitLab for the full test builds to occur. This is a completely optional step you might want to skip if you are not interested in testing locally.
 
@@ -1172,7 +1176,7 @@ Let's now dig into setting up the local environment in your workstation.
 
     _(Note: after you complete the rest of this demo, when you don't need the local environment anymore, you can easily delete everything by running `make clean`. It will shutdown netsim devices, NSO, and delete any related remnants.)_
 
-### <a name='Runningthedemo'></a>Running the demo
+#### <a name='Demooverview'></a>Demo overview
 
 Our demonstration will include the following architecture and elements, to show how a completely automated CICD pipeline could be applied to a network configuration environment across a complete network, including test and production environments.
 
@@ -1398,13 +1402,242 @@ __CONGRATULATIONS! You have completed your first NetDevOps demo on how to automa
 <img src="imgs/100congrats.gif">
 </p>
 
-### <a name='Summary-1'></a>Summary
+#### <a name='Summary-1'></a>Summary
 
 In this NetDevOps demo you have seen a modern approach into version-controlled automated network configuration and testing. The scenario describes how multiple network operators would be able to propose configuration changes, in the same way developers do it for code: by mean of git branches. A standard version control server provides multiple benefits, like automated pipelines, version control and tracking, rollback cababilities, etc. During the demo you have also experienced the benefits of being able to locally verify syntax for proposed changes before submitting them. Also how a simulated environment helps verifying proposed changes are correct, before applying them into the production network. Finally, the set of automated tests helps making sure proposed changes have not had unexpected results on critical business-relevant functionality. This way you have experienced end-to-end automation and testing in a scalable and error-free approach.
 
 <p align="center"> 
 <img src="imgs/34netdevops_overview.png">
 </p>
+
+### <a name='NetDevOpsDemo2-VPNHeadEndManagementPlatformHEMP'></a>NetDevOps Demo 2 - VPN Head End Management Platform (HEMP)
+
+Managing connections from [extranet](https://en.wikipedia.org/wiki/Extranet) environments usually involves a great amount of workload, especially around VPN configurations at central hub points. One way of implementing this type of environments is pre-configuring VPN endpoints at remote locations, and then completing the required configuration from the central head-end point as connectivity is required. This configuration will explicitly define the authorized end-points and type of traffic that can traverse the connection.
+
+Once connectivity to a certain remote location is not required anymore, you will have to remove the associated relevant configuration from the central head-end, disabling that specific VPN and hence discontinuing connectivity.
+
+As you might guess, scaling this type of environment would really benefit from _automation_. The more remote locations from different 3rd-party entities (ie. partners, vendors), the longer the process to configure VPNs, ACLs with type of traffic and authorized end-points, etc. Implementing these long VPN configurations via CLI is of course a prone to errors process due to the required human interaction, so automation will also take care of this challenge and provide the required consistency along the network.
+
+This demonstration will focus on how to automate the lifecycle of extranet VPN connections, from setting them up to checking everything is correct, providing related metrics, and tearing them down once they are not required anymore. It also includes a simple graphical user interface (GUI) that uses APIs to demonstrate how easy it could be to manage those VPN connections for users without the required permissions to connect via CLI to network devices.
+
+#### <a name='Topology'></a>Topology
+
+Our demo setup will include 1 central hub location, with a _headend_ router that will concentrate VPN connections from 4 remote _partner_ locations.
+
+We will also have some switches acting as _hosts_ exchanging traffic, and another router simulating _internet_, providing connectivity between the headend and partner locations.
+
+All devices will be simulated using VIRL as per the diagram below.
+
+<p align="center"> 
+<img src="imgs/51hemptopo.png">
+</p>
+
+#### <a name='Buildingblocks'></a>Building blocks
+
+These are the components we will use to build the demo:
+
+* [Cisco Network Services Orchestrator](https://developer.cisco.com/site/nso/): formerly Tail-f, it provides end-to-end automation to design and deliver services much faster
+* [VIRL](http://virl.cisco.com/): network modelling and simulation environment
+* [Ansible](https://www.ansible.com/): simple automation
+
+The provided GUI portal to manage HEMP uses the following technologies:
+
+* Python, Flask, and JavaScript for the primary web interface
+* Telegraf, InfluxDB, and Grafana for visualizing operational metrics collected via SNMP
+* For ease of deployment and portability, all of the above components are run as a [docker compose stack](https://github.com/DevNetSandbox/sbx_multi_ios/blob/add-hemp-demo/hemp/docker-compose.yml) which can be executed directly on your sandbox _devbox_.
+
+#### <a name='Environmentsetup'></a>Environment setup
+
+Open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on OSX) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
+
+```
+$ ssh developer@10.10.20.20
+```
+
+Once in, clone the repository that includes all required files to build the setup into your _devbox_.
+
+```
+[developer@devbox ~]$git clone --recurse-submodules https://github.com/DevNetSandbox/sbx_multi_ios.git
+```
+
+With that, your sandbox _devbox_ includes now all required info to start building the environment.
+
+Go into the repo directory, change to the `add-hemp-demo` git branch, and go into the `hemp` directory:
+
+```
+[developer@devbox ~]$cd sbx_multi_ios
+[developer@devbox sbx_multi_ios]$git checkout add-hemp-demo
+[developer@devbox sbx_multi_ios]$cd hemp
+```
+
+There you must run the `setup.sh` script to set the complete environment up.
+
+```
+[developer@devbox hemp]$./setup.sh
+```
+
+`setup.sh` will perform the following steps in the sandbox _devbox_:
+
+1. Install required software tools and dependencies in a python virtual environment
+2. Launch VIRL simulations for the whole network, including 4 remote locations and 1 central hub headend
+    >As per the proposed architecture, routers in every remote location will be completely configured, and each VPN will only become active when the required configuration for that specific VPN is applied at the headend central location.
+3. Setup and start NSO
+4. Add all VIRL network devices into NSO
+5. Synchronize all existing configurations from network devices to NSO
+6. Display the status for VIRL network devices 
+7. Start a HEMP management GUI, implemented with containers
+8. Use Ansible to pre-configure the headend and activate 2 out of the 4 remote locations VPNs
+
+<p align="center"> 
+<img src="imgs/53hempworkflow.png">
+</p>
+
+The process will take approximately 15 minutes, so check this out in the meanwhile.
+
+<p align="center"> 
+<img src="imgs/50pendulum.gif">
+</p>
+
+#### <a name='Demooverview-1'></a>Demo overview
+
+Your demo architecture is now set up, and includes the following main components: 
+
+* 1 central _headend_ router where _partner_ extranet VPN connections from remote devices are terminated
+* 4 remote _partner_ routers (_partner1_, _partner2_, _partner3_, _partner4_) that represent the _unmanaged_ side of extranet/partner VPN connections
+
+Both the remote _partner_ routers and the _headend_ one are configured with IP SLA probes, to send interesting traffic through the VPNs and keep them active.
+
+Every remote _partner_ router (1 to 4) is completely configured to establish their respective VPNs. Having connectivity for each one of them will depend exclusively on having the proper configuration applied on the _headend_ router side.
+
+At the _headend_ router we have already provided the required configuration to setup VPN connections towards _partner1_ and _partner2_ remote devices. The `partners` directory includes YAML files with all required parameters to configure the _headend_ router and complete the VPN connections _just_ for _partner1_ and _partner2_ remote locations (not 3 and 4).
+
+This configuration has been provided using Ansible and associated NSO modules during step 8 of the _setup_ phase. That step is the one that runs an Ansible playbook, described in the `site.yaml` file. If you go through its content, you will see that first it synchronizes the configuration from NSO to the remote devices for consistency (in case there might have been any changes configured directly on the devices they will be overwritten by this step). Then the playbook will load _partner1_ and _partner2_ YAML files into variables, and push those those to NSO as new headend router configuration to activate those specific VPNs. Finally the playbook with instruct NSO to sync that new configuration from NSO to the _headend_ router.
+
+However, _partner3_ and _partner4_ VPNs are pre-configured __only__ on the partner/remote side, and will need you to provide additional configuration on the _headend_ to complete those VPNs setup.
+
+Instead of configuring it manually, or via YAML files and Ansible, for this demos you will be able to define the required configuration in the _headend_ via the GUI management portal. It will allow you to provide the required parameters, and the GUI will translate them into the required information to send towards NSO north-bound APIs.
+
+<p align="center"> 
+<img src="imgs/52hempelements.png">
+</p>
+
+This API-based automation solution will enable you to easily apply or remove the required configuration in the _headend_ router, without having to connect to the device via CLI and type _myriads_ of commands.
+
+At this point you might be wondering why NSO is part of the architecture, or if you could use Ansible to directly configure your network devices. One of the multiple benefits that NSO provides is that, although in this demo we are only using IOS XE devices, it would be easy to support a mixed environment with other types of devices / CLIs (ie. IOS XR, ASA firewall, other vendors...) _without doing any modifications in the management GUI_. Please remember the GUI uses NSO APIs, so it does not depend on the type of underlying infrastructure devices. NSO plays a key role by performing that translation from API requests to the information and format those devices require and support.
+
+You may access your HEMP GUI portal by pointing your browser to http://10.10.20.20:5001
+
+<p align="center"> 
+<img src="imgs/55hemp1.png">
+</p>
+
+Please click on _Configure VPN connections_ and there you will see the ones already configured on the _headend_ router: _partner1_ and _partner2_. 
+
+<p align="center"> 
+<img src="imgs/56hemp2.png">
+</p>
+
+You may now click on one of them, for example _partner1_, and the GUI will display its configuration and metrics. The system will also allow you to perform some actions on the VPN:
+
+* _Check Sync_: this will compare the configuration in NSO vs the one in the _headend_ router
+* _Reactivate Re-Deploy_: ask NSO to sync configuration again from NSO to the _headend_ router
+* _Undeploy_: remove configuration from the _headend_ router, while keeping it in NSO in case you need to redeploy it later
+
+Now let's go back to _Configure VPN connections_ and click on _Add VPN_ to start the "VPN Setup Wizard". This will allow you to provide the required information that establishes the VPN connection to _partner3_. 
+
+You may find below the required configuration that will be applied in the _headend_ router, so that _partner3_ VPN connection is established:
+
+```
+partner3:
+  - partner_name: partner3
+    device:
+      - headend
+    sequence: 103
+    peer_ip: 172.16.252.3
+    isakmp_algo: 3des
+    isakmp_group: 2
+    pre_shared_key: cisco
+    transform_encryption: esp-3des
+    transform_auth: esp-md5-hmac
+    acl_number: "101"
+    acl_rule: "permit ip 192.168.0.0 0.0.0.255 192.168.3.0 0.0.0.255"
+```
+
+<p align="center"> 
+<img src="imgs/57hemp3.png">
+</p>
+
+<p align="center"> 
+<img src="imgs/58hemp4.png">
+</p>
+
+<p align="center"> 
+<img src="imgs/59hemp5.png">
+</p>
+
+<p align="center"> 
+<img src="imgs/60hemp6.png">
+</p>
+
+<p align="center"> 
+<img src="imgs/61hemp7.png">
+</p>
+
+<p align="center"> 
+<img src="imgs/62hemp8.png">
+</p>
+
+Once you are done with _partner3_ please repeat the process for the _partner4_ VPN connection, using the parameters below:
+
+```
+partner4:
+  - partner_name: partner4
+    device:
+      - headend
+    sequence: 104
+    peer_ip: 172.16.252.4
+    isakmp_algo: 3des
+    isakmp_group: 2
+    pre_shared_key: cisco
+    transform_encryption: esp-3des
+    transform_auth: esp-md5-hmac
+    acl_number: "104"
+    acl_rule: "permit ip 192.168.0.0 0.0.0.255 192.168.4.0 0.0.0.255"
+```
+
+By the end of the process you should have something like this in the _Configure VPN connections section_:
+
+<p align="center"> 
+<img src="imgs/63hemp9.png">
+</p>
+
+You may now click on _Monitor VPN Connections_ and the GUI will load a Grafana dashboard. Please login there with admin/admin, and change the password. If it does not work correctly (shows _Dashboard not found_) you may still access the Grafana dashboard by pointing your browser to http://10.10.20.20:3000
+
+Selecting the _Tunnel Detail_ dashboard will show you information about each specific tunnel, just by choosing the peer IP address:
+
+<p align="center"> 
+<img src="imgs/64grafana1.png">
+</p>
+
+The _Extranet Monitoring_ dashboard will show you all information about how the _headend_ router is doing:
+
+<p align="center"> 
+<img src="imgs/65grafana2.png">
+</p>
+
+#### <a name='Summary-1'></a>Summary
+
+This automation demo shows how you can leverage APIs to easily provision and monitor Extranet VPNs from a simple custom GUI. With this kind of approach network operators would not need to:
+
+* Understand network architecture details
+* Remotely connect to devices
+* Be experts on each underlying device CLI
+* Configure those devices via a _myriad_ CLI commands
+
+> Note: it is important to remark that this automation demo is based on NSO and its capability to extend existing functionalities via service models. The primary service model for NSO can be found in the `./nso/packages/vpn` directory. Service models/packages are the primary way that NSO functionality is extended. A service model is comprised of a YANG file, a set of templates, and optionally some python or java logic.
+
+
+
 
 # Author
 
