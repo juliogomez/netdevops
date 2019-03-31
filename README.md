@@ -1416,9 +1416,9 @@ Managing connections from [extranet](https://en.wikipedia.org/wiki/Extranet) env
 
 Once connectivity to a certain remote location is not required anymore, you will have to remove the associated relevant configuration from the central head-end, disabling that specific VPN and hence discontinuing connectivity.
 
-As you might guess, scaling this type of environment would really benefit from _automation_. The more remote locations from different 3rd-party entities (ie. partners, vendors), the longer the process to configure VPNs, ACLs with type of traffic and authorized end-points, etc. Implementing these long VPN configurations via CLI is of course a prone to errors process due to the required human interaction, so automation will also take care of this challenge and provide the required consistency along the network.
+As you might guess, scaling this type of environment would really benefit from _automation_. The more remote locations from different 3rd-party entities (ie. partners, vendors), the longer the process to configure VPNs, ACLs with type of traffic and authorized end-points, etc. Implementing these long VPN configurations via CLI is of course a _prone-to-error_ process due to the required human interaction, so automation will also take care of this challenge and provide the required consistency along the network.
 
-This demonstration will focus on how to automate the lifecycle of extranet VPN connections, from setting them up to checking everything is correct, providing related metrics, and tearing them down once they are not required anymore. It also includes a simple graphical user interface (GUI) that uses APIs to demonstrate how easy it could be to manage those VPN connections for users without the required permissions to connect via CLI to network devices.
+This demonstration will focus on how to automate the lifecycle of extranet VPN connections, from setting them up to checking everything is correct, providing related metrics, and tearing them down once they are not required anymore. It also includes a simple graphical user interface (GUI) that uses APIs to demonstrate how easy it could be to manage those VPN connections for users without the required permissions to connect via CLI to network devices, or even the knowledge to configure them.
 
 #### <a name='Topology'></a>Topology
 
@@ -1444,11 +1444,12 @@ The provided GUI portal to manage HEMP uses the following technologies:
 
 * Python, Flask, and JavaScript for the primary web interface
 * Telegraf, InfluxDB, and Grafana for visualizing operational metrics collected via SNMP
-* For ease of deployment and portability, all of the above components are run as a [docker compose stack](https://github.com/DevNetSandbox/sbx_multi_ios/blob/add-hemp-demo/hemp/docker-compose.yml) which can be executed directly on your sandbox _devbox_.
+
+For ease of deployment and portability, all of the above components are run as a [docker compose stack](https://github.com/DevNetSandbox/sbx_multi_ios/blob/add-hemp-demo/hemp/docker-compose.yml) which can be executed directly on your sandbox _devbox_.
 
 #### <a name='Environmentsetup'></a>Environment setup
 
-Open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on OSX) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
+Once you are connected via VPN to your reserved sandbox, please open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on OSX) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
 
 ```
 $ ssh developer@10.10.20.20
@@ -1479,8 +1480,7 @@ There you must run the `setup.sh` script to set the complete environment up.
 `setup.sh` will perform the following steps in the sandbox _devbox_:
 
 1. Install required software tools and dependencies in a python virtual environment
-2. Launch VIRL simulations for the whole network, including 4 remote locations and 1 central hub headend
-    >As per the proposed architecture, routers in every remote location will be completely configured, and each VPN will only become active when the required configuration for that specific VPN is applied at the headend central location.
+2. Launch VIRL simulations for the whole network, including 4 remote _partner_ locations and 1 central hub _headend_
 3. Setup and start NSO
 4. Add all VIRL network devices into NSO
 5. Synchronize all existing configurations from network devices to NSO
@@ -1505,17 +1505,17 @@ Your demo architecture is now set up, and includes the following main components
 * 1 central _headend_ router where _partner_ extranet VPN connections from remote devices are terminated
 * 4 remote _partner_ routers (_partner1_, _partner2_, _partner3_, _partner4_) that represent the _unmanaged_ side of extranet/partner VPN connections
 
-Both the remote _partner_ routers and the _headend_ one are configured with IP SLA probes, to send interesting traffic through the VPNs and keep them active.
+Simulated devices connected to both, the remote _partner_ routers and the _headend_ one, are configured with IP SLA probes, to send interesting traffic through the VPNs and keep them active.
 
 Every remote _partner_ router (1 to 4) is completely configured to establish their respective VPNs. Having connectivity for each one of them will depend exclusively on having the proper configuration applied on the _headend_ router side.
 
-At the _headend_ router we have already provided the required configuration to setup VPN connections towards _partner1_ and _partner2_ remote devices. The `partners` directory includes YAML files with all required parameters to configure the _headend_ router and complete the VPN connections _just_ for _partner1_ and _partner2_ remote locations (not 3 and 4).
+On the _headend_ router we have already provided the required configuration to setup VPN connections towards _partner1_ and _partner2_ remote devices. The `partners` directory includes YAML files with all required parameters to configure the _headend_ router and complete the VPN connections _just_ for _partner1_ and _partner2_ remote locations (not 3 and 4).
 
 This configuration has been provided using Ansible and associated NSO modules during step 8 of the _setup_ phase. That step is the one that runs an Ansible playbook, described in the `site.yaml` file. If you go through its content, you will see that first it synchronizes the configuration from NSO to the remote devices for consistency (in case there might have been any changes configured directly on the devices they will be overwritten by this step). Then the playbook will load _partner1_ and _partner2_ YAML files into variables, and push those those to NSO as new headend router configuration to activate those specific VPNs. Finally the playbook with instruct NSO to sync that new configuration from NSO to the _headend_ router.
 
 However, _partner3_ and _partner4_ VPNs are pre-configured __only__ on the partner/remote side, and will need you to provide additional configuration on the _headend_ to complete those VPNs setup.
 
-Instead of configuring it manually, or via YAML files and Ansible, for this demos you will be able to define the required configuration in the _headend_ via the GUI management portal. It will allow you to provide the required parameters, and the GUI will translate them into the required information to send towards NSO north-bound APIs.
+Instead of configuring it manually, or via YAML files and Ansible, for this demos you will be able to define the required configuration in the _headend_ via a GUI management portal. It will allow you to provide the required parameters, and the GUI will translate them into the required information to send towards NSO north-bound APIs.
 
 <p align="center"> 
 <img src="imgs/52hempelements.png">
@@ -1523,9 +1523,9 @@ Instead of configuring it manually, or via YAML files and Ansible, for this demo
 
 This API-based automation solution will enable you to easily apply or remove the required configuration in the _headend_ router, without having to connect to the device via CLI and type _myriads_ of commands.
 
-At this point you might be wondering why NSO is part of the architecture, or if you could use Ansible to directly configure your network devices. One of the multiple benefits that NSO provides is that, although in this demo we are only using IOS XE devices, it would be easy to support a mixed environment with other types of devices / CLIs (ie. IOS XR, ASA firewall, other vendors...) _without doing any modifications in the management GUI_. Please remember the GUI uses NSO APIs, so it does not depend on the type of underlying infrastructure devices. NSO plays a key role by performing that translation from API requests to the information and format those devices require and support.
+At this point you might be wondering why NSO is part of the architecture, or if you could use Ansible to directly configure your network devices. One of the multiple benefits that NSO provides is that, although in this demo we are only using IOS XE devices, it would be easy to support a _mixed_ environment with other types of devices / CLIs (ie. IOS XR, ASA firewall, other vendors...) _without doing any modifications in the management GUI_. Please remember the GUI uses NSO north-bound APIs, so it does not depend on the type of underlying infrastructure devices. NSO plays a key role by performing that translation from API requests to the information and format those devices require and support.
 
-You may access your HEMP GUI portal by pointing your browser to http://10.10.20.20:5001
+You may access the HEMP GUI portal by pointing your browser to http://10.10.20.20:5001
 
 <p align="center"> 
 <img src="imgs/55hemp1.png">
@@ -1537,13 +1537,13 @@ Please click on _Configure VPN connections_ and there you will see the ones alre
 <img src="imgs/56hemp2.png">
 </p>
 
-You may now click on one of them, for example _partner1_, and the GUI will display its configuration and metrics. The system will also allow you to perform some actions on the VPN:
+You may now click on one of them, for example _partner1_, and the GUI will display its configuration and metrics. The system will also allow you to perform some actions on that specific VPN:
 
 * _Check Sync_: this will compare the configuration in NSO vs the one in the _headend_ router
 * _Reactivate Re-Deploy_: ask NSO to sync configuration again from NSO to the _headend_ router
-* _Undeploy_: remove configuration from the _headend_ router, while keeping it in NSO in case you need to redeploy it later
+* _Undeploy_: remove configuration from the _headend_ router, while conveniently keeping it in NSO in case you need to redeploy it later
 
-Now let's go back to _Configure VPN connections_ and click on _Add VPN_ to start the "VPN Setup Wizard". This will allow you to provide the required information that establishes the VPN connection to _partner3_. 
+Now let's go back to _Configure VPN connections_ and click on _Add VPN_ to start the "VPN Setup Wizard". This will allow you to provide the required information to establish the VPN connection from the _headend_ router to _partner3_. 
 
 You may find below the required configuration that will be applied in the _headend_ router, so that _partner3_ VPN connection is established:
 
@@ -1562,6 +1562,8 @@ partner3:
     acl_number: "101"
     acl_rule: "permit ip 192.168.0.0 0.0.0.255 192.168.3.0 0.0.0.255"
 ```
+
+This is the sequence of steps you will need to follow in the GUI_
 
 <p align="center"> 
 <img src="imgs/57hemp3.png">
@@ -1605,13 +1607,13 @@ partner4:
     acl_rule: "permit ip 192.168.0.0 0.0.0.255 192.168.4.0 0.0.0.255"
 ```
 
-By the end of the process you should have something like this in the _Configure VPN connections section_:
+By the end of the process you should have something like this in the _Configure VPN connections_ section:
 
 <p align="center"> 
 <img src="imgs/63hemp9.png">
 </p>
 
-You may now click on _Monitor VPN Connections_ and the GUI will load a Grafana dashboard. Please login there with admin/admin, and change the password. If it does not work correctly (shows _Dashboard not found_) you may still access the Grafana dashboard by pointing your browser to http://10.10.20.20:3000
+You may now click on _Monitor VPN Connections_ and the GUI will load a Grafana dashboard. Please login there with `admin/admin`, and change the password. If it does not work correctly (error message _Dashboard not found_) you may still access the Grafana dashboard by pointing your browser directly to http://10.10.20.20:3000
 
 Selecting the _Tunnel Detail_ dashboard will show you information about each specific tunnel, just by choosing the peer IP address:
 
@@ -1623,6 +1625,12 @@ The _Extranet Monitoring_ dashboard will show you all information about how the 
 
 <p align="center"> 
 <img src="imgs/65grafana2.png">
+</p>
+
+__CONGRATULATIONS! You have now completed your second NetDevOps demo on how to leverage APIs to automate Extranet VPNs management!__ 
+
+<p align="center"> 
+<img src="imgs/101congrats.gif">
 </p>
 
 #### <a name='Summary-1'></a>Summary
