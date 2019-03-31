@@ -1418,11 +1418,15 @@ Once connectivity to a certain remote location is not required anymore, you will
 
 As you might guess, scaling this type of environment would really benefit from _automation_. The more remote locations from different 3rd-party entities (ie. partners, vendors), the longer the process to configure VPNs, ACLs with type of traffic and authorized end-points, etc. Implementing these long VPN configurations via CLI is of course a _prone-to-error_ process due to the required human interaction, so automation will also take care of this challenge and provide the required consistency along the network.
 
+<p align="center"> 
+<img src="imgs/54carrey.gif">
+</p>
+
 This demonstration will focus on how to automate the lifecycle of extranet VPN connections, from setting them up to checking everything is correct, providing related metrics, and tearing them down once they are not required anymore. It also includes a simple graphical user interface (GUI) that uses APIs to demonstrate how easy it could be to manage those VPN connections for users without the required permissions to connect via CLI to network devices, or even the knowledge to configure them.
 
 #### <a name='Topology'></a>Topology
 
-Our demo setup will include 1 central hub location, with a _headend_ router that will concentrate VPN connections from 4 remote _partner_ locations.
+Our demo setup will include 1 central hub location with a _headend_ router that will concentrate VPN connections from 4 remote _partner_ locations.
 
 We will also have some switches acting as _hosts_ exchanging traffic, and another router simulating _internet_, providing connectivity between the headend and partner locations.
 
