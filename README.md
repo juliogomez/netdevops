@@ -1467,17 +1467,10 @@ Once in, clone the repository that includes all required files to build the setu
 
 With that, your sandbox _devbox_ includes now all required info to start building the environment.
 
-Go into the repo directory, change to the `add-hemp-demo` git branch, and go into the `hemp` directory:
+Go into the `hemp` directory and run the `setup.sh` script to set the complete environment up.
 
 ```
-[developer@devbox ~]$cd sbx_multi_ios
-[developer@devbox sbx_multi_ios]$git checkout add-hemp-demo
-[developer@devbox sbx_multi_ios]$cd hemp
-```
-
-There you must run the `setup.sh` script to set the complete environment up.
-
-```
+[developer@devbox ~]$cd sbx_multi_ios/hemp
 [developer@devbox hemp]$./setup.sh
 ```
 
