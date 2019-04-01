@@ -680,7 +680,13 @@ Following this strategy, we are now ready to start building a completely automat
 
 ## <a name='NetDevOpsDemonstrations'></a>NetDevOps Demonstrations
 
-The following set of demos requires a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for your demo. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO netsim, etc.
+Now that you know about some of the most important building blocks for programmability, it is time to see them working together and how they are used to build business-relevant solutions that help managing our networks. And what better way to learn about them than getting our hands _dirty_ by running some demos?
+
+<p align="center"> 
+<img src="imgs/99morpheus.jpg">
+</p>
+
+The following set of demos requires a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for those demos. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO netsim, etc.
 
 You may find the required sandbox for our demo using [this link](https://devnetsandbox.cisco.com/RM/Diagram/Index/6b023525-4e7f-4755-81ae-05ac500d464a?diagramType=Topology), and book it for up to one week exclusively for you.
 
