@@ -12,6 +12,7 @@ devices:
     tacacs:
         username: root
     passwords:
+        line: "D_Vay!_10&"
         tacacs: D_Vay!_10&
 
     connections:
