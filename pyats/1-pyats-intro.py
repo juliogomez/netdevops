@@ -1,5 +1,5 @@
 from ats.topology import loader
-testbed = '/pyats/netdevops/pyats/devnet_sandbox.yaml'
+testbed = '/pyats/demos/devnet_sandbox.yaml'
 testbed = loader.load(testbed)
 
 # select a specific device from the testbed definition

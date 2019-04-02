@@ -25,7 +25,7 @@ def get_interface_counters(dev):
     return intf.info
 
 # define where the testbed definition file is
-testbed = '/pyats/netdevops/pyats/devnet_sandbox.yaml'
+testbed = '/pyats/demos/devnet_sandbox.yaml'
 # load the pyATS testbed
 testbed = loader.load(testbed)
 # load the Genie testbed from the pyATS one
