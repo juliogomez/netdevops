@@ -1,0 +1,62 @@
+testbed:
+
+  name: devnet_always_on_sandbox
+
+
+devices:
+
+  csr1000v:
+    alias: csr1000v
+    os: iosxe
+    type: CSR1000v
+    tacacs:
+        username: root
+    passwords:
+        tacacs: D_Vay!_10&
+
+    connections:
+      defaults:
+        class: unicon.Unicon
+      console:
+        ip: ios-xe-mgmt.cisco.com
+        protocol: ssh
+        port: 8181
+    custom:
+      abstraction:
+        order: [os, type]
+
+  sbx-n9kv-ao:
+    alias: nxos
+    os: nxos
+    type: Nexus9000v
+    tacacs:
+        username: admin
+    passwords:
+        tacacs: Admin_1234!
+
+    connections:
+      defaults:
+        class: unicon.Unicon
+      console:
+        ip: sbx-nxos-mgmt.cisco.com
+        protocol: ssh
+        port: 8181
+    custom:
+      abstraction:
+        order: [os, type]
+
+
+topology:
+  csr1000v:
+    interfaces:
+      GigabitEthernet1:
+        ipv4: 10.10.20.48
+        link: flat
+        type: ethernet
+
+  nxos:
+    interfaces:
+      Ethernet1/1:
+        ipv4: 10.10.20.48
+        link: flat
+        type: ethernet
