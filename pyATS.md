@@ -43,6 +43,7 @@ Before starting please clone this repo in your local workstation, so you can exe
 
 ```
 $ git clone https://github.com/juliogomez/netdevops.git
+$ cd netdeveops
 ```
 
 *** For these first demos we will be using [this testbed definition](./pyats/devnet_sandbox.yaml), including a couple of devices from the _always-on_ sandboxes: a CSR1000V (IOSXE) and a Nexus 9000 (NXOS). As long as you don't need to go through any reservation process, they are very convenient to use but they are sometimes quite slow and often unreliable.***
@@ -91,13 +92,11 @@ Displaying 1 Results For ios
 ╘════════════════════════╧═════════╧══════════════════════╛
 ```
 
-That is a simple template for a 2 IOS-routers simulation. Kind of like a _hello-world for virlutils_.
+That is a simple template for a 2 IOS-routers simulation (kind of like a _hello-world for virlutils_).
 
-Once you are connected to your sandbox VPN, make a new directory, enter it, and there download that VIRL example topology to start it in our server.
+Connect to your sandbox VPN and download the VIRL topology specified below, to start it in your server.
 
 ```
-$ mkdir virl
-$ cd virl
 $ virl pull virlfiles/2-ios-router
 Pulling from virlfiles/2-ios-router
 Saved topology as topology.virl
@@ -181,7 +180,7 @@ The most basic demo will show you how to use pyATS to execute a single command o
 Run the demo with:
 
 ```
-$ docker run -it -v $PWD/netdevops/pyats/:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/1-pyats-intro.py
+$ docker run -it -v $PWD/pyats/:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/1-pyats-intro.py
 ```
 
 ### Demo 2: Look for CRC errors across multiple devices
