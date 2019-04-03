@@ -43,7 +43,7 @@ Before starting please clone this repo in your local workstation, so you can exe
 
 ```
 $ git clone https://github.com/juliogomez/netdevops.git
-$ cd netdeveops
+$ cd netdevops/pyats
 ```
 
 *** For these first demos we will be using [this testbed definition](./pyats/devnet_sandbox.yaml), including a couple of devices from the _always-on_ sandboxes: a CSR1000V (IOSXE) and a Nexus 9000 (NXOS). As long as you don't need to go through any reservation process, they are very convenient to use but they are sometimes quite slow and often unreliable.***
@@ -97,14 +97,12 @@ That is a simple template for a 2 IOS-routers simulation (kind of like a _hello-
 Connect to your sandbox VPN and download the VIRL topology specified below, to start it in your server.
 
 ```
-$ virl pull virlfiles/2-ios-router
-Pulling from virlfiles/2-ios-router
+$ virl pull virlfiles/genie_learning_lab
+Pulling from virlfiles/genie_learning_lab
 Saved topology as topology.virl
 $ virl up
 Creating default environment from topology.virl
-Localizing {{ dns_server }} with: 4.2.2.3
 Localizing {{ gateway }} with: 172.16.30.254
-Localizing rsa modulus 768 with: rsa modulus 1024
 ```
 
 Now you have your VIRL simulation running in the sandbox server.
@@ -112,11 +110,11 @@ Now you have your VIRL simulation running in the sandbox server.
 ```
 $ virl ls
 Running Simulations
-╒═════════════════════╤══════════╤════════════════════════════╤═══════════╕
-│ Simulation          │ Status   │ Launched                   │ Expires   │
-╞═════════════════════╪══════════╪════════════════════════════╪═══════════╡
-│ virl_default_K83qto │ ACTIVE   │ 2019-04-03T07:19:37.995070 │           │
-╘═════════════════════╧══════════╧════════════════════════════╧═══════════╛
+╒══════════════════════════╤══════════╤════════════════════════════╤═══════════╕
+│ Simulation               │ Status   │ Launched                   │ Expires   │
+╞══════════════════════════╪══════════╪════════════════════════════╪═══════════╡
+│ netdevops_default_oAmstu │ ACTIVE   │ 2019-04-03T10:54:44.416113 │           │
+╘══════════════════════════╧══════════╧════════════════════════════╧═══════════╛
 ```
 
 You can also see its included nodes.
@@ -124,46 +122,46 @@ You can also see its included nodes.
 ```
 $ virl nodes
 Here is a list of all the running nodes
-╒═════════╤════════╤═════════╤═════════════╤════════════╤══════════════════════╤════════════════════╕
-│ Node    │ Type   │ State   │ Reachable   │ Protocol   │ Management Address   │ External Address   │
-╞═════════╪════════╪═════════╪═════════════╪════════════╪══════════════════════╪════════════════════╡
-│ router2 │ IOSv   │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.118        │ N/A                │
-├─────────┼────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
-│ router1 │ IOSv   │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.117        │ N/A                │
-╘═════════╧════════╧═════════╧═════════════╧════════════╧══════════════════════╧════════════════════╛
+╒════════════╤══════════╤═════════╤═════════════╤════════════╤══════════════════════╤════════════════════╕
+│ Node       │ Type     │ State   │ Reachable   │ Protocol   │ Management Address   │ External Address   │
+╞════════════╪══════════╪═════════╪═════════════╪════════════╪══════════════════════╪════════════════════╡
+│ nx-osv-1   │ NX-OSv   │ ACTIVE  │ UNREACHABLE │ telnet     │ 172.16.30.126        │ N/A                │
+├────────────┼──────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
+│ csr1000v-1 │ CSR1000v │ ACTIVE  │ UNREACHABLE │ telnet     │ 172.16.30.125        │ N/A                │
+╘════════════╧══════════╧═════════╧═════════════╧════════════╧══════════════════════╧════════════════════╛
 ```
 
-Once a node shows up as _ACTIVE_ you can connect to it (use password `cisco`) with:
+Once a node shows up as _ACTIVE_ and _REACHABLE_ you can connect to it (use password `cisco`) with:
 
 ```
-$ virl ssh router1
+$ virl ssh nx-osv-1
 ```
 
 Please note you will need to confirm you want to add its IP address to the list of _known hosts_.
 
 One of the fantastic features that _virlutils_ includes is that it can generate inventories to be used by other systems, with `virl generate [ pyats | nso | ansible ]`
 
-For our demos we will use the `pyats` one, try it.
+For our demos we will use the `pyats` one, so try it once that all nodes in your simulation are _REACHABLE_ (the first time it might take up to 4 mins).
 
 ```
-$ virl generate pyats
+$ virl generate pyats -o default_testbed.yaml
 Writing default_testbed.yaml
 ```
 
-With just a single command now you have a YAML file that defines your VIRL environment as a testbed to be used by pyATS straight away!
+With just a single command you have now a YAML file that defines your VIRL environment as a testbed to be used by pyATS straight away!
 
 <p align="center"> 
 <img src="imgs/200wow.gif">
 </p>
 
-__We are now ready to start our demos!__
+__We are now READY to start our demos!__
 
 Please note that by the end of the labs, when you are done with your simulation, you can easily tear it down with:
 
 ```
 $ virl down
 Removing ./.virl/default
-Shutting Down Simulation virl_default_K83qto.....
+Shutting Down Simulation netdevops_default_oAmstu.....
 SUCCESS
 ```
 
@@ -177,10 +175,10 @@ The most basic demo will show you how to use pyATS to execute a single command o
 4. Connect to that device
 5. Execute a command in that device
 
-Run the demo with:
+Run the demo with an interactive container (`-it`) that requires the enable password as an environment variable (`-e PYATS_AUTH_PASS=cisco`) and a mapped volume from your workstation to the container (`-v $PWD/pyats/:/pyats/demos/`):
 
 ```
-$ docker run -it -v $PWD/pyats/:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/1-pyats-intro.py
+$ docker run -it -e PYATS_AUTH_PASS=cisco -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/1-pyats-intro.py
 ```
 
 ### Demo 2: Look for CRC errors across multiple devices
@@ -203,24 +201,8 @@ In this case you will use pyATS and Genie to compile interface counters from mul
 8. Merge all interface details from these 2 different devices (with different CLIs), into a single source (python dictionary)
 9. Loop through the compiled data in that single source and show CRC errors for every interface
 
-
-
-
-```
-$ docker run -it -v $PWD/netdevops/pyats/:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/2-genie-intro.py
-```
-
------
-
-Additionally, [ipyATS](https://github.com/kecorbin/ipyats) is an iPython wrapper for pyATS and Genie you can use to develop your test cases. By default it provides you connectivity to a couple of devices from the _always-on_ sandboxes: a CSR1000V (IOSXE) and a Nexus 9000 (NXOS). So it is very convenient to easily get started with pyATS.
-
-
-Finally install ipyATS and execute it:
+Run the demo with an interactive container (`-it`) that requires the enable password & login user/password as environment variables (`-e PYATS_AUTH_PASS=cisco -e PYATS_USERNAME=cisco -e PYATS_PASSWORD=cisco`) and a mapped volume from your workstation to the container (`-v $PWD/pyats/:/pyats/demos/`):
 
 ```
-root@3140943f041c:/??????# pip install ipyats
-[... lots of installation logs ...]
-root@3140943f041c:/??????# ipyats
-[... more logs ...]
-In [1]: 
+$ docker run -it -e PYATS_AUTH_PASS=cisco -e PYATS_USERNAME=cisco -e PYATS_PASSWORD=cisco -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/2-genie-intro.py
 ```
