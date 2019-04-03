@@ -8,7 +8,7 @@ Genie builds on top of pyATS and it is fully integrated to provide model automat
 
 Together, pyATS and Genie enable you to create network test cases that provide __stateful__ validation of devices operational status. You can use them to validate how a new feature or product will affect your network, compare the status of your network before/after a change, customize your network monitoring based on your own business drivers.
 
-The solution provides visibility on network devices' health, by focusing not only on the _configurational_ state, but also on the _operational_ status.
+The solution provides visibility on network devices health, by focusing not only on the _configurational_ state, but also on the _operational_ status.
 
 It is agnostic and extensible, so any type of system could potentially be included by developing the right set of libraries. 
 
@@ -37,7 +37,7 @@ The first thing you need to decide is _how_ you want to run pyATS: natively in y
 
 For the first option you should use a Python 3.X [virtual environment](https://virtualenv.pypa.io/en/latest/), so you don't clog your system, and then install the required tools (see [doc](https://developer.cisco.com/docs/pyats/#!python-virtual-environment)). 
 
-However it would be easier to run it [in a Docker container](https://developer.cisco.com/docs/pyats/#!docker-container), as the available image includes all required software, libraries and dependencies. So we will use this option for our demos.
+However it is easier to run it [in a Docker container](https://developer.cisco.com/docs/pyats/#!docker-container), as the available image includes all required software, libraries and dependencies. So we will use this option for our demos.
 
 Before starting please clone this repo in your local workstation, so you can execute the different scripts we will use during the demos.
 
@@ -45,10 +45,6 @@ Before starting please clone this repo in your local workstation, so you can exe
 $ git clone https://github.com/juliogomez/netdevops.git
 $ cd netdevops/pyats
 ```
-
-*** For these first demos we will be using [this testbed definition](./pyats/devnet_sandbox.yaml), including a couple of devices from the _always-on_ sandboxes: a CSR1000V (IOSXE) and a Nexus 9000 (NXOS). As long as you don't need to go through any reservation process, they are very convenient to use but they are sometimes quite slow and often unreliable.***
-
-YOU NEED TO MAKE A RESERVATION FOR A sbx-multi-ios SANDBOX...
 
 The sandbox you have reserved includes a _big_ VIRL server we will use to run some simulated devices for our demos. In order to easily manage it we will use a very handy utility called [virlutils](https://github.com/CiscoDevNet/virlutils).
 
@@ -58,7 +54,7 @@ You can install it in your workstation with:
 $ pip install virlutils
 ```
 
-Once done please create a VIRL init file...
+Once done, please create a VIRL init file...
 
 ```
 $ vi ~/.virlrc
@@ -72,7 +68,7 @@ VIRL_PASSWORD=guest
 VIRL_HOST=10.10.20.160
 ```
 
-And then start a new terminal window, so it reads the new VIRL init file.
+And then start a new terminal window in your workstation, so that it reads the new VIRL init file.
 
 Now you are able to search for some example pre-defined simulated topologies that could be useful for testing.
 
@@ -80,7 +76,7 @@ Now you are able to search for some example pre-defined simulated topologies tha
 $ virl search
 ```
 
-You may even filter them, and look for the ones using _IOS_.
+You may even filter them, and for example look for the ones using _IOS_.
 
 ```
 $ virl search ios
@@ -94,7 +90,7 @@ Displaying 1 Results For ios
 
 That is a simple template for a 2 IOS-routers simulation (kind of like a _hello-world for virlutils_).
 
-Connect to your sandbox VPN and download the VIRL topology specified below, to start it in your server.
+Make sure you are connected to your sandbox VPN and then download the VIRL topology specified below, so that you can start it in your server.
 
 ```
 $ virl pull virlfiles/genie_learning_lab
@@ -117,7 +113,7 @@ Running Simulations
 ╘══════════════════════════╧══════════╧════════════════════════════╧═══════════╛
 ```
 
-You can also see its included nodes.
+You can also see the status of its included nodes.
 
 ```
 $ virl nodes
@@ -125,9 +121,9 @@ Here is a list of all the running nodes
 ╒════════════╤══════════╤═════════╤═════════════╤════════════╤══════════════════════╤════════════════════╕
 │ Node       │ Type     │ State   │ Reachable   │ Protocol   │ Management Address   │ External Address   │
 ╞════════════╪══════════╪═════════╪═════════════╪════════════╪══════════════════════╪════════════════════╡
-│ nx-osv-1   │ NX-OSv   │ ACTIVE  │ UNREACHABLE │ telnet     │ 172.16.30.126        │ N/A                │
+│ csr1000v-1 │ CSR1000v │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.129        │ N/A                │
 ├────────────┼──────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
-│ csr1000v-1 │ CSR1000v │ ACTIVE  │ UNREACHABLE │ telnet     │ 172.16.30.125        │ N/A                │
+│ nx-osv-1   │ NX-OSv   │ ACTIVE  │ REACHABLE   │ telnet     │ 172.16.30.130        │ N/A                │
 ╘════════════╧══════════╧═════════╧═════════════╧════════════╧══════════════════════╧════════════════════╛
 ```
 
@@ -137,9 +133,9 @@ Once a node shows up as _ACTIVE_ and _REACHABLE_ you can connect to it (use pass
 $ virl ssh nx-osv-1
 ```
 
-Please note you will need to confirm you want to add its IP address to the list of _known hosts_.
+Please note that during the connection process you will need to confirm you want to add its IP address to the list of _known hosts_.
 
-One of the fantastic features that _virlutils_ includes is that it can generate inventories to be used by other systems, with `virl generate [ pyats | nso | ansible ]`
+One of the fantastic features that _virlutils_ includes is that it can generate inventories to be used by other systems, using the command: `virl generate [ pyats | nso | ansible ]`
 
 For our demos we will use the `pyats` one, so try it once that all nodes in your simulation are _REACHABLE_ (the first time it might take up to 4 mins).
 
@@ -167,7 +163,9 @@ SUCCESS
 
 ### Demo 1: Execute a command on a network device
 
-The most basic demo will show you how to use pyATS to execute a single command on a certain network device. Please review the content of [this script](./pyats/1-pyats-intro.py), and you will see the following steps to execute:
+The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` in a CSR1000v.
+
+Please review the content of [this script](./pyats/1-pyats-intro.py), and you will see it executes the following steps:
 
 1. Load the required pyATS library
 2. Load the pyATS testbed definition from file
@@ -175,15 +173,17 @@ The most basic demo will show you how to use pyATS to execute a single command o
 4. Connect to that device
 5. Execute a command in that device
 
-Run the demo with an interactive container (`-it`) that requires the enable password as an environment variable (`-e PYATS_AUTH_PASS=cisco`) and a mapped volume from your workstation to the container (`-v $PWD/pyats/:/pyats/demos/`):
+Run the demo with an interactive container (`-it`), and pass it the enable password as an environment variable (`-e PYATS_AUTH_PASS=cisco`) and a mapped volume from your workstation to the container (`-v $PWD/pyats/:/pyats/demos/`):
 
 ```
 $ docker run -it -e PYATS_AUTH_PASS=cisco -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/1-pyats-intro.py
 ```
 
-### Demo 2: Look for CRC errors across multiple devices
+### Demo 2: List interface CRC errors from different devices
 
-In this case you will use pyATS and Genie to compile interface counters from multiple devices across the network and then check if there are CRC errors in them. Please review the content of [this script](./pyats/2-genie-intro.py), and you will see the following steps to execute:
+In this case you will use pyATS and Genie to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. The script will use the same function to compile CRC errors information from 2 devices with different CLI (CSR1000v and Nexus switch), with the available parsers providing independance from the underlying device type.
+
+Please review the content of [this script](./pyats/2-genie-intro.py), and you will see the following steps to execute:
 
 1. Load the required pyATS and Genie libraries
 2. Define a reusable function that obtains __all__ interface counters from a single device
