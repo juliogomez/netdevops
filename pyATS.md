@@ -176,7 +176,11 @@ Please review the content of [this script](./pyats/1-pyats-intro.py), and you wi
 Run the demo with an interactive container (`-it`), and pass it the enable password as an environment variable (`-e PYATS_AUTH_PASS=cisco`) and a mapped volume from your workstation to the container (`-v $PWD/pyats/:/pyats/demos/`):
 
 ```
-$ docker run -it -e PYATS_AUTH_PASS=cisco -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/1-pyats-intro.py
+$ docker run -it \
+  -e PYATS_AUTH_PASS=cisco \
+  -v $PWD:/pyats/demos/ \
+  ciscotestautomation/pyats:latest \
+  python3 /pyats/demos/1-pyats-intro.py
 ```
 
 ### Demo 2: List interface CRC errors from different devices
@@ -204,5 +208,11 @@ Please review the content of [this script](./pyats/2-genie-intro.py), and you wi
 Run the demo with an interactive container (`-it`) that requires the enable password & login user/password as environment variables (`-e PYATS_AUTH_PASS=cisco -e PYATS_USERNAME=cisco -e PYATS_PASSWORD=cisco`) and a mapped volume from your workstation to the container (`-v $PWD/pyats/:/pyats/demos/`):
 
 ```
-$ docker run -it -e PYATS_AUTH_PASS=cisco -e PYATS_USERNAME=cisco -e PYATS_PASSWORD=cisco -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest python3 /pyats/demos/2-genie-intro.py
+$ docker run -it \
+  -e PYATS_AUTH_PASS=cisco \
+  -e PYATS_USERNAME=cisco \
+  -e PYATS_PASSWORD=cisco \
+  -v $PWD:/pyats/demos/ \
+  ciscotestautomation/pyats:latest \
+  python3 /pyats/demos/2-genie-intro.py
 ```
