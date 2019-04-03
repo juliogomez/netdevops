@@ -150,6 +150,14 @@ With just a single command you have now a YAML file that defines your VIRL envir
 <img src="imgs/200wow.gif">
 </p>
 
+That pyATS testbed definition file requires the enable password and login user/password to be defined as variables.
+
+```
+$ export PYATS_AUTH_PASS=cisco
+$ export PYATS_USERNAME=cisco
+$ export PYATS_PASSWORD=cisco
+```
+
 __We are now READY to start our demos!__
 
 Please note that by the end of the labs, when you are done with your simulation, you can easily tear it down with:
@@ -173,11 +181,10 @@ Please review the content of [this script](./pyats/1-pyats-intro.py), and you wi
 4. Connect to that device
 5. Execute a command in that device
 
-Run the demo with an interactive container (`-it`), and pass it the enable password as an environment variable (`-e PYATS_AUTH_PASS=cisco`) and a mapped volume from your workstation to the container (`-v $PWD/pyats/:/pyats/demos/`):
+Run the demo with an interactive container (`-it`), and pass it a mapped volume from your workstation to the container (`-v $PWD:/pyats/demos/`):
 
 ```
 $ docker run -it \
-  -e PYATS_AUTH_PASS=cisco \
   -v $PWD:/pyats/demos/ \
   ciscotestautomation/pyats:latest \
   python3 /pyats/demos/1-pyats-intro.py
@@ -205,13 +212,10 @@ Please review the content of [this script](./pyats/2-genie-intro.py), and you wi
 8. Merge all interface details from these 2 different devices (with different CLIs), into a single source (python dictionary)
 9. Loop through the compiled data in that single source and show CRC errors for every interface
 
-Run the demo with an interactive container (`-it`) that requires the enable password & login user/password as environment variables (`-e PYATS_AUTH_PASS=cisco -e PYATS_USERNAME=cisco -e PYATS_PASSWORD=cisco`) and a mapped volume from your workstation to the container (`-v $PWD/pyats/:/pyats/demos/`):
+Run the demo with an interactive container (`-it`), and pass it a mapped volume from your workstation to the container (`-v $PWD:/pyats/demos/`):
 
 ```
 $ docker run -it \
-  -e PYATS_AUTH_PASS=cisco \
-  -e PYATS_USERNAME=cisco \
-  -e PYATS_PASSWORD=cisco \
   -v $PWD:/pyats/demos/ \
   ciscotestautomation/pyats:latest \
   python3 /pyats/demos/2-genie-intro.py
