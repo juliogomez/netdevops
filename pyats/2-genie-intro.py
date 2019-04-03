@@ -25,20 +25,20 @@ def get_interface_counters(dev):
     return intf.info
 
 # define where the testbed definition file is
-testbed = '/pyats/demos/devnet_sandbox.yaml'
+testbed = '/pyats/demos/default_testbed.yaml'
 # load the pyATS testbed
 testbed = loader.load(testbed)
 # load the Genie testbed from the pyATS one
 testbed = Genie.init(testbed)
 
 # select a device from the testbed
-csr = testbed.devices['csr1000v']
+csr = testbed.devices['csr1000v-1']
 # call our function to obtain counters for all interfaces from that device
 csr_interface_details = get_interface_counters(csr)
 print(csr_interface_details)
 
 # select a different device from the testbed, with a different CLI
-nx = testbed.devices['nxos']
+nx = testbed.devices['nx-osv-1']
 # use the same function to obtain the counters for all interfaces from that device
 nx_interface_details = get_interface_counters(nx)
 print(nx_interface_details)

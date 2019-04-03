@@ -33,6 +33,7 @@ devices:
     tacacs:
         username: admin
     passwords:
+        line: "Admin_1234!"
         tacacs: Admin_1234!
 
     connections:
