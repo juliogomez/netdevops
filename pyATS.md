@@ -19,7 +19,15 @@
 
 pyATS is an Automation Test System written in Python. It provides the core infrastructure to define topologies, connect to network devices and run the required tests.
 
+<p align="center"> 
+<img src="imgs/202pyatslogo.jpg">
+</p>
+
 Genie builds on top of pyATS and it is fully integrated to provide model automation tests. It focuses on test cases for features (ie. BGP, HSRP, OSPF), and abstracts how this information is obtained from underlying devices. 
+
+<p align="center"> 
+<img src="imgs/203genie.png">
+</p>
 
 Together, pyATS and Genie enable you to create network test cases that provide __stateful__ validation of devices operational status. You can use them to validate how a new feature or product will affect your network, compare the status of your network before/after a change, customize your network monitoring based on your own business drivers.
 
@@ -29,7 +37,7 @@ It is agnostic and extensible, so any type of system could potentially be includ
 
 It can be integrated into CICD pipelines (implemented via integration servers like GitLab or Jenkins), other frameworks (like Robot, for almost-natural language stateful tests definition), or even interact with ChatBots (ChatOps).
 
-It also integrates _beautifully_ with VIRL topologies, so you can focus only on what you want to test.
+It also integrates _beautifully_ with VIRL topologies, and we will show you how to do it so you can focus only on what you want to test in your network.
 
 [pyATS Documentation](https://developer.cisco.com/docs/pyats)
 
@@ -42,11 +50,11 @@ Your network devices are also objects in pyATS, so you can perform operations on
 * execute('show version')
 * configure('no ip domain lookup')
 
-The output from these commands will be parsed by the system into structured data, so you can extract business-relevant data from them.
+The output from these commands will be parsed into structured data, so your systems can easily extract business-relevant data from them.
 
 ## <a name='Demos'></a>Demos
 
-Let's see it working.
+0k, let's see it working.
 
 The first thing you need to decide is _how_ you want to run pyATS: natively in your own system, or in a Docker container.
 
@@ -54,18 +62,19 @@ For the first option you should use a Python 3.X [virtual environment](https://v
 
 However it is easier to run it [in a Docker container](https://developer.cisco.com/docs/pyats/#!docker-container), as the available image includes all required software, libraries and dependencies. So we will use this option for our demos.
 
-The sandbox you have reserved includes a _big_ VIRL server we will use to run some simulated devices for our demos. In order to easily manage it we will use a very handy utility called [virlutils](https://github.com/CiscoDevNet/virlutils).
+<p align="center"> 
+<img src="imgs/205ilovecontainers.jpg">
+</p>
+
+The sandbox you have reserved includes a _big_ [VIRL](http://virl.cisco.com/) server we will use to run some simulated devices for our demos. 
+
+<p align="center"> 
+<img src="imgs/204virllogo.png">
+</p>
 
 It also includes a _devbox_ with all required utilities pre-configured. So at this point you could decide to use the _devbox_ included in your sandbox to execute the demos, or rather configure your own system so you can continue using it later. If you decide to use the sandbox _devbox_ you can connect to it by running: `ssh developer@10.10.20.20`, and use password `C1sco12345`.
 
-In any case, before starting please clone this repo into your system (sandbox _devbox_ or your local workstation), so you can execute the different scripts we will use during the demos.
-
-```
-$ git clone https://github.com/juliogomez/netdevops.git
-$ cd netdevops/pyats
-```
-
-You can install _virlutils_ in your local workstation (no need to do it in the sandbox _devbox_) with:
+In order to easily manage the VIRL server we will use a very handy utility called [virlutils](https://github.com/CiscoDevNet/virlutils). You will only need to install _virlutils_ if you decide to use your own local workstation for the demos (no need to do it if you will be using the sandbox _devbox_).
 
 ```
 $ pip install virlutils
@@ -77,7 +86,7 @@ Once done, please create a VIRL init file...
 $ vi ~/.virlrc
 ```
 
-... with the following content:
+... and define the required VIRL credentials:
 
 ```
 VIRL_USERNAME=guest
@@ -85,15 +94,15 @@ VIRL_PASSWORD=guest
 VIRL_HOST=10.10.20.160
 ```
 
-And then start a new terminal window in your workstation, so that it reads the new VIRL init file.
+Then start a new terminal window in your workstation, so that it reads the new VIRL init file configuration.
 
-Now you are able to search for some example pre-defined simulated topologies that could be useful for testing.
+Now you should be able to search for some example pre-defined simulated topologies that could be useful for testing.
 
 ```
 $ virl search
 ```
 
-You may even filter them, and for example look for the ones using _IOS_.
+You may even filter those examples: ie. look for the ones including _IOS_ in their name.
 
 ```
 $ virl search ios
@@ -110,6 +119,8 @@ That is a simple template for a 2 IOS-routers simulation (kind of like a _hello-
 Make sure you are connected to your sandbox VPN and then download the VIRL topology specified below, so that you can start it in your server.
 
 ```
+$ mkdir tests
+$ cd tests
 $ virl pull virlfiles/genie_learning_lab
 Pulling from virlfiles/genie_learning_lab
 Saved topology as topology.virl
@@ -118,7 +129,11 @@ Creating default environment from topology.virl
 Localizing {{ gateway }} with: 172.16.30.254
 ```
 
-Now you have your VIRL simulation running in the sandbox server.
+__Now you have your VIRL simulation running in the sandbox server!__
+
+<p align="center"> 
+<img src="imgs/206power.jpg">
+</p>
 
 ```
 $ virl ls
@@ -177,7 +192,7 @@ $ export PYATS_PASSWORD=cisco
 
 __We are now READY to start our demos!__
 
-Please note that by the end of our set of demos, when you are done with your simulation, you can easily tear it down with:
+_Don't do it now_, but please note that by the end of our set of demos, when you are finally done with your simulation, you can easily tear it down with:
 
 ```
 $ virl down
@@ -190,7 +205,13 @@ SUCCESS
 
 The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` on a CSR1000v.
 
-Please review the content of [this script](./pyats/1-pyats-intro.py), and you will see it executes the following steps:
+Download the required script to your system:
+
+```
+$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/1-pyats-intro.py -o 1-pyats-intro.py
+```
+
+Please review [its content](./pyats/1-pyats-intro.py) and you will see it executes the following steps:
 
 1. Load the required pyATS library
 2. Load the pyATS testbed definition from file
@@ -210,9 +231,21 @@ $ docker run -it --rm \
 
 ### <a name='Demo2-ListinterfaceCRCerrorsfromdifferentdevices'></a>Demo 2 - List interface CRC errors from different devices
 
-In this case you will use pyATS and Genie to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. The script will use the same function to compile CRC errors information from 2 devices with different CLI (CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type.
+In this case you will use pyATS and Genie to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. 
 
-Please review the content of [this script](./pyats/2-genie-intro.py), and you will see the following steps to execute:
+<p align="center"> 
+<img src="imgs/207errors.gif">
+</p>
+
+The script will use the same function to compile CRC errors information from 2 devices with different CLI (CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type.
+
+Download the required script to your system:
+
+```
+$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/2-genie-intro.py -o 2-genie-intro.py
+```
+
+Please review [its content](./pyats/2-genie-intro.py) and you will see the following steps to execute:
 
 1. Load the required pyATS and Genie libraries
 2. Define a reusable function that obtains __all__ interface counters from a single device
@@ -503,7 +536,13 @@ Let's insert a simple verification test in our test case. Please edit the python
             self.failed("{} is not {}".format(self.a, self.b))
 ```
 
-As you can see we are defining 2 simple variables with fixed values of 1 and 2, and then inserting a conditional statement that fails if they are different. So obviously the test will now fail because 1 and 2 are different. Try it.
+As you can see we are defining 2 simple variables with fixed values of 1 and 2, and then inserting a conditional statement that fails if they are different. So, obviously the test will now fail because 1 and 2 are different. 
+
+<p align="center"> 
+<img src="imgs/208thinking.gif">
+</p>
+
+Try it.
 
 ```
 (pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
@@ -552,6 +591,10 @@ Once you are done you can exit the container.
 
 So let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helped you profiling your network end-to-end and storing all that info as snapshots?
 
+<p align="center"> 
+<img src="imgs/209tellmehow.gif">
+</p>
+
 Let's focus, for example, on profiling everything related to BGP, OSPF, interfaces and the platforms in your network, and saving it to files. Ideally you would take a snapshot of your network when everything is working _superb_.
 
 _Genie_ can help you do it with a simple command, specifying what features you want to learn (`ospf interface bgp platform`), from what specific testbed (`--testbed-file default_testbed.yaml`), and the directory where you want to store the resulting files (`--output good`):
@@ -593,6 +636,10 @@ csr1000v-1#exit
 Connection to 172.16.30.129 closed by remote host.
 Connection to 172.16.30.129 closed.
 ```
+
+<p align="center"> 
+<img src="imgs/210whathaveidone.gif">
+</p>
 
 In the real world, soon you would be receiving calls from users: "Something is wrong... _terribly_ wrong", "I lost ALL connectivity", "My database stopped working!". So instead of starting your troubleshooting by _brute force_, how about asking Genie to determine what is the current new status of the network after the outage, and even better _what changed exactly_ since the last time you took the snapshot of the network in good state.
 
@@ -653,3 +700,6 @@ info:
 
 __Talk about an easy way to determine why your network is not working properly as before, and to find out what happened exactly!__
 
+<p align="center"> 
+<img src="imgs/211cool.gif">
+</p>
