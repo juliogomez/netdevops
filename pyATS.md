@@ -336,7 +336,7 @@ Out[9]:
 
 Wow, that was easy! Think about the kind of processing and parsing you would have had to do in the past to go through the text output of all those commands. Now pyATS is compiling the information from all those commands and giving you a consolidated, structured view that you can easily work with.
 
-If you are interested in understanding what that specific task does:
+If you are interested in understanding what that specific _task_ does, you can find out with:
 
 ```
 In [10]: show_source(tasks.get_routing_table)
@@ -357,7 +357,7 @@ This is a pretty neat way of _not-having_ to type all those commands, and just i
 
 And of course, you can even create your own tasks!
 
-Let's try now a different task, and learn about BGP in the _csr_:
+Now let's try a different task, and learn about _all-things- BGP in the _csr_ device:
 
 ```
 In [11]: bgp = tasks.learn('bgp',csr)
@@ -371,13 +371,13 @@ In [12]: bgp
 
 Now let's explore what can be done with __genie.conf__ libraries.
 
-For example, in order to work with BGP we need to import the required library:
+For example, in order to work with BGP configurations we need to import the required library:
 
 ```
 In [13]: from genie.libs.conf.bgp import Bgp
 ```
 
-And then could use it to learn the BGP configuration in our Nexus switch:
+And then we could use it to learn the BGP configuration in our Nexus switch:
 
 ```
 In [14]: bgps_nx = Bgp.learn_config(nx)
@@ -389,7 +389,7 @@ As long as there might be (potentially) several BGP instances we receive a _list
 In [15]: bgp_nx = bgps_nx[0]
 ```
 
-You could also apply this configuration as an example, or a different one, to your device:
+We can also apply configurations, like this or a different one, to our device:
 
 ```
 In [16]: bgp_nx.build_config()
@@ -422,7 +422,7 @@ In [20]: exit()
 
 ### <a name='Demo4-WorkingwithTestCases'></a>Demo 4 - Working with Test Cases
 
-Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what Test Cases are all about: a framework that allows you to build _repeatable_ and _complex_ testing processes.
+Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what Test Cases are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
 
 Let's take a look at this example:
 
@@ -442,12 +442,12 @@ Task-1: basic_example_script
 
 The sections are quite simple:
 
-* You can define a number of _tasks_ to run in your test case (in our example we have just 1 task)
+* You can define a number of _tasks_ to run in your test case (in the example above we have just 1 task)
 * Then you will have some _common setup_ to do, structured in subsections 
-* After that you would go into the real Test Case (_tc_), with 3 phases: preparation, execution and cleaning
+* After that, you would go into the real Test Case (_tc_), with 3 phases: preparation, execution and cleaning
 * Finally, as a good citizen, you would need to _clean_ everything you set up during the _common setup_ phase
 
-We can see it working in your setup. This time we will ask our pyATS container to provide an interactive shell (_ash_). We will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files.
+Let's see it working in your own setup. This time we will ask our pyATS container to provide an interactive shell (_ash_). We will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files during the demo.
 
 ```
 $ docker run -it --rm ciscotestautomation/pyats:latest-alpine ash
@@ -459,19 +459,19 @@ Once inside the container shell you have access to its directory structure and t
 (pyats) /pyats # cd examples/basic
 ```
 
-There you will find the `basic_example_script.py` python script file that defines a very simple Test Case. It includes all the sections mentioned before but actually not doing much (only logging)... so it is a good starting point as a template for your own test cases.
+There you will find the `basic_example_script.py` python script file that defines a very simple Test Case. It includes quite some python code for all the sections mentioned before, but actually not doing much (in fact only logging)... so it is a good starting point as a template for your own test cases.
 
 ```
 (pyats) /pyats/examples/basic# cat basic_example_script.py
 ```
 
-To execute it you will need to define a _job_ that uses the python script. You can find it here:
+It is executed with a _job_ that invokes the python script. You can find it here:
 
 ```
 (pyats) /pyats/examples/basic# cat job/basic_example_job.py
 ```
 
-You would run the job like this:
+You would run the job with `pyats run job ...`:
 
 ```
 (pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
@@ -479,7 +479,7 @@ You would run the job like this:
 
 You can see in the report shown at the end of the execution process that all tests in our task _PASSED_.
 
-Let's insert a simple verification test in our test case. Please edit the python script with `vi basic_example_script.py`, scroll down to the _TESTCASES SECTION_ and look for the _First test section_. There insert the required code as per the following:
+Let's insert a simple verification test in our test case. Please edit the python script with `vi basic_example_script.py`, scroll down to the _TESTCASES SECTION_ and look for the _First test section_. There you need to insert the required code as per the following:
 
 ```
     # First test section
@@ -493,7 +493,7 @@ Let's insert a simple verification test in our test case. Please edit the python
             self.failed("{} is not {}".format(self.a, self.b))
 ```
 
-As you can see we are defining 2 simple variables with fixed values of 1 and 2, and then inserting a conditional statement that fails if they are different. So obviously the test will now fail. Try it.
+As you can see we are defining 2 simple variables with fixed values of 1 and 2, and then inserting a conditional statement that fails if they are different. So obviously the test will now fail because 1 and 2 are different. Try it.
 
 ```
 (pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
@@ -532,7 +532,7 @@ Check the execution logs and you will find how a failed test looks like when exe
 
 As you can see you don't need to be a Python expert to use the test cases framework. You have templates already available for you, where you can insert the specific tests you would like to run and execute them straight away.
 
-You can now exit the container.
+Once you are done you can exit the container.
 
 ```
 (pyats) /pyats/examples/basic# exit
@@ -540,9 +540,9 @@ You can now exit the container.
 
 ### <a name='Demo5-Profilingyournetwork'></a>Demo 5 - Profiling your network
 
-So let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helped you profiling your network end-to-end and storing that info as snapshots?
+So let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helped you profiling your network end-to-end and storing all that info as snapshots?
 
-Let's focus, for example, on profiling everything related to BGP, OSPF, interfaces and the platforms in your network, and saving it to files. Ideally you would take a snapshot to learn how the network looks like when everything is working fine.
+Let's focus, for example, on profiling everything related to BGP, OSPF, interfaces and the platforms in your network, and saving it to files. Ideally you would take a snapshot of your network when everything is working _superb_.
 
 _Genie_ can help you do it with a simple command, specifying what features you want to learn (`ospf interface bgp platform`), from what specific testbed (`--testbed-file default_testbed.yaml`), and the directory where you want to store the resulting files (`--output good`):
 
@@ -552,9 +552,9 @@ $ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alp
 (pyats) /pyats/demos # genie learn ospf interface bgp platform --testbed-file default_testbed.yaml --output good
 ```
 
-Inside the `good` directory, _console_ files show what commands were run to obtain all required info, while _ops_ files store the resulting information __in structured format__.
+Inside the created `good` directory, _console_ files will show you what commands were run to obtain all required info, while _ops_ files will store the resulting information __in structured format__.
 
-Now let's simulate something terrible happened in your network... by shutting down one of the loopback interfaces in your CSR1000v router. Well, it's not _that_ terrible, but you get the idea as an example of what _could have happened_.
+Now let's simulate something _terrible_ happened in your network... by shutting down one of the loopback interfaces in your CSR1000v router. Well, it's not _that terrible_, but you get the idea as an example of what _could have happened_.
 
 First you need to identify the IP address of that CSR1000v, so you can connect to it:
 
@@ -570,7 +570,7 @@ Now you can SSH to it, with password `cisco`:
 (pyats) /pyats/demos # ssh cisco@172.16.30.129
 ```
 
-Once inside the system please shutdown interface loopback 1:
+Once inside the system please shutdown interface loopback 1, to simulate _that terrible catastrophe in your network_:
 
 ```
 csr1000v-1#conf t
@@ -585,7 +585,7 @@ Connection to 172.16.30.129 closed.
 (pyats) /pyats/demos #
 ```
 
-In a real situation you would be receiving calls from users. "Something is wrong", "I lost connectivity", "My database stopped working". So instead of start your troubleshooting by _brute force_, how about asking Genie to determine what is the current status of the network, and even better _what changed_ since the last time you took the snapshot of the network in good state.
+In the real world, soon you would be receiving calls from users. "Something is wrong", "I lost connectivity", "My database stopped working". So instead of starting your troubleshooting by _brute force_, how about asking Genie to determine what is the current status of the network after the outage, and even better _what changed_ since the last time you took the snapshot of the network in good state.
 
 Let's do this by running the same command as previously, but asking the system to store the resulting files in a different directory (`--output bad`).
 
@@ -627,7 +627,7 @@ And now find out what changed with a simple command.
 |------------------------------------------------------------------------------|
 ```
 
-As you can see the system generates some files that signal exactly what has changed from the _good_ situation to the _bad_ one. In this specific case, the key file shows that Lo1 in the CSR1000v is now disabled:
+As you can see the system generates some files that signal exactly what has changed from the _good_ situation to the _bad_ one. In this specific case, one of the files immediately shows that Lo1 in the CSR1000v has been disabled!
 
 ```
 (pyats) /pyats/demos # cat ./diff_interface_iosxe_csr1000v-1_ops.txt
@@ -642,5 +642,5 @@ info:
 -  oper_status: up
 ```
 
-Talk about an easy way to determine why your network does not work as before, and what has changed exactly!
+Talk about an easy way to determine why your network is not working properly as before, and to find out what happened exactly!
 
