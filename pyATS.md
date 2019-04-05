@@ -8,6 +8,7 @@
 	* [Demo 3 - Interactive pyATS](#Demo3-InteractivepyATS)
 	* [Demo 4 - Working with Test Cases](#Demo4-WorkingwithTestCases)
 	* [Demo 5 - Profiling your network for troubleshooting](#Demo5-Profilingyournetworkfortroubleshooting)
+	* [Demo 6 - Check all BGP neighbors are Established](#Demo6-CheckallBGPneighborsareEstablished)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -96,7 +97,7 @@ VIRL_HOST=10.10.20.160
 
 Then start a new terminal window in your workstation, so that it reads the new VIRL init file configuration.
 
-Now you should be able to search for some example pre-defined simulated topologies that could be useful for testing.
+Now you should be able to search for some example pre-defined simulated topologies that could be useful for testing (you can find some more [here](https://github.com/VIRL-Open/sample-topologies)).
 
 ```
 $ virl search
@@ -131,10 +132,6 @@ Localizing {{ gateway }} with: 172.16.30.254
 
 __Now you have your VIRL simulation running in the sandbox server!__
 
-<p align="center"> 
-<img src="imgs/206power.jpg">
-</p>
-
 ```
 $ virl ls
 Running Simulations
@@ -144,6 +141,10 @@ Running Simulations
 │ netdevops_default_oAmstu │ ACTIVE   │ 2019-04-03T10:54:44.416113 │           │
 ╘══════════════════════════╧══════════╧════════════════════════════╧═══════════╛
 ```
+
+<p align="center"> 
+<img src="imgs/206power.jpg">
+</p>
 
 You can also see the status of its included nodes.
 
@@ -169,7 +170,7 @@ Please note that during the connection process you will need to confirm you want
 
 One of the fantastic features that _virlutils_ includes is that it can generate inventories to be used by other systems, using the command: `virl generate [ pyats | nso | ansible ]`
 
-For our demos we will use the `pyats` one, so try it once that all nodes in your simulation are _REACHABLE_ (the first time it might take up to 4 mins).
+For our demos we will use the `pyats` one, so try it once that all nodes in your simulation are _REACHABLE_.
 
 ```
 $ virl generate pyats -o default_testbed.yaml
@@ -703,3 +704,33 @@ __Talk about an easy way to determine why your network is not working properly a
 <p align="center"> 
 <img src="imgs/211cool.gif">
 </p>
+
+### <a name='Demo6-CheckallBGPneighborsareEstablished'></a>Demo 6 - Check all BGP neighbors are Established
+
+We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state. 
+
+The test case is structured in the following sections:
+
+* Common setup: connect to all devices included in your testbed.
+* Test cases: learn about all BGP sessions in each device, check their status and build a table to represent that info. If there are neighbors _not in a established state_ the test will fail and signal this condition in an error message.
+
+In order to run it you will first need to install `git` on your pyATS container, clone an examples repo, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
+
+```
+$ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alpine ash
+(pyats) /pyats # apk add --no-cache git
+(pyats) /pyats # git clone https://github.com/kecorbin/pyats-network-checks.git
+(pyats) /pyats # pip3 install tabulate
+(pyats) /pyats # cd pyats-network-checks/bgp_adjacencies
+(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed-file /pyats/demos/default_testbed.yaml
+```
+
+As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status 
+
+```
+2019-04-05T18:10:41: %SCRIPT-INFO: | Device     | Peer     | State       | Pass/Fail   |
+2019-04-05T18:10:41: %SCRIPT-INFO: |------------+----------+-------------+-------------|
+2019-04-05T18:10:41: %SCRIPT-INFO: | csr1000v-1 | 10.2.2.2 | established | Passed      |
+2019-04-05T18:10:41: %SCRIPT-INFO: | nx-osv-1   | 10.1.1.1 | established | Passed      |
+```
+
