@@ -244,16 +244,22 @@ As you can see pyATS feels really _pythonic_, so wouldn't it be great to have th
 
 [ipyATS](https://github.com/kecorbin/ipyats) is an iPython wrapper for pyATS and Genie, so that you can conveniently explore and develop your own tests in an interactive way.
 
+For our demos we will start a pyATS container and ask it to start an interactive shell (_bash_) so we can install ipyATS in it.
+
+```
+$ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest bash
+```
+
 You can easily install it with:
 
 ```
-$ pip install ipyats
+root@2ad68679070c:/pyats# pip install ipyats
 ```
 
 And run it with your VIRL testbed:
 
 ```
-$ ipyats --testbed default_testbed.yaml
+root@2ad68679070c:/pyats# ipyats --testbed demos/default_testbed.yaml
 ```
 
 The great thing about being able to define the specific _testbed_ to use for this test is that you can reuse everything you create in different environments (eg. production, testing, datacenter 1, datacenter 2).
@@ -405,18 +411,21 @@ You can check it's all gone with the same command we used in the _genie.ops_ sec
 
 ```
 In [18]: bgp = tasks.learn('bgp',nx)
+In [19]: bgp
+Out[19]: {}
 ```
 
 And easily apply all the BGP config back again:
 
 ```
-In [19]: bgp_nx.build_config()
+In [20]: bgp_nx.build_config()
 ```
 
 When you are done exploring ipyATS, you can exit with:
 
 ```
-In [20]: exit()
+In [21]: exit()
+root@2ad68679070c:/pyats# exit
 ```
 
 
@@ -447,7 +456,7 @@ The sections are quite simple:
 * After that, you would go into the real Test Case (_tc_), with 3 phases: preparation, execution and cleaning
 * Finally, as a good citizen, you would need to _clean_ everything you set up during the _common setup_ phase
 
-Let's see it working in your own setup. This time we will ask our pyATS container to provide an interactive shell (_ash_). We will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files during the demo.
+Let's see it working in your own setup. In this case we will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files during this demo. We will ask our pyATS container to provide a shell (_ash_ for _-alpine_ image) so we work with it interactively.
 
 ```
 $ docker run -it --rm ciscotestautomation/pyats:latest-alpine ash
