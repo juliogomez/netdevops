@@ -38,11 +38,11 @@
 		* [Summary](#Summary-1)
 	* [NetDevOps Demo 3 - Working with pyATS and Genie](#NetDevOpsDemo3-WorkingwithpyATSandGenie)
 		* [Execute a command on a network device](#Executeacommandonanetworkdevice)
-		* [List interface CRC errors from different devices](#ListinterfaceCRCerrorsfromdifferentdevices)
+		* [Consolidate info from devices with different CLIs](#ConsolidateinfofromdeviceswithdifferentCLIs)
 		* [Develop your own tests with interactive pyATS](#DevelopyourowntestswithinteractivepyATS)
 		* [Working with Test Cases](#WorkingwithTestCases)
 		* [Profiling your network for troubleshooting](#Profilingyournetworkfortroubleshooting)
-		* [Check all BGP neighbors are Established](#CheckallBGPneighborsareEstablished)
+		* [Check all BGP neighbors are established](#CheckallBGPneighborsareestablished)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -1866,7 +1866,7 @@ $ docker run -it --rm \
   python3 /pyats/demos/1-pyats-intro.py
 ```
 
-#### <a name='ListinterfaceCRCerrorsfromdifferentdevices'></a>List interface CRC errors from different devices
+#### <a name='ConsolidateinfofromdeviceswithdifferentCLIs'></a>Consolidate info from devices with different CLIs
 
 In this case you will use not only pyATS, but also Genie, to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. 
 
@@ -2345,7 +2345,7 @@ __Talk about an easy way to determine why your network is not working properly a
 <img src="imgs/211cool.gif">
 </p>
 
-#### <a name='CheckallBGPneighborsareEstablished'></a>Check all BGP neighbors are Established
+#### <a name='CheckallBGPneighborsareestablished'></a>Check all BGP neighbors are established
 
 We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state. 
 
