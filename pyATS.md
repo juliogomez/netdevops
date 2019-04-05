@@ -5,7 +5,7 @@
 * [Demos](#Demos)
 	* [Demo 1 - Execute a command on a network device](#Demo1-Executeacommandonanetworkdevice)
 	* [Demo 2 - List interface CRC errors from different devices](#Demo2-ListinterfaceCRCerrorsfromdifferentdevices)
-	* [Demo 3 - Interactive pyATS](#Demo3-InteractivepyATS)
+	* [Demo 3 - Develop your own tests with interactive pyATS](#Demo3-DevelopyourowntestswithinteractivepyATS)
 	* [Demo 4 - Working with Test Cases](#Demo4-WorkingwithTestCases)
 	* [Demo 5 - Profiling your network for troubleshooting](#Demo5-Profilingyournetworkfortroubleshooting)
 	* [Demo 6 - Check all BGP neighbors are Established](#Demo6-CheckallBGPneighborsareEstablished)
@@ -232,13 +232,13 @@ $ docker run -it --rm \
 
 ### <a name='Demo2-ListinterfaceCRCerrorsfromdifferentdevices'></a>Demo 2 - List interface CRC errors from different devices
 
-In this case you will use pyATS and Genie to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. 
+In this case you will use not only pyATS, but also Genie, to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. 
 
 <p align="center"> 
 <img src="imgs/207errors.gif">
 </p>
 
-The script will use the same function to compile CRC errors information from 2 devices with different CLI (CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type.
+The script will use the same function to compile CRC errors information from 2 devices with different CLI (ie. CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type.
 
 Download the required script to your system:
 
@@ -273,9 +273,12 @@ $ docker run -it --rm \
   python3 /pyats/demos/2-genie-intro.py
 ```
 
-### <a name='Demo3-InteractivepyATS'></a>Demo 3 - Interactive pyATS
+### <a name='Demo3-DevelopyourowntestswithinteractivepyATS'></a>Demo 3 - Develop your own tests with interactive pyATS
 
-As you can see pyATS feels really _pythonic_, so wouldn't it be great to have the option to execute these steps interactively while developing your tests? Well, we got you covered!
+Now that you have seen a couple of simple examples of what can be done with pyATS and Genie, you might want to start developing your own tests. But instead of iterating through the process of "writing a complete script, trying to run it, failing ands rewriting", we would rather have a more _interactive_ way of developing tests. Something that allows us to check the results of each step during the test, and debug it by exploring the results at any point of the flow.
+
+As you may have noticed pyATS feels really _pythonic_, so wouldn't it be great to have something similar
+to the interactive Python shell? Something that would give us the option to execute individual steps interactively while developing our tests? Well, we got you covered!
 
 [ipyATS](https://github.com/kecorbin/ipyats) is an iPython wrapper for pyATS and Genie, so that you can conveniently explore and develop your own tests in an interactive way.
 
@@ -375,7 +378,7 @@ Out[9]:
     'outgoing_interface': 'mgmt0'}}}}
 ```
 
-Wow, that was easy! Think about the kind of processing and parsing you would have had to do in the past to go through the text output of all those commands. Now pyATS is compiling the information from all those commands and giving you a consolidated, structured view that you can easily work with.
+__Wow, that was easy! Think about the kind of processing and parsing you would have had to do in the past to go through the text output of all those commands. Now pyATS is compiling the information from all those commands and giving you a consolidated, structured view that you can easily work with.__
 
 If you are interested in understanding what that specific _task_ does, you can find out with:
 
@@ -463,6 +466,7 @@ In [21]: exit()
 root@2ad68679070c:/pyats# exit
 ```
 
+__ipyATS makes it really easy for you to develop and debug your tests step by step, in the classic _pythonic_ way!__
 
 ### <a name='Demo4-WorkingwithTestCases'></a>Demo 4 - Working with Test Cases
 
@@ -580,7 +584,7 @@ Check the execution logs and you will find how a failed test looks like when exe
 2019-04-04T08:32:09: %EASYPY-INFO:     `-- clean_everything                                                  PASSED
 ```
 
-As you can see you don't need to be a Python expert to use the test cases framework. You have templates already available for you, where you can insert the specific tests you would like to run and execute them straight away.
+__As you can see you don't need to be a Python expert to use the test cases framework. You have templates readily available for you, where you can insert the specific tests you would like to run and execute them straight away.__
 
 Once you are done you can exit the container.
 
@@ -709,7 +713,7 @@ __Talk about an easy way to determine why your network is not working properly a
 
 We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state. 
 
-The test case is structured in the following sections:
+The test case structure includes the following sections:
 
 * Common setup: connect to all devices included in your testbed.
 * Test cases: learn about all BGP sessions in each device, check their status and build a table to represent that info. If there are neighbors _not in a established state_ the test will fail and signal this condition in an error message.
@@ -725,7 +729,7 @@ $ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alp
 (pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed-file /pyats/demos/default_testbed.yaml
 ```
 
-As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status 
+As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status:
 
 ```
 2019-04-05T18:10:41: %SCRIPT-INFO: | Device     | Peer     | State       | Pass/Fail   |
@@ -734,3 +738,4 @@ As a result you will find the following table in your logs, displaying all BGP n
 2019-04-05T18:10:41: %SCRIPT-INFO: | nx-osv-1   | 10.1.1.1 | established | Passed      |
 ```
 
+__It was never this easy to make sure BGP neighbors across your network are properly _established_!__
