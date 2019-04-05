@@ -1,21 +1,21 @@
 # pyATS and Genie
 
 <!-- vscode-markdown-toc -->
-* 1. [Introduction](#Introduction)
-* 2. [Demos](#Demos)
-	* 2.1. [Demo 1: Execute a command on a network device](#Demo1:Executeacommandonanetworkdevice)
-	* 2.2. [Demo 2: List interface CRC errors from different devices](#Demo2:ListinterfaceCRCerrorsfromdifferentdevices)
-	* 2.3. [Demo 3: Interactive pyATS](#Demo3:InteractivepyATS)
-	* 2.4. [Demo 4: Working with Test Cases](#Demo4:WorkingwithTestCases)
-	* 2.5. [Demo 5: Profiling your network](#Demo5:Profilingyournetwork)
+* [Introduction](#Introduction)
+* [Demos](#Demos)
+	* [Demo 1: Execute a command on a network device](#Demo1:Executeacommandonanetworkdevice)
+	* [Demo 2: List interface CRC errors from different devices](#Demo2:ListinterfaceCRCerrorsfromdifferentdevices)
+	* [Demo 3: Interactive pyATS](#Demo3:InteractivepyATS)
+	* [Demo 4: Working with Test Cases](#Demo4:WorkingwithTestCases)
+	* [Demo 5: Profiling your network](#Demo5:Profilingyournetwork)
 
 <!-- vscode-markdown-toc-config
-	numbering=true
+	numbering=false
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-##  1. <a name='Introduction'></a>Introduction
+## <a name='Introduction'></a>Introduction
 
 pyATS is an Automation Test System written in Python. It provides the core infrastructure to define topologies, connect to network devices and run the required tests.
 
@@ -44,7 +44,7 @@ Your network devices are also objects in pyATS, so you can perform operations on
 
 The output from these commands will be parsed by the system into structured data, so you can extract business-relevant data from them.
 
-##  2. <a name='Demos'></a>Demos
+## <a name='Demos'></a>Demos
 
 Let's see it working.
 
@@ -186,7 +186,7 @@ Shutting Down Simulation netdevops_default_oAmstu.....
 SUCCESS
 ```
 
-###  2.1. <a name='Demo1:Executeacommandonanetworkdevice'></a>Demo 1: Execute a command on a network device
+### <a name='Demo1:Executeacommandonanetworkdevice'></a>Demo 1: Execute a command on a network device
 
 The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` in a CSR1000v.
 
@@ -207,7 +207,7 @@ $ docker run -it --rm \
   python3 /pyats/demos/1-pyats-intro.py
 ```
 
-###  2.2. <a name='Demo2:ListinterfaceCRCerrorsfromdifferentdevices'></a>Demo 2: List interface CRC errors from different devices
+### <a name='Demo2:ListinterfaceCRCerrorsfromdifferentdevices'></a>Demo 2: List interface CRC errors from different devices
 
 In this case you will use pyATS and Genie to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. The script will use the same function to compile CRC errors information from 2 devices with different CLI (CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type.
 
@@ -238,7 +238,7 @@ $ docker run -it --rm \
   python3 /pyats/demos/2-genie-intro.py
 ```
 
-###  2.3. <a name='Demo3:InteractivepyATS'></a>Demo 3: Interactive pyATS
+### <a name='Demo3:InteractivepyATS'></a>Demo 3: Interactive pyATS
 
 As you can see pyATS feels really _pythonic_, so wouldn't it be great to have the option to execute these steps interactively while developing your tests? Well, we got you covered!
 
@@ -420,7 +420,7 @@ In [20]: exit()
 ```
 
 
-###  2.4. <a name='Demo4:WorkingwithTestCases'></a>Demo 4: Working with Test Cases
+### <a name='Demo4:WorkingwithTestCases'></a>Demo 4: Working with Test Cases
 
 Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what Test Cases are all about: a framework that allows you to build _repeatable_ and _complex_ testing processes.
 
@@ -538,7 +538,7 @@ You can now exit the container.
 (pyats) /pyats/examples/basic# exit
 ```
 
-###  2.5. <a name='Demo5:Profilingyournetwork'></a>Demo 5: Profiling your network
+### <a name='Demo5:Profilingyournetwork'></a>Demo 5: Profiling your network
 
 So let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helped you profiling your network end-to-end and storing that info as snapshots?
 
