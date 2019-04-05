@@ -1,3 +1,5 @@
+# pyATS and Genie
+
 <!-- vscode-markdown-toc -->
 * 1. [Introduction](#Introduction)
 * 2. [Demos](#Demos)
@@ -11,7 +13,7 @@
 	numbering=true
 	autoSave=true
 	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc --># pyATS and Genie
+<!-- /vscode-markdown-toc -->
 
 ##  1. <a name='Introduction'></a>Introduction
 
