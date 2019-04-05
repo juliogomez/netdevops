@@ -7,7 +7,7 @@
 	* [Demo 2 - List interface CRC errors from different devices](#Demo2-ListinterfaceCRCerrorsfromdifferentdevices)
 	* [Demo 3 - Interactive pyATS](#Demo3-InteractivepyATS)
 	* [Demo 4 - Working with Test Cases](#Demo4-WorkingwithTestCases)
-	* [Demo 5 - Profiling your network](#Demo5-Profilingyournetwork)
+	* [Demo 5 - Profiling your network for troubleshooting](#Demo5-Profilingyournetworkfortroubleshooting)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -177,7 +177,7 @@ $ export PYATS_PASSWORD=cisco
 
 __We are now READY to start our demos!__
 
-Please note that by the end of the labs, when you are done with your simulation, you can easily tear it down with:
+Please note that by the end of our set of demos, when you are done with your simulation, you can easily tear it down with:
 
 ```
 $ virl down
@@ -188,7 +188,7 @@ SUCCESS
 
 ### <a name='Demo1-Executeacommandonanetworkdevice'></a>Demo 1 - Execute a command on a network device
 
-The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` in a CSR1000v.
+The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` on a CSR1000v.
 
 Please review the content of [this script](./pyats/1-pyats-intro.py), and you will see it executes the following steps:
 
@@ -203,6 +203,7 @@ Run the demo with an interactive container (`-it`) that will be automatically de
 ```
 $ docker run -it --rm \
   -v $PWD:/pyats/demos/ \
+  -e PYATS_AUTH_PASS=cisco \
   ciscotestautomation/pyats:latest \
   python3 /pyats/demos/1-pyats-intro.py
 ```
@@ -547,7 +548,7 @@ Once you are done you can exit the container.
 (pyats) /pyats/examples/basic# exit
 ```
 
-### <a name='Demo5-Profilingyournetwork'></a>Demo 5 - Profiling your network
+### <a name='Demo5-Profilingyournetworkfortroubleshooting'></a>Demo 5 - Profiling your network for troubleshooting
 
 So let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helped you profiling your network end-to-end and storing all that info as snapshots?
 
@@ -591,10 +592,9 @@ csr1000v-1(config)#exit
 csr1000v-1#exit
 Connection to 172.16.30.129 closed by remote host.
 Connection to 172.16.30.129 closed.
-(pyats) /pyats/demos #
 ```
 
-In the real world, soon you would be receiving calls from users. "Something is wrong", "I lost connectivity", "My database stopped working". So instead of starting your troubleshooting by _brute force_, how about asking Genie to determine what is the current status of the network after the outage, and even better _what changed_ since the last time you took the snapshot of the network in good state.
+In the real world, soon you would be receiving calls from users: "Something is wrong... _terribly_ wrong", "I lost ALL connectivity", "My database stopped working!". So instead of starting your troubleshooting by _brute force_, how about asking Genie to determine what is the current new status of the network after the outage, and even better _what changed exactly_ since the last time you took the snapshot of the network in good state.
 
 Let's do this by running the same command as previously, but asking the system to store the resulting files in a different directory (`--output bad`).
 
@@ -602,7 +602,7 @@ Let's do this by running the same command as previously, but asking the system t
 (pyats) /pyats/demos # genie learn ospf interface bgp platform --testbed-file default_testbed.yaml --output bad
 ```
 
-And now find out what changed with a simple command.
+And now find out what changed with yet another simple command.
 
 ```
 (pyats) /pyats/demos # genie diff good bad
@@ -636,7 +636,7 @@ And now find out what changed with a simple command.
 |------------------------------------------------------------------------------|
 ```
 
-As you can see the system generates some files that signal exactly what has changed from the _good_ situation to the _bad_ one. In this specific case, one of the files immediately shows that Lo1 in the CSR1000v has been disabled!
+As you can see the system generates some files that signal _exactly_ what has changed from the _good_ situation to the _bad_ one. In this specific case, one of the files immediately shows that Lo1 in the CSR1000v has been disabled!
 
 ```
 (pyats) /pyats/demos # cat ./diff_interface_iosxe_csr1000v-1_ops.txt
@@ -651,5 +651,5 @@ info:
 -  oper_status: up
 ```
 
-Talk about an easy way to determine why your network is not working properly as before, and to find out what happened exactly!
+__Talk about an easy way to determine why your network is not working properly as before, and to find out what happened exactly!__
 
