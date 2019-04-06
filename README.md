@@ -22,7 +22,7 @@
 * [NetDevOps](#NetDevOps)
 	* [The challenge of network configuration today](#Thechallengeofnetworkconfigurationtoday)
 	* [Network configuration as code](#Networkconfigurationascode)
-* [NetDevOps Demonstrations](#NetDevOpsDemonstrations)
+* [Hands-on with NetDevOps](#Hands-onwithNetDevOps)
 	* [NetDevOps Demo 1 - Automating network configuration from testing to production](#NetDevOpsDemo1-Automatingnetworkconfigurationfromtestingtoproduction)
 		* [GitLab setup](#GitLabsetup)
 		* [CICD setup](#CICDsetup)
@@ -685,15 +685,15 @@ And considering that modern network devices support modern interfaces and APIs, 
 
 Following this strategy, we are now ready to start building a completely automated environment to deploy and test configuration changes across the network.
 
-## <a name='NetDevOpsDemonstrations'></a>NetDevOps Demonstrations
+## <a name='Hands-onwithNetDevOps'></a>Hands-on with NetDevOps
 
-Now that you know about some of the most important building blocks for programmability, it is time to see them working together and how they are used to build business-relevant solutions that help managing our networks. And what better way to learn about them than getting our hands _dirty_ by running some demos?
+Now that you know about some of the most important building blocks for programmability, it is time to see them working together and how they are used to build business-relevant solutions that help managing our networks. And what better way to learn about them than getting our hands _dirty_ by going through some demos?
 
 <p align="center"> 
 <img src="imgs/99morpheus.jpg">
 </p>
 
-The following set of demos requires a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for those demos. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO netsim, etc.
+The following set of demos requires a [sandbox](https://developer.cisco.com/site/sandbox/): an environment where you have all the required platforms and elements that you will need for those demos. In our case we need a _big_ server to run VIRL simulations for all network devices we will discuss later, and another server to run our VCS, NSO, etc.
 
 You may find the required sandbox for our demo using [this link](https://devnetsandbox.cisco.com/RM/Diagram/Index/6b023525-4e7f-4755-81ae-05ac500d464a?diagramType=Topology), and book it for up to one week exclusively for you.
 
@@ -1717,7 +1717,7 @@ In order to easily manage the VIRL server we will use a very handy utility calle
 $ pip install virlutils
 ```
 
-Once done, please create a VIRL init file...
+Once done, please create a VIRL init file (again, no need to do this step if you will be using the sandbox _devbox_)...
 
 ```
 $ vi ~/.virlrc
@@ -1813,7 +1813,7 @@ $ virl generate pyats -o default_testbed.yaml
 Writing default_testbed.yaml
 ```
 
-With just a single command you have now a YAML file that defines your VIRL environment as a testbed to be used by pyATS straight away!
+__With just a single command you have now a YAML file that defines your VIRL environment as a testbed to be used by pyATS straight away!__
 
 <p align="center"> 
 <img src="imgs/200wow.gif">
