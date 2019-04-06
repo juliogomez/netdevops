@@ -38,7 +38,7 @@
 		* [Summary](#Summary-1)
 	* [NetDevOps Demo 3 - Working with pyATS and Genie](#NetDevOpsDemo3-WorkingwithpyATSandGenie)
 		* [Execute a command on a network device](#Executeacommandonanetworkdevice)
-		* [Consolidate info from devices with different CLIs](#ConsolidateinfofromdeviceswithdifferentCLIs)
+		* [Consolidate info from devices with different CLI](#ConsolidateinfofromdeviceswithdifferentCLI)
 		* [Develop your own tests with interactive pyATS](#DevelopyourowntestswithinteractivepyATS)
 		* [Working with Test Cases](#WorkingwithTestCases)
 		* [Profiling your network for troubleshooting](#Profilingyournetworkfortroubleshooting)
@@ -1697,7 +1697,7 @@ The first thing you need to decide is _how_ you want to run pyATS: natively in y
 
 For the first option you should use a Python 3.X [virtual environment](https://virtualenv.pypa.io/en/latest/), so you don't clog your system, and then install the required tools (see [doc](https://developer.cisco.com/docs/pyats/#!python-virtual-environment)). 
 
-However it is easier to run it [in a Docker container](https://developer.cisco.com/docs/pyats/#!docker-container), as the available image includes all required software, libraries and dependencies. So we will use this option for our demos.
+However it is easier to run it [in a Docker container](https://developer.cisco.com/docs/pyats/#!docker-container), as the available image includes all required software, libraries, dependencies and a ton of examples you can use to get started. So we will use containers for our demos.
 
 <p align="center"> 
 <img src="imgs/205ilovecontainers.jpg">
@@ -1866,7 +1866,7 @@ $ docker run -it --rm \
   python3 /pyats/demos/1-pyats-intro.py
 ```
 
-#### <a name='ConsolidateinfofromdeviceswithdifferentCLIs'></a>Consolidate info from devices with different CLIs
+#### <a name='ConsolidateinfofromdeviceswithdifferentCLI'></a>Consolidate info from devices with different CLI
 
 In this case you will use not only pyATS, but also Genie, to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. 
 
@@ -1874,7 +1874,7 @@ In this case you will use not only pyATS, but also Genie, to compile interface c
 <img src="imgs/207errors.gif">
 </p>
 
-The script will use the same function to compile CRC errors information from 2 devices with different CLI (ie. CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type.
+The script will use the same function to compile CRC errors information from 2 devices with different CLI (ie. CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type. Genie uses [models](https://pubhub.devnetcloud.com/media/pyats-packages/docs/genie/genie_libs/#/models) to determine the specific commands and format that need to be used for each feature in each platform/OS, and how to map the outcome to the specific fields in the resulting structured data.
 
 Download the required script to your system:
 
@@ -2345,6 +2345,8 @@ __Talk about an easy way to determine why your network is not working properly a
 <img src="imgs/211cool.gif">
 </p>
 
+If you want learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md).
+
 #### <a name='CheckallBGPneighborsareestablished'></a>Check all BGP neighbors are established
 
 We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state. 
@@ -2354,7 +2356,7 @@ The test case structure includes the following sections:
 * Common setup: connect to all devices included in your testbed.
 * Test cases: learn about all BGP sessions in each device, check their status and build a table to represent that info. If there are neighbors _not in a established state_ the test will fail and signal this condition in an error message.
 
-In order to run it you will first need to install `git` on your pyATS container, clone an examples repo, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
+In order to run it you will first need to install `git` on your pyATS container, clone a repo with additional examples, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
 
 ```
 $ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alpine ash
