@@ -198,7 +198,7 @@ $ python
 
 ```
 
-What you are seeing here:
+What you are seeing here is the following:
 * We installed a community library from a public package repository ( `pip install requests` )
 * We entered a Python interactive shell ( `python` )
 * We imported the library into our Python code ( `import requests` )
@@ -675,7 +675,7 @@ We could follow the same approach with network device configurations, and this i
 
 In this new mode of operation, network configuration changes are proposed in code _branches_, like software code developers do. These branches are _safe_ places where network developers will be able to work _safely_ on their proposed configurations, without affecting the _master_ branch, where master configurations reside. Once these configurations are ready, developers will request their branch to be _merged_ with the master configurations, and will go through an approval process to verify there are no issues when incorporating these changes.
 
-Continuing with the emulation of DevOps automation capabilities, this will lead into using CICD (Continuous Integration and Delivery) Build Servers to automatically deploy and test the proposed configurations in testing, staging and production environments. Configurations that sucessfully pass the complete tests set, will be deployed into the production environment. In case of failure during that final deployment, the system itself will automatically rollback the proposed changes, leaving the production network in the previous state just before the change.
+Continuing with the emulation of DevOps automation capabilities, this will lead into using CICD (Continuous Integration and Delivery) Build Servers to automatically deploy and test the proposed configurations in testing, staging and production environments. Configurations that successfully pass the complete tests set, will be deployed into the production environment. In case of failure during that final deployment, the system itself will automatically rollback the proposed changes, leaving the production network in the previous state just before the change.
 
 <p align="center"> 
 <img src="imgs/5cicd.png">
@@ -1682,7 +1682,7 @@ It also integrates _beautifully_ with VIRL topologies, and we will show you how 
 
 The network topology you will use for testing is called the _testbed_, and it includes your devices and links. It is defined in a YAML file, and as long as pyATS is implemented in Python, _everything is an object_... including the testbed.
 
-Your network devices are also objects in pyATS, so you can perform operations on them using _methods_:
+Your network devices are also objects in pyATS, so you can perform operations on them using _methods_, like the following:
 
 * connect()
 * ping(destination)
@@ -1695,7 +1695,7 @@ The output from these commands will be parsed into structured data, so your syst
 
 The first thing you need to decide is _how_ you want to run pyATS: natively in your own system, or in a Docker container.
 
-For the first option you should use a Python 3.X [virtual environment](https://virtualenv.pypa.io/en/latest/), so you don't clog your system, and then install the required tools (see [doc](https://developer.cisco.com/docs/pyats/#!python-virtual-environment)). 
+For the first option you should use a Python 3.X [virtual environment](https://virtualenv.pypa.io/en/latest/), so you don't clog your system, and then install the required tools (see this [doc](https://developer.cisco.com/docs/pyats/#!python-virtual-environment)). 
 
 However it is easier to run it [in a Docker container](https://developer.cisco.com/docs/pyats/#!docker-container), as the available image includes all required software, libraries, dependencies and a ton of examples you can use to get started. So we will use containers for our demos.
 
@@ -1709,7 +1709,7 @@ The sandbox you have reserved includes a _big_ [VIRL](http://virl.cisco.com/) se
 <img src="imgs/204virllogo.png">
 </p>
 
-It also includes a _devbox_ with all required utilities pre-configured. So at this point you could decide to use the _devbox_ included in your sandbox to execute the demos, or rather configure your own system so you can continue using it later. If you decide to use the sandbox _devbox_ you can connect to it by running: `ssh developer@10.10.20.20`, and use password `C1sco12345`.
+It also includes a _devbox_ with all required utilities pre-configured. At this point you could decide to use the _devbox_ included in your sandbox to execute the demos, or rather configure your own system so you can continue using it later. If you decide to use the sandbox _devbox_ you can connect to it by running: `ssh developer@10.10.20.20`, and use password `C1sco12345`.
 
 In order to easily manage the VIRL server we will use a very handy utility called [virlutils](https://github.com/CiscoDevNet/virlutils). You will only need to install _virlutils_ if you decide to use your own local workstation for the demos (no need to do it if you will be using the sandbox _devbox_).
 
@@ -1733,7 +1733,8 @@ VIRL_HOST=10.10.20.160
 
 Then start a new terminal window in your workstation, so that it reads the new VIRL init file configuration.
 
-Now you should be able to search for some example pre-defined simulated topologies that could be useful for testing (you can find some more [here](https://github.com/VIRL-Open/sample-topologies)).
+Now you should be able to search for [some example pre-defined simulated topologies](https://github.com/virlfiles)
+ that could be useful for testing (you can find some more [here](https://github.com/VIRL-Open/sample-topologies)).
 
 ```
 $ virl search
@@ -1856,7 +1857,7 @@ Please review [its content](./pyats/1-pyats-intro.py) and you will see it execut
 4. Connect to that device via SSH and configure the connection to be _automation-friendly_ (disable logging, change terminal width/length, no timeout)
 5. Execute a command in that device
 
-Run the demo with an interactive container (`-it`) that will be automatically deleted after execution (`--rm`), and pass it a mapped volume from your workstation to the container (`-v $PWD:/pyats/demos/`):
+Run the demo with an interactive container (`-it`) that will be automatically deleted after execution (`--rm`), and pass it a mapped volume from your workstation to the container (`-v $PWD:/pyats/demos/`). When the container starts it will automatically execute the specified python script.
 
 ```
 $ docker run -it --rm \
@@ -1900,7 +1901,7 @@ Please review [its content](./pyats/2-genie-intro.py) and you will see the follo
 8. Merge all interface details from these 2 different devices (with different CLIs), into a single source (python dictionary)
 9. Loop through the compiled data in that single source and show CRC errors for every interface
 
-Run the demo with an interactive container (`-it`) that will be automatically deleted after execution (`--rm`), and pass it a mapped volume from your workstation to the container (`-v $PWD:/pyats/demos/`):
+Run the demo with an interactive container (`-it`) that will be automatically deleted after execution (`--rm`), and pass it a mapped volume from your workstation to the container (`-v $PWD:/pyats/demos/`). When the container starts it will automatically execute the specified python script.
 
 ```
 $ docker run -it --rm \
@@ -1911,7 +1912,7 @@ $ docker run -it --rm \
 
 #### <a name='DevelopyourowntestswithinteractivepyATS'></a>Develop your own tests with interactive pyATS
 
-Now that you have seen a couple of simple examples of what can be done with pyATS and Genie, you might want to start developing your own tests. But instead of iterating through the process of "writing a complete script, trying to run it, failing ands rewriting", we would rather have a more _interactive_ way of developing tests. Something that allows us to check the results of each step during the test, and debug it by exploring the results at any point of the flow.
+Now that you have seen a couple of simple examples of what can be done with pyATS and Genie, you might want to start developing your own tests. But instead of iterating through the process of "writing a complete script, trying to run it, failing and rewriting", we would rather have a more _interactive_ way of developing tests. Something that allows us to check the results of each step during the test, and debug it by exploring the results at any point of the flow.
 
 As you may have noticed pyATS feels really _pythonic_, so wouldn't it be great to have something similar
 to the interactive Python shell? Something that would give us the option to execute individual steps interactively while developing our tests? Well, we got you covered!
@@ -1924,7 +1925,7 @@ For our demos we will start a pyATS container and ask it to start an interactive
 $ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest bash
 ```
 
-You can easily install it with:
+You can easily install ipyATS in it with:
 
 ```
 root@2ad68679070c:/pyats# pip install ipyats
@@ -2345,7 +2346,7 @@ __Talk about an easy way to determine why your network is not working properly a
 <img src="imgs/211cool.gif">
 </p>
 
-If you want learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md).
+If you want learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md) and also [this one](https://github.com/CiscoTestAutomation/CL-DevNet-2595). Both offer you the option to run them on _mocked devices_, so you don't actually need a reserved sandbox environment... how cool is that?
 
 #### <a name='CheckallBGPneighborsareestablished'></a>Check all BGP neighbors are established
 
