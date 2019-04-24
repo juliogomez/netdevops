@@ -1820,12 +1820,10 @@ __With just a single command you have now a YAML file that defines your VIRL env
 <img src="imgs/200wow.gif">
 </p>
 
-That pyATS testbed definition file will need some variables to define the _enable password_ and _login user/password_.
+That pyATS testbed definition file will need some variables to define the _enable password_ and _login user/password_. The most convenient way to use them later is to have them stored in a file, so please go ahead and download it.
 
 ```
-$ export PYATS_AUTH_PASS=cisco
-$ export PYATS_USERNAME=cisco
-$ export PYATS_PASSWORD=cisco
+$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/env.list -o env.list
 ```
 
 __We are now READY to start our demos!__
@@ -1862,7 +1860,7 @@ Run the demo with an interactive container (`-it`) that will be automatically de
 ```
 $ docker run -it --rm \
   -v $PWD:/pyats/demos/ \
-  -e PYATS_AUTH_PASS=cisco \
+  --env-file env.list \
   ciscotestautomation/pyats:latest \
   python3 /pyats/demos/1-pyats-intro.py
 ```
@@ -1906,6 +1904,7 @@ Run the demo with an interactive container (`-it`) that will be automatically de
 ```
 $ docker run -it --rm \
   -v $PWD:/pyats/demos/ \
+  --env-file env.list \
   ciscotestautomation/pyats:latest \
   python3 /pyats/demos/2-genie-intro.py
 ```
@@ -1922,7 +1921,10 @@ to the interactive Python shell? Something that would give us the option to exec
 For our demos we will start a pyATS container and ask it to start an interactive shell (_bash_) so we can install ipyATS in it.
 
 ```
-$ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest bash
+$ docker run -it --rm \
+  -v $PWD:/pyats/demos/ \
+  --env-file env.list \
+  ciscotestautomation/pyats:latest bash
 ```
 
 You can easily install ipyATS in it with:
