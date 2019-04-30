@@ -2244,8 +2244,8 @@ Let's focus, for example, on profiling everything related to BGP, OSPF, interfac
 _Genie_ can help you do it __with a simple command__, specifying what features you want to learn (`ospf interface bgp platform`), from what specific testbed (`--testbed-file default_testbed.yaml`), and the directory where you want to store the resulting files (`--output good`):
 
 ```
-$ docker run -it --rm \ 
-  -v $PWD:/pyats/demos/ \ 
+$ docker run -it --rm \
+  -v $PWD:/pyats/demos/ \
   --env-file env.list \
   ciscotestautomation/pyats:latest-alpine ash
 (pyats) /pyats# cd demos
