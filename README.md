@@ -2040,7 +2040,7 @@ This is a pretty neat way of _not-having_ to type all those commands, and just i
 
 And of course, you can even create your own tasks!
 
-Now let's try a different task, and learn about _all-things- BGP in the _csr_ device:
+Now let's try a different task, and learn about _all-things_ BGP in the _csr_ device:
 
 ```
 In [11]: bgp = tasks.learn('bgp',csr)
@@ -2066,7 +2066,7 @@ And then we could use it to learn the BGP configuration in our Nexus switch:
 In [14]: bgps_nx = Bgp.learn_config(nx)
 ```
 
-As long as there might be (potentially) several BGP instances we receive a _list_, and need to refer to its first entry (ie. 0):
+As long as for other routing protocols (not BGP) there might be several instances we receive a _list_, and we need to refer to its first entry, numbered 0:
 
 ```
 In [15]: bgp_nx = bgps_nx[0]
@@ -2078,7 +2078,7 @@ We can also apply configurations, like this or a different one, to our device:
 In [16]: bgp_nx.build_config()
 ```
 
-Or remove all that BGP configuration:
+Or remove all BGP configuration:
 
 ```
 In [17]: bgp_nx.build_unconfig()
@@ -2092,7 +2092,7 @@ In [19]: bgp
 Out[19]: {}
 ```
 
-And easily apply all the BGP config back again:
+And easily apply all BGP configuration back again:
 
 ```
 In [20]: bgp_nx.build_config()
@@ -2105,11 +2105,11 @@ In [21]: exit()
 root@2ad68679070c:/pyats# exit
 ```
 
-__ipyATS makes it really easy for you to develop and debug your tests step by step, in the classic _pythonic_ way!__
+__ipyATS makes it really easy for you to develop and debug your tests step-by-step, in the classic _pythonic_ way!__
 
 #### <a name='WorkingwithTestCases'></a>Working with Test Cases
 
-Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what Test Cases are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
+Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what _Test Cases_ are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
 
 Let's take a look at this example:
 
@@ -2127,14 +2127,14 @@ Task-1: basic_example_script
 `-- clean_everything
 ```
 
-The sections are quite simple:
+The sections are easy to understand:
 
 * You can define a number of _tasks_ to run in your test case (in the example above we have just 1 task)
 * Then you will have some _common setup_ to do, structured in subsections 
 * After that, you would go into the real Test Case (_tc_), with 3 phases: preparation, execution and cleaning
-* Finally, as a good citizen, you would need to _clean_ everything you set up during the _common setup_ phase
+* Finally, as a good citizen, you would need to _clean after yourself_, everything you set up during the _common setup_ phase
 
-Let's see it working in your own setup. In this case we will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files during this demo. We will ask our pyATS container to provide a shell (_ash_ for _-alpine_ image) so we work with it interactively.
+Let's see it working in your own setup. In this case we will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files during this demo. We will ask our pyATS container to provide a shell (_ash_ for _-alpine_ image) so we can work with it interactively.
 
 ```
 $ docker run -it --rm ciscotestautomation/pyats:latest-alpine ash
@@ -2146,13 +2146,13 @@ Once inside the container shell you have access to its directory structure and t
 (pyats) /pyats # cd examples/basic
 ```
 
-There you will find the `basic_example_script.py` python script file that defines a very simple Test Case. It includes quite some python code for all the sections mentioned before, but actually not doing much (in fact only logging)... so it is a good starting point as a template for your own test cases.
+There you will find the `basic_example_script.py` python script file that defines a very simple _Test Case_. It includes quite some python code for all the sections mentioned before, but actually not doing much (in fact only logging)... so it is a good starting point as a template to develop your own test cases.
 
 ```
 (pyats) /pyats/examples/basic# cat basic_example_script.py
 ```
 
-It is executed with a _job_ that invokes the python script. You can find it here:
+This script will be executed from a _job_, defined in this file:
 
 ```
 (pyats) /pyats/examples/basic# cat job/basic_example_job.py
@@ -2186,7 +2186,7 @@ As you can see we are defining 2 simple variables with fixed values of 1 and 2, 
 <img src="imgs/208thinking.gif">
 </p>
 
-Try it.
+Save the file and try it.
 
 ```
 (pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
@@ -2233,18 +2233,21 @@ Once you are done you can exit the container.
 
 #### <a name='Profilingyournetworkfortroubleshooting'></a>Profiling your network for troubleshooting
 
-So let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helped you profiling your network end-to-end and storing all that info as snapshots?
+Now let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helps you profile the network end-to-end and store that info as snapshots?
 
 <p align="center"> 
 <img src="imgs/209tellmehow.gif">
 </p>
 
-Let's focus, for example, on profiling everything related to BGP, OSPF, interfaces and the platforms in your network, and saving it to files. Ideally you would take a snapshot of your network when everything is working _superb_.
+Let's focus, for example, on profiling everything related to BGP, OSPF, interfaces and the platforms in your network, and saving it to snapshot files. Ideally you would take a first snapshot of your network when everything is working _superb_.
 
-_Genie_ can help you do it with a simple command, specifying what features you want to learn (`ospf interface bgp platform`), from what specific testbed (`--testbed-file default_testbed.yaml`), and the directory where you want to store the resulting files (`--output good`):
+_Genie_ can help you do it __with a simple command__, specifying what features you want to learn (`ospf interface bgp platform`), from what specific testbed (`--testbed-file default_testbed.yaml`), and the directory where you want to store the resulting files (`--output good`):
 
 ```
-$ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alpine ash
+$ docker run -it --rm \ 
+  -v $PWD:/pyats/demos/ \ 
+  --env-file env.list \
+  ciscotestautomation/pyats:latest-alpine ash
 (pyats) /pyats# cd demos
 (pyats) /pyats/demos # genie learn ospf interface bgp platform --testbed-file default_testbed.yaml --output good
 ```
@@ -2285,7 +2288,7 @@ Connection to 172.16.30.129 closed.
 <img src="imgs/210whathaveidone.gif">
 </p>
 
-In the real world, soon you would be receiving calls from users: "Something is wrong... _terribly_ wrong", "I lost ALL connectivity", "My database stopped working!". So instead of starting your troubleshooting by _brute force_, how about asking Genie to determine what is the current new status of the network after the outage, and even better _what changed exactly_ since the last time you took the snapshot of the network in good state.
+In the real world, soon you would be receiving calls from users: "Something is wrong... _terribly_ wrong", "I lost ALL connectivity", "My database stopped working!". So instead of starting to troubleshoot by _brute force_, how about asking Genie to determine what is the current new status of the network after the outage. And even better, _what changed exactly_ since the last time you took the snapshot of the network in good state?
 
 Let's do this by running the same command as previously, but asking the system to store the resulting files in a different directory (`--output bad`).
 
@@ -2359,7 +2362,7 @@ The test case structure includes the following sections:
 * Common setup: connect to all devices included in your testbed.
 * Test cases: learn about all BGP sessions in each device, check their status and build a table to represent that info. If there are neighbors _not in a established state_ the test will fail and signal this condition in an error message.
 
-In order to run it you will first need to install `git` on your pyATS container, clone a repo with additional examples, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
+In order to run it first you will need to install `git` on your pyATS container, clone a repo with additional examples, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
 
 ```
 $ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alpine ash
@@ -2367,7 +2370,7 @@ $ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alp
 (pyats) /pyats # git clone https://github.com/kecorbin/pyats-network-checks.git
 (pyats) /pyats # pip3 install tabulate
 (pyats) /pyats # cd pyats-network-checks/bgp_adjacencies
-(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed-file /pyats/demos/default_testbed.yaml
+(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed_file /pyats/demos/default_testbed.yaml
 ```
 
 As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status:
