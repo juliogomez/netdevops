@@ -40,9 +40,9 @@
 		* [Test a - Execute a command on a network device](#Testa-Executeacommandonanetworkdevice)
 		* [Test b - Consolidate info from devices with different CLI](#Testb-ConsolidateinfofromdeviceswithdifferentCLI)
 		* [Test c - Develop your own tests with interactive pyATS](#Testc-DevelopyourowntestswithinteractivepyATS)
-		* [Test d - Working with Test Cases](#Testd-WorkingwithTestCases)
+		* [Test d - Check all BGP neighbors are established](#Testd-CheckallBGPneighborsareestablished)
 		* [Test e - Profiling your network for troubleshooting](#Teste-Profilingyournetworkfortroubleshooting)
-		* [Test f - Check all BGP neighbors are established](#Testf-CheckallBGPneighborsareestablished)
+		* [Test f - Working with Test Cases](#Testf-WorkingwithTestCases)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -2107,129 +2107,36 @@ root@2ad68679070c:/pyats# exit
 
 __ipyATS makes it really easy for you to develop and debug your tests step-by-step, in the classic _pythonic_ way!__
 
-#### <a name='Testd-WorkingwithTestCases'></a>Test d - Working with Test Cases
+#### <a name='Testd-CheckallBGPneighborsareestablished'></a>Test d - Check all BGP neighbors are established
 
-Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what _Test Cases_ are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
+We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state. 
 
-Let's take a look at this example:
+The test case structure includes the following sections:
 
-```
-Task-1: basic_example_script
-|-- commonSetup                                                           
-|   |-- sample_subsection_1                                               
-|   `-- sample_subsection_2                                               
-|-- tc_one
-|   |-- prepare_testcase                                                  
-|   |-- simple_test_1                                                     
-|   |-- simple_test_2                                                     
-|   `-- clean_testcase                                                    
-`-- commonCleanup                                                         
-`-- clean_everything
-```
+* Common setup: connect to all devices included in your testbed.
+* Test cases: learn about all BGP sessions in each device, check their status and build a table to represent that info. If there are neighbors _not in a established state_ the test will fail and signal this condition in an error message.
 
-The sections are easy to understand:
-
-* You can define a number of _tasks_ to run in your test case (in the example above we have just 1 task)
-* Then you will have some _common setup_ to do, structured in subsections 
-* After that, you would go into the real Test Case (_tc_), with 3 phases: preparation, execution and cleaning
-* Finally, as a good citizen, you would need to _clean after yourself_, everything you set up during the _common setup_ phase
-
-Let's see it working in your own setup. In this case we will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files during this demo. We will ask our pyATS container to provide a shell (_ash_ for _-alpine_ image) so we can work with it interactively.
+In order to run it first you will need to install `git` on your pyATS container, clone a repo with additional examples, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
 
 ```
-$ docker run -it --rm ciscotestautomation/pyats:latest-alpine ash
+$ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alpine ash
+(pyats) /pyats # apk add --no-cache git
+(pyats) /pyats # git clone https://github.com/kecorbin/pyats-network-checks.git
+(pyats) /pyats # pip3 install tabulate
+(pyats) /pyats # cd pyats-network-checks/bgp_adjacencies
+(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed_file /pyats/demos/default_testbed.yaml
 ```
 
-Once inside the container shell you have access to its directory structure and tools. Inside the `pyats` directory you will find multiple examples and templates to use with pyATS. To get started let's focus on a _basic_ one.
+As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status:
 
 ```
-(pyats) /pyats # cd examples/basic
+2019-04-05T18:10:41: %SCRIPT-INFO: | Device     | Peer     | State       | Pass/Fail   |
+2019-04-05T18:10:41: %SCRIPT-INFO: |------------+----------+-------------+-------------|
+2019-04-05T18:10:41: %SCRIPT-INFO: | csr1000v-1 | 10.2.2.2 | established | Passed      |
+2019-04-05T18:10:41: %SCRIPT-INFO: | nx-osv-1   | 10.1.1.1 | established | Passed      |
 ```
 
-There you will find the `basic_example_script.py` python script file that defines a very simple _Test Case_. It includes quite some python code for all the sections mentioned before, but actually not doing much (in fact only logging)... so it is a good starting point as a template to develop your own test cases.
-
-```
-(pyats) /pyats/examples/basic# cat basic_example_script.py
-```
-
-This script will be executed from a _job_, defined in this file:
-
-```
-(pyats) /pyats/examples/basic# cat job/basic_example_job.py
-```
-
-You would run the job with `pyats run job ...`:
-
-```
-(pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
-```
-
-You can see in the report shown at the end of the execution process that all tests in our task _PASSED_.
-
-Let's insert a simple verification test in our test case. Please edit the python script with `vi basic_example_script.py`, scroll down to the _TESTCASES SECTION_ and look for the _First test section_. There you need to insert the required code as per the following:
-
-```
-    # First test section
-    @ aetest.test
-    def simple_test_1(self):
-        """ Sample test section. Only print """
-        log.info("First test section ")
-        self.a = 1
-        self.b = 2
-        if self.a != self.b:
-            self.failed("{} is not {}".format(self.a, self.b))
-```
-
-As you can see we are defining 2 simple variables with fixed values of 1 and 2, and then inserting a conditional statement that fails if they are different. So, obviously the test will now fail because 1 and 2 are different. 
-
-<p align="center"> 
-<img src="imgs/208thinking.gif">
-</p>
-
-Save the file and try it.
-
-```
-(pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
-```
-
-Check the execution logs and you will find how a failed test looks like when executing a test case:
-
-```
-...
-2019-04-04T08:32:09: %AETEST-INFO: Starting section simple_test_1
-2019-04-04T08:32:09: %SCRIPT-INFO: First test section
-2019-04-04T08:32:09: %AETEST-ERROR: Failed reason: 1 is not 2
-2019-04-04T08:32:09: %AETEST-INFO: The result of section simple_test_1 is => FAILED
-...
-2019-04-04T08:32:09: %EASYPY-INFO: +------------------------------------------------------------------------------+
-2019-04-04T08:32:09: %EASYPY-INFO: |                             Task Result Summary                              |
-2019-04-04T08:32:09: %EASYPY-INFO: +------------------------------------------------------------------------------+
-2019-04-04T08:32:09: %EASYPY-INFO: Task-1: basic_example_script.commonSetup                                  PASSED
-2019-04-04T08:32:09: %EASYPY-INFO: Task-1: basic_example_script.tc_one                                       FAILED
-2019-04-04T08:32:09: %EASYPY-INFO: Task-1: basic_example_script.commonCleanup                                PASSED
-2019-04-04T08:32:09: %EASYPY-INFO: +------------------------------------------------------------------------------+
-2019-04-04T08:32:09: %EASYPY-INFO: |                             Task Result Details                              |
-2019-04-04T08:32:09: %EASYPY-INFO: +------------------------------------------------------------------------------+
-2019-04-04T08:32:09: %EASYPY-INFO: Task-1: basic_example_script
-2019-04-04T08:32:09: %EASYPY-INFO: |-- commonSetup                                                           PASSED
-2019-04-04T08:32:09: %EASYPY-INFO: |   |-- sample_subsection_1                                               PASSED
-2019-04-04T08:32:09: %EASYPY-INFO: |   `-- sample_subsection_2                                               PASSED
-2019-04-04T08:32:09: %EASYPY-INFO: |-- tc_one                                                                FAILED
-2019-04-04T08:32:09: %EASYPY-INFO: |   |-- prepare_testcase                                                  PASSED
-2019-04-04T08:32:09: %EASYPY-INFO: |   |-- simple_test_1                                                     FAILED
-2019-04-04T08:32:09: %EASYPY-INFO: |   |-- simple_test_2                                                     PASSED
-2019-04-04T08:32:09: %EASYPY-INFO: |   `-- clean_testcase                                                    PASSED
-2019-04-04T08:32:09: %EASYPY-INFO: `-- commonCleanup                                                         PASSED
-2019-04-04T08:32:09: %EASYPY-INFO:     `-- clean_everything                                                  PASSED
-```
-
-__As you can see you don't need to be a Python expert to use the test cases framework. You have templates readily available for you, where you can insert the specific tests you would like to run and execute them straight away.__
-
-Once you are done you can exit the container.
-
-```
-(pyats) /pyats/examples/basic# exit
-```
+__It was never this easy to make sure BGP neighbors across your network are properly _established_!__
 
 #### <a name='Teste-Profilingyournetworkfortroubleshooting'></a>Test e - Profiling your network for troubleshooting
 
@@ -2482,36 +2389,129 @@ In summary, using Robot we have been able to define the desired test case using 
 
 If you want to learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md) and also [this one](https://github.com/CiscoTestAutomation/CL-DevNet-2595). Both offer you the option to run them on _mocked devices_, so you don't actually need a reserved sandbox environment... how cool is that?
 
-#### <a name='Testf-CheckallBGPneighborsareestablished'></a>Test f - Check all BGP neighbors are established
+#### <a name='Testf-WorkingwithTestCases'></a>Test f - Working with Test Cases
 
-We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state. 
+Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what _Test Cases_ are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
 
-The test case structure includes the following sections:
-
-* Common setup: connect to all devices included in your testbed.
-* Test cases: learn about all BGP sessions in each device, check their status and build a table to represent that info. If there are neighbors _not in a established state_ the test will fail and signal this condition in an error message.
-
-In order to run it first you will need to install `git` on your pyATS container, clone a repo with additional examples, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
+Let's take a look at this example:
 
 ```
-$ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alpine ash
-(pyats) /pyats # apk add --no-cache git
-(pyats) /pyats # git clone https://github.com/kecorbin/pyats-network-checks.git
-(pyats) /pyats # pip3 install tabulate
-(pyats) /pyats # cd pyats-network-checks/bgp_adjacencies
-(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed_file /pyats/demos/default_testbed.yaml
+Task-1: basic_example_script
+|-- commonSetup                                                           
+|   |-- sample_subsection_1                                               
+|   `-- sample_subsection_2                                               
+|-- tc_one
+|   |-- prepare_testcase                                                  
+|   |-- simple_test_1                                                     
+|   |-- simple_test_2                                                     
+|   `-- clean_testcase                                                    
+`-- commonCleanup                                                         
+`-- clean_everything
 ```
 
-As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status:
+The sections are easy to understand:
+
+* You can define a number of _tasks_ to run in your test case (in the example above we have just 1 task)
+* Then you will have some _common setup_ to do, structured in subsections 
+* After that, you would go into the real Test Case (_tc_), with 3 phases: preparation, execution and cleaning
+* Finally, as a good citizen, you would need to _clean after yourself_, everything you set up during the _common setup_ phase
+
+Let's see it working in your own setup. In this case we will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files during this demo. We will ask our pyATS container to provide a shell (_ash_ for _-alpine_ image) so we can work with it interactively.
 
 ```
-2019-04-05T18:10:41: %SCRIPT-INFO: | Device     | Peer     | State       | Pass/Fail   |
-2019-04-05T18:10:41: %SCRIPT-INFO: |------------+----------+-------------+-------------|
-2019-04-05T18:10:41: %SCRIPT-INFO: | csr1000v-1 | 10.2.2.2 | established | Passed      |
-2019-04-05T18:10:41: %SCRIPT-INFO: | nx-osv-1   | 10.1.1.1 | established | Passed      |
+$ docker run -it --rm ciscotestautomation/pyats:latest-alpine ash
 ```
 
-__It was never this easy to make sure BGP neighbors across your network are properly _established_!__
+Once inside the container shell you have access to its directory structure and tools. Inside the `pyats` directory you will find multiple examples and templates to use with pyATS. To get started let's focus on a _basic_ one.
+
+```
+(pyats) /pyats # cd examples/basic
+```
+
+There you will find the `basic_example_script.py` python script file that defines a very simple _Test Case_. It includes quite some python code for all the sections mentioned before, but actually not doing much (in fact only logging)... so it is a good starting point as a template to develop your own test cases.
+
+```
+(pyats) /pyats/examples/basic# cat basic_example_script.py
+```
+
+This script will be executed from a _job_, defined in this file:
+
+```
+(pyats) /pyats/examples/basic# cat job/basic_example_job.py
+```
+
+You would run the job with `pyats run job ...`:
+
+```
+(pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
+```
+
+You can see in the report shown at the end of the execution process that all tests in our task _PASSED_.
+
+Let's insert a simple verification test in our test case. Please edit the python script with `vi basic_example_script.py`, scroll down to the _TESTCASES SECTION_ and look for the _First test section_. There you need to insert the required code as per the following:
+
+```
+    # First test section
+    @ aetest.test
+    def simple_test_1(self):
+        """ Sample test section. Only print """
+        log.info("First test section ")
+        self.a = 1
+        self.b = 2
+        if self.a != self.b:
+            self.failed("{} is not {}".format(self.a, self.b))
+```
+
+As you can see we are defining 2 simple variables with fixed values of 1 and 2, and then inserting a conditional statement that fails if they are different. So, obviously the test will now fail because 1 and 2 are different. 
+
+<p align="center"> 
+<img src="imgs/208thinking.gif">
+</p>
+
+Save the file and try it.
+
+```
+(pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
+```
+
+Check the execution logs and you will find how a failed test looks like when executing a test case:
+
+```
+...
+2019-04-04T08:32:09: %AETEST-INFO: Starting section simple_test_1
+2019-04-04T08:32:09: %SCRIPT-INFO: First test section
+2019-04-04T08:32:09: %AETEST-ERROR: Failed reason: 1 is not 2
+2019-04-04T08:32:09: %AETEST-INFO: The result of section simple_test_1 is => FAILED
+...
+2019-04-04T08:32:09: %EASYPY-INFO: +------------------------------------------------------------------------------+
+2019-04-04T08:32:09: %EASYPY-INFO: |                             Task Result Summary                              |
+2019-04-04T08:32:09: %EASYPY-INFO: +------------------------------------------------------------------------------+
+2019-04-04T08:32:09: %EASYPY-INFO: Task-1: basic_example_script.commonSetup                                  PASSED
+2019-04-04T08:32:09: %EASYPY-INFO: Task-1: basic_example_script.tc_one                                       FAILED
+2019-04-04T08:32:09: %EASYPY-INFO: Task-1: basic_example_script.commonCleanup                                PASSED
+2019-04-04T08:32:09: %EASYPY-INFO: +------------------------------------------------------------------------------+
+2019-04-04T08:32:09: %EASYPY-INFO: |                             Task Result Details                              |
+2019-04-04T08:32:09: %EASYPY-INFO: +------------------------------------------------------------------------------+
+2019-04-04T08:32:09: %EASYPY-INFO: Task-1: basic_example_script
+2019-04-04T08:32:09: %EASYPY-INFO: |-- commonSetup                                                           PASSED
+2019-04-04T08:32:09: %EASYPY-INFO: |   |-- sample_subsection_1                                               PASSED
+2019-04-04T08:32:09: %EASYPY-INFO: |   `-- sample_subsection_2                                               PASSED
+2019-04-04T08:32:09: %EASYPY-INFO: |-- tc_one                                                                FAILED
+2019-04-04T08:32:09: %EASYPY-INFO: |   |-- prepare_testcase                                                  PASSED
+2019-04-04T08:32:09: %EASYPY-INFO: |   |-- simple_test_1                                                     FAILED
+2019-04-04T08:32:09: %EASYPY-INFO: |   |-- simple_test_2                                                     PASSED
+2019-04-04T08:32:09: %EASYPY-INFO: |   `-- clean_testcase                                                    PASSED
+2019-04-04T08:32:09: %EASYPY-INFO: `-- commonCleanup                                                         PASSED
+2019-04-04T08:32:09: %EASYPY-INFO:     `-- clean_everything                                                  PASSED
+```
+
+__As you can see you don't need to be a Python expert to use the test cases framework. You have templates readily available for you, where you can insert the specific tests you would like to run and execute them straight away.__
+
+Once you are done you can exit the container.
+
+```
+(pyats) /pyats/examples/basic# exit
+```
 
 
 # Author
