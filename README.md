@@ -37,12 +37,12 @@
 		* [Demo overview](#Demooverview-1)
 		* [Summary](#Summary-1)
 	* [NetDevOps Demo 3 - Working with pyATS and Genie](#NetDevOpsDemo3-WorkingwithpyATSandGenie)
-		* [Execute a command on a network device](#Executeacommandonanetworkdevice)
-		* [Consolidate info from devices with different CLI](#ConsolidateinfofromdeviceswithdifferentCLI)
-		* [Develop your own tests with interactive pyATS](#DevelopyourowntestswithinteractivepyATS)
-		* [Working with Test Cases](#WorkingwithTestCases)
-		* [Profiling your network for troubleshooting](#Profilingyournetworkfortroubleshooting)
-		* [Check all BGP neighbors are established](#CheckallBGPneighborsareestablished)
+		* [Test a: Execute a command on a network device](#Testa:Executeacommandonanetworkdevice)
+		* [Test b: Consolidate info from devices with different CLI](#Testb:ConsolidateinfofromdeviceswithdifferentCLI)
+		* [Test c: Develop your own tests with interactive pyATS](#Testc:DevelopyourowntestswithinteractivepyATS)
+		* [Test d: Working with Test Cases](#Testd:WorkingwithTestCases)
+		* [Test e: Profiling your network for troubleshooting](#Teste:Profilingyournetworkfortroubleshooting)
+		* [Test f: Check all BGP neighbors are established](#Testf:CheckallBGPneighborsareestablished)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -1837,7 +1837,7 @@ Shutting Down Simulation netdevops_default_oAmstu.....
 SUCCESS
 ```
 
-#### <a name='Executeacommandonanetworkdevice'></a>Execute a command on a network device
+#### <a name='Testa:Executeacommandonanetworkdevice'></a>Test a: Execute a command on a network device
 
 The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` on a CSR1000v.
 
@@ -1865,7 +1865,7 @@ $ docker run -it --rm \
   python3 /pyats/demos/1-pyats-intro.py
 ```
 
-#### <a name='ConsolidateinfofromdeviceswithdifferentCLI'></a>Consolidate info from devices with different CLI
+#### <a name='Testb:ConsolidateinfofromdeviceswithdifferentCLI'></a>Test b: Consolidate info from devices with different CLI
 
 In this case you will use not only pyATS, but also Genie, to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. 
 
@@ -1909,7 +1909,7 @@ $ docker run -it --rm \
   python3 /pyats/demos/2-genie-intro.py
 ```
 
-#### <a name='DevelopyourowntestswithinteractivepyATS'></a>Develop your own tests with interactive pyATS
+#### <a name='Testc:DevelopyourowntestswithinteractivepyATS'></a>Test c: Develop your own tests with interactive pyATS
 
 Now that you have seen a couple of simple examples of what can be done with pyATS and Genie, you might want to start developing your own tests. But instead of iterating through the process of "writing a complete script, trying to run it, failing and rewriting", we would rather have a more _interactive_ way of developing tests. Something that allows us to check the results of each step during the test, and debug it by exploring the results at any point of the flow.
 
@@ -2107,7 +2107,7 @@ root@2ad68679070c:/pyats# exit
 
 __ipyATS makes it really easy for you to develop and debug your tests step-by-step, in the classic _pythonic_ way!__
 
-#### <a name='WorkingwithTestCases'></a>Working with Test Cases
+#### <a name='Testd:WorkingwithTestCases'></a>Test d: Working with Test Cases
 
 Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what _Test Cases_ are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
 
@@ -2231,7 +2231,7 @@ Once you are done you can exit the container.
 (pyats) /pyats/examples/basic# exit
 ```
 
-#### <a name='Profilingyournetworkfortroubleshooting'></a>Profiling your network for troubleshooting
+#### <a name='Teste:Profilingyournetworkfortroubleshooting'></a>Test e: Profiling your network for troubleshooting
 
 Now let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helps you profile the network end-to-end and store that info as snapshots?
 
@@ -2353,7 +2353,7 @@ __Talk about an easy way to determine why your network is not working properly a
 
 If you want learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md) and also [this one](https://github.com/CiscoTestAutomation/CL-DevNet-2595). Both offer you the option to run them on _mocked devices_, so you don't actually need a reserved sandbox environment... how cool is that?
 
-#### <a name='CheckallBGPneighborsareestablished'></a>Check all BGP neighbors are established
+#### <a name='Testf:CheckallBGPneighborsareestablished'></a>Test f: Check all BGP neighbors are established
 
 We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state. 
 
