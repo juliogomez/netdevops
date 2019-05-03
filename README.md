@@ -2290,13 +2290,13 @@ Connection to 172.16.30.129 closed.
 
 In the real world, soon you would be receiving calls from users: "Something is wrong... _terribly_ wrong", "I lost ALL connectivity", "My database stopped working!". So instead of starting to troubleshoot by _brute force_, how about asking Genie to determine what is the current new status of the network after the outage. And even better, _what changed exactly_ since the last time you took the snapshot of the network in good state?
 
-Let's do this by running the same command as previously, but asking the system to store the resulting files in a different directory (`--output bad`).
+Let's do this by running the same command as previously, but this time asking the system to store the resulting files in a different directory (`--output bad`).
 
 ```
 (pyats) /pyats/demos # genie learn ospf interface bgp platform --testbed-file default_testbed.yaml --output bad
 ```
 
-And now find out what changed with yet another simple command.
+And now find out what changed between the _good_ situation and the _bad_ one with yet another simple command.
 
 ```
 (pyats) /pyats/demos # genie diff good bad
@@ -2350,6 +2350,135 @@ __Talk about an easy way to determine why your network is not working properly a
 <p align="center"> 
 <img src="imgs/211cool.gif">
 </p>
+
+But we can make better... there's always room for improvement, right? Probably you have noticed that the output from `genie` commands is better and more meaningful than the one for the original `pyats` commands. But still it was _a lot_ for just a couple of devices. Please consider if we wanted to run that same test in the complete network with maybe hundreds or thousands of systems... that would be a lot of logging info! However as an operator probably I don't need that much output, and I could have a more intuitive summary that gives me the key info on what I am doing.
+
+Besides this, network operators are probably interested in defining their tests in a way that is as close to natural language as possible. [Robot framework](https://robotframework.org/) is an open-source automation framework for testing that can help you with these challenges. Let's take a look at an example on what can be done with it!
+
+We will run the same scenario as before, and see what are the benefits we get. So again, we will take a first snapshot of our network when it is working fine.
+
+Go to your CSR and get interface Loopback 1 back up again.
+
+```
+(pyats) /pyats/demos # ssh cisco@172.16.30.129
+csr1000v-1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+csr1000v-1(config)#int lo 1
+csr1000v-1(config-if)#no shut
+csr1000v-1(config-if)#exit
+csr1000v-1(config)#exit
+csr1000v-1#exit
+Connection to 172.16.30.129 closed by remote host.
+Connection to 172.16.30.129 closed.
+```
+
+Everything is now back to the normal / initial situation.
+
+Now, instead of running the Genie profiling command directly from the CLI, with Robot we will use the `initial_snapshot.robot` test definition file you will find in the `demos` directory. This file specifies the libraries to import, where is the testbed file, and then define the test cases. Please review this file and you will see that the different steps in these test cases are defined with very simple language.
+
+First step is connecting to the testbed devices:
+
+```
+Connect
+    # Initializes the pyATS/Genie Testbed
+    use genie testbed "${testbed}"
+
+    # Connect to both devices
+    connect to device "nx-osv-1"
+    connect to device "csr1000v-1"
+```
+
+And then profile them, specifiying where to store the resulting outcome and log files:
+
+```
+Profile the devices
+    Profile the system for "bgp;config;interface;platform;ospf;arp;routing;vrf;vlan" on devices "nx-osv-1;csr1000v-1" as "./good/good_snapshot"
+```
+
+Very simple and natural language that helps understanding intuitively what the test case is supposed to do.
+
+Once more we run a container, change to the required directory and execute robot with a single command:
+
+```
+$ docker run -it --rm \
+  -v $PWD:/pyats/demos/ \
+  --env-file env.list \
+  ciscotestautomation/pyats:latest-alpine ash
+[Entrypoint] Starting pyATS Docker Image ...
+[Entrypoint] Workspace Directory: /pyats
+[Entrypoint] Activating workspace
+(pyats) /pyats # cd demos
+(pyats) /pyats/demos # robot -d good initial_snapshot.robot
+==============================================================================
+Initial Snapshot
+==============================================================================
+[ WARN ] Could not load the Datafile correctly
+Connect                                                               | PASS |
+------------------------------------------------------------------------------
+Profile the devices                                                   | PASS |
+------------------------------------------------------------------------------
+Initial Snapshot                                                      | PASS |
+2 critical tests, 2 passed, 0 failed
+2 tests total, 2 passed, 0 failed
+==============================================================================
+Output:  /pyats/demos/good/output.xml
+Log:     /pyats/demos/good/log.html
+Report:  /pyats/demos/good/report.html
+(pyats) /pyats/demos #
+```
+
+As you can see now the output an operator gets when executing the test case, is much more summarized. It clearly specifies, in one line per step, if the test passed or not and where you can find the outcome report, output and logs. These are extremely useful to easily visualize from a browser how did the tests go, and how you can drill down into each specific test to see the logs about what happened exactly. In this case we have decided to store these files in the same directory where we keep the profiling snapshots.
+
+The `good` directory now stores everything about your network profile when things work great. Let's mess it up again, by connecting to the system and shutting down interface Loopback 1 again.
+
+```
+(pyats) /pyats/demos # ssh cisco@172.16.30.129
+csr1000v-1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+csr1000v-1(config)#int lo 1
+csr1000v-1(config-if)#shut
+csr1000v-1(config-if)#exit
+csr1000v-1(config)#exit
+csr1000v-1#exit
+Connection to 172.16.30.129 closed by remote host.
+Connection to 172.16.30.129 closed.
+```
+
+After this _terrible happening_ it is time to profile the network again, but this time we will use the `compare_snapshot.robot` to run the following test case, a little bit different from the initial one. We will add one extra step: once it has connected to the devices and profiled them, it will automatically _compare the snapshots for us_.
+
+```
+Compare snapshots
+    Compare profile "./good/good_snapshot" with "./fail/failed_snapshot" on devices "nx-osv-1;csr1000v-1"
+```
+
+Again, very simple and natural language that helps understanding intuitively what the test case is supposed to do.
+
+```
+(pyats) /pyats/demos # robot -d fail compare_snapshot.robot
+```
+
+As you can see from the output the first 2 steps work fine, it connects to the devices and profile them just fine. However when it goes into step 3 it _fails_, indicating that _something has changed_. Going further down the log it clearly states the CSR interface has actually been shutdown and it is not operational anymore.
+
+```
+Comparison between ./good/good_snapshot and ./fail/failed_snapshot is different for feature 'config' for device:
+
+'csr1000v-1'
+interface Loopback1
++ shutdown
+
+**********
+Comparison between ./good/good_snapshot and ./fail/failed_snapshot is different for feature 'interface' for device:
+
+'csr1000v-1'
+info:
+ Loopback1:
++  enabled: False
+-  enabled: True
++  oper_status: down
+-  oper_status: up
+```
+
+In summary, using Robot we have been able to define the desired test case using very intuitive and natural language for the desired profiling. The received outcome is also very clear when debugging possible network issues and offer HTML reporting that you can easily consume and share. __Really cool tool!__
 
 If you want learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md) and also [this one](https://github.com/CiscoTestAutomation/CL-DevNet-2595). Both offer you the option to run them on _mocked devices_, so you don't actually need a reserved sandbox environment... how cool is that?
 
