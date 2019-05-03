@@ -2376,7 +2376,7 @@ Everything is now back to the normal initial situation.
 
 Now, instead of running the Genie profiling command directly from the CLI, with Robot we will use the `initial_snapshot.robot` test definition file you will find in the `demos` directory. This file specifies the libraries to import, where the testbed file resides, and the test cases definition. Please review this file and you will see the different steps in these test cases are defined with very simple language.
 
-First step is connecting to the testbed devices:
+First it will connect to the testbed devices:
 
 ```
 Connect
@@ -2388,7 +2388,7 @@ Connect
     connect to device "csr1000v-1"
 ```
 
-And then profile them, specifiying where to store the resulting outcome and log files:
+And then the system will profile them, specifiying where to store the resulting outcome and log files:
 
 ```
 Profile the devices
@@ -2397,7 +2397,7 @@ Profile the devices
 
 Very simple and natural language that helps understanding intuitively what the test case is supposed to do.
 
-Once more we run a container, change to the required directory and execute robot with a single command:
+Once more we will create a container, change to the required directory and run `robot` with a single command:
 
 ```
 $ docker run -it --rm \
@@ -2427,9 +2427,9 @@ Report:  /pyats/demos/good/report.html
 (pyats) /pyats/demos #
 ```
 
-As you can see now the output an operator gets when executing the test case, is much more summarized. It clearly specifies, in one line per step, if the test passed or not and where you can find the outcome report, output and logs. These are extremely useful to easily visualize from a browser how did the tests go, using a browser to drill down into each specific test and see the logs about what happened exactly. In this case we have decided to store these files in the same directory where we keep the profiling snapshots.
+As you can see now the output an operator would get when executing the test case, is much more summarized. It clearly specifies, in one line per step, if the test passed or not and where you can find the resulting report, output and log files. These are extremely useful to easily visualize from a browser how did the tests go, drill down into each specific test and examine the logs about what happened exactly. In this case we have decided to store these files in the same directory where we keep the profiling snapshots.
 
-The `good` directory now stores everything about your network profile when things work great. Let's mess it up again, by connecting to the system and shutting down interface Loopback 1.
+The `good` directory now stores everything about your network profile when things work _fine_. Let's mess it up again, by connecting to the system and shutting down interface Loopback 1.
 
 ```
 (pyats) /pyats/demos # ssh cisco@172.16.30.129
@@ -2444,7 +2444,7 @@ Connection to 172.16.30.129 closed by remote host.
 Connection to 172.16.30.129 closed.
 ```
 
-After this _terrible happening_ it is time to profile the network again, but this time we will use the `compare_snapshot.robot` file to run the following test case, a little bit different from the initial one. It will include one extra step: once it has connected to the devices and profiled them as before, it will automatically _compare the snapshots for us_.
+After this _terrible happening_ it is time to profile the network again, but this time we will use the `compare_snapshot.robot` file to run another test case, a little bit different from the initial one. It will include one extra step: once it is connected to the devices and has profiled them as before, it will automatically _compare the new snapshots with the old ones_.
 
 ```
 Compare snapshots
@@ -2457,7 +2457,7 @@ Again, very simple and natural language that helps understanding intuitively wha
 (pyats) /pyats/demos # robot -d fail compare_snapshot.robot
 ```
 
-As you can see from the output the first 2 steps work fine: it connects to the devices and profile them just fine. However, when it goes into step 3 it _fails_, indicating that _something has changed_. Going further down the log it clearly states the CSR interface has actually been shutdown and it is not operational anymore, compared to the initial _good_ state. __Wow, that was easy to debug!__
+As you will see from the output the first 2 steps work fine: it connects to the devices and profiles them just fine. However, when it goes into step number 3 it _fails_, indicating that _something has changed_ from the previous situation. Going further down the log it clearly states the CSR interface has actually been shutdown and it is not operational anymore, compared to the initial _good_ state. __Wow, that was easy to debug!__
 
 ```
 Comparison between ./good/good_snapshot and ./fail/failed_snapshot is different for feature 'config' for device:
@@ -2478,7 +2478,7 @@ info:
 -  oper_status: up
 ```
 
-In summary, using Robot we have been able to define the desired test case using very intuitive and natural language for the desired profiling. The received outcome is also very clear when debugging possible network issues and even offer HTML reporting that you can easily consume and share. __Really cool tool!__
+In summary, using Robot we have been able to define the desired test case using very intuitive and natural language for the desired profiling. The resulting outcome is also very clear when debugging possible network issues and even offer HTML reporting that you can easily consume and share. __Really awesome tool!__
 
 If you want to learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md) and also [this one](https://github.com/CiscoTestAutomation/CL-DevNet-2595). Both offer you the option to run them on _mocked devices_, so you don't actually need a reserved sandbox environment... how cool is that?
 
