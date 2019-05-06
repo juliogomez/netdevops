@@ -1053,7 +1053,7 @@ Let's now dig into setting up the local environment in your workstation.
         -ncs-netsim start
     ```
 
-    These `ncs-netsim` commands create netsim devices in the `netsim` directory, with the specified NEDs (ie. `cisco-ios` or `cisco-nx`) and a certain name (ie. `coreX`, `distX`, `accessX`). Then the last step starts them locally in your workstation. Netsim devices are a quick and easy way to test configuration changes locally, with no risk.
+    These `ncs-netsim` commands create netsim devices in the `netsim` directory, using the specified NEDs (ie. `cisco-ios` or `cisco-nx`) and a certain name (ie. `coreX`, `distX`, `accessX`). Then the last step starts these devices locally in your workstation. Netsim devices are a quick and easy way to emulate the management plane and test configuration changes locally, with no risk involved in the test or production networks.
 
     You may check your netsim devices started correctly and their ports configuration, with:
 
@@ -2428,7 +2428,7 @@ Once inside the container shell you have access to its directory structure and t
 (pyats) /pyats # cd examples/basic
 ```
 
-There you will find the `basic_example_script.py` python script file that defines a very simple _Test Case_. It includes quite some python code for all the sections mentioned before, but actually not doing much (in fact only logging)... so it is a good starting point as a template to develop your own test cases.
+There you will find the `basic_example_script.py` python script file that defines a very simple _Test Case_. It includes quite some python code for all the sections mentioned before, but actually not doing much (in fact only logging), so it is a good starting point as a template to develop your own test cases.
 
 ```
 (pyats) /pyats/examples/basic# cat basic_example_script.py
@@ -2440,7 +2440,7 @@ This script will be executed from a _job_, defined in this file:
 (pyats) /pyats/examples/basic# cat job/basic_example_job.py
 ```
 
-You would run the job with `pyats run job ...`:
+You would run the job with:
 
 ```
 (pyats) /pyats/examples/basic# pyats run job job/basic_example_job.py
