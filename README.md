@@ -2239,7 +2239,7 @@ And now find out what changed between the _good_ situation and the _bad_ one wit
 |------------------------------------------------------------------------------|
 ```
 
-As you can see the system generates some files that signal _exactly_ what has changed from the _good_ situation to the _bad_ one. In this specific case, one of the files immediately shows that Lo1 in the CSR1000v has been disabled!
+As you can see the system generates some files that signal _exactly_ what has changed from the _good_ situation to the _bad_ one. In this specific case, one of the files immediately shows that interface Loopback 1 in the CSR1000v has been disabled!
 
 ```
 (pyats) /pyats/demos # cat ./diff_interface_iosxe_csr1000v-1_ops.txt
@@ -2266,7 +2266,7 @@ Besides this, network operators are probably interested in defining their tests 
 
 We will run the same scenario as before, and see what are some of the benefits we get with Robot. So again, we will take a first snapshot of our network when it is working fine.
 
-Before we start, please go to your CSR and get interface Loopback 1 back up again, so that the network is tidy and clean as it was in the beginning. 
+Before we start, please go to your CSR and get interface Loopback 1 back up again, so that the network is _tidy and clean_, as it was in the beginning.
 
 ```
 (pyats) /pyats/demos # ssh cisco@172.16.30.129
@@ -2297,7 +2297,7 @@ Connect
     connect to device "csr1000v-1"
 ```
 
-And then the system will profile them, specifiying where to store the resulting outcome and log files:
+And then the system will profile them, specifiying where to store the resulting network profile snapshot files:
 
 ```
 Profile the devices
@@ -2306,7 +2306,7 @@ Profile the devices
 
 Very simple and natural language that helps understanding intuitively what the test case is supposed to do.
 
-Once more we will create a container, change to the required directory and run `robot` with a single command:
+Once more we will create a container, change to the required directory and run `robot` with a single command that simply specifies the directory where we want to store the resulting log, output and report (`-d good`):
 
 ```
 $ docker run -it --rm \
@@ -2336,7 +2336,7 @@ Report:  /pyats/demos/good/report.html
 (pyats) /pyats/demos #
 ```
 
-As you can see now the output an operator would get when executing the test case, is much more summarized. It clearly specifies, in one line per step, if the test passed or not and where you can find the resulting report, output and log files. These are extremely useful to easily visualize from a browser how did the tests go, drill down into each specific test and examine the logs about what happened exactly. In this case we have decided to store these files in the same directory where we keep the profiling snapshots.
+As you can see now the output an operator would get when executing the test case, is much more _summarized_. It clearly specifies, in one line per step, if the test passed or not and where you can find the resulting report, output and log files. These are extremely useful to easily visualize from a browser how did the tests go, drill down into each specific test and examine the logs about what happened exactly. In this case we have decided to store these files in the same directory where we keep the profiling snapshots.
 
 The `good` directory now stores everything about your network profile when things work _fine_. Let's mess it up again, by connecting to the system and shutting down interface Loopback 1.
 
@@ -2353,7 +2353,7 @@ Connection to 172.16.30.129 closed by remote host.
 Connection to 172.16.30.129 closed.
 ```
 
-After this _terrible happening_ it is time to profile the network again, but this time we will use the `compare_snapshot.robot` file to run another test case, a little bit different from the initial one. It will include one extra step: once it is connected to the devices and has profiled them as before, it will automatically _compare the new snapshots with the old ones_.
+After this _terrible happening_ it is time to profile the network again, but this time we will use the `compare_snapshot.robot` file to run another test case, a little bit different from the initial one. In this case it will include one extra step: once it is connected to the devices and has profiled them as before, it will automatically _compare the new snapshots with the old good ones_.
 
 ```
 Compare snapshots
@@ -2366,7 +2366,7 @@ Again, very simple and natural language that helps understanding intuitively wha
 (pyats) /pyats/demos # robot -d fail compare_snapshot.robot
 ```
 
-As you will see from the output the first 2 steps work fine: it connects to the devices and profiles them just fine. However, when it goes into step number 3 it _fails_, indicating that _something has changed_ from the previous situation. Going further down the log it clearly states the CSR interface has actually been shutdown and it is not operational anymore, compared to the initial _good_ state. __Wow, that was easy to debug!__
+As you will see from the output the first 2 steps work fine: it connects to the devices and profiles them just fine. However, when it goes into step number 3 it _fails_, indicating that _something has changed_ from the previous _good_ situation. Going further down the log it clearly states the CSR interface has actually been shutdown and it is not operational anymore, compared to the initial _good_ state. __Wow, that was easy to debug!__
 
 ```
 Comparison between ./good/good_snapshot and ./fail/failed_snapshot is different for feature 'config' for device:
@@ -2393,7 +2393,7 @@ If you want to learn more about how Genie network profiling can help you manage 
 
 #### <a name='Testf-WorkingwithTestCases'></a>Test f - Working with Test Cases
 
-Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build a more complex test. That's what _Test Cases_ are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
+Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build more complex tests. That's what _Test Cases_ are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
 
 Let's take a look at this example:
 
