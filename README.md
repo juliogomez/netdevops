@@ -2109,7 +2109,7 @@ __ipyATS makes it really easy for you to develop and debug your tests step-by-st
 
 #### <a name='Testd-CheckallBGPneighborsareestablished'></a>Test d - Check all BGP neighbors are established
 
-We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state. 
+We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state.
 
 The test case structure includes the following sections:
 
@@ -2119,12 +2119,14 @@ The test case structure includes the following sections:
 In order to run it first you will need to install `git` on your pyATS container, clone a repo with additional examples, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
 
 ```
-$ docker run -it --rm -v $PWD:/pyats/demos/ ciscotestautomation/pyats:latest-alpine ash
+$ docker run -it --rm \
+  -v $PWD:/pyats/demos/ \
+  ciscotestautomation/pyats:latest-alpine ash
 (pyats) /pyats # apk add --no-cache git
 (pyats) /pyats # git clone https://github.com/kecorbin/pyats-network-checks.git
 (pyats) /pyats # pip3 install tabulate
 (pyats) /pyats # cd pyats-network-checks/bgp_adjacencies
-(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed_file /pyats/demos/default_testbed.yaml
+(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed-file /pyats/demos/default_testbed.yaml
 ```
 
 As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status:
