@@ -1826,6 +1826,12 @@ That pyATS testbed definition file will need some variables to define the _enabl
 $ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/env.list -o env.list
 ```
 
+As the final preparation step before starting, please make sure to obtain the latest pyATS Docker image.
+
+```
+$ docker pull ciscotestautomation/pyats:latest
+```
+
 __We are now READY to start our demos!__
 
 _Don't do it now_, but please note that by the end of our set of demos, when you are finally done with your simulation, you can easily tear it down with:
