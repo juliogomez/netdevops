@@ -871,6 +871,7 @@ Here is a list of all the running nodes
     Attemping ssh connectionto core1 at 172.16.30.221
     Warning: Permanently added '172.16.30.221' (RSA) to the list of known hosts.
     cisco@172.16.30.221's password:
+    ```
 
 
     core1#reload
@@ -1879,7 +1880,7 @@ In this case you will use not only pyATS, but also Genie, to compile interface c
 <img src="imgs/207errors.gif">
 </p>
 
-The script will use the same function to compile CRC errors information from 2 devices with different CLI (ie. CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type. Genie uses [models](https://pubhub.devnetcloud.com/media/pyats-packages/docs/genie/genie_libs/#/models) to determine the specific commands and format that need to be used for each feature in each platform/OS, and how to map the outcome to the specific fields in the resulting structured data.
+The script will use the same function to compile CRC errors information from 2 devices with different CLI (ie. CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type. Genie uses [models](https://pubhub.devnetcloud.com/media/pyats-packages/docs/genie/genie_libs/#/models) to determine the specific commands and format that need to be used for each feature in each platform/OS, and how to map the outcome to the specific fields in the resulting structured data. Genie determines the platform/OS from the testbed file.
 
 Download the required script to your system:
 
@@ -1893,10 +1894,8 @@ Please review [its content](./pyats/2-genie-intro.py) and you will see the follo
 2. Define a reusable function that obtains __all__ interface counters from a single device
 
     * If not connected to the device, connect to it via SSH
-    * Load the platform parser for that specific device
-    * Load the interface parsers for interfaces in that device
     * Learn info about those device interfaces to parse and return it as structured data
-
+    
 3. Load the pyATS and Genie testbeds definition from file
 4. Select a specific device from the testbed
 5. Call the function defined previously to obtain all interface counters from that device
@@ -1922,7 +1921,7 @@ Now that you have seen a couple of simple examples of what can be done with pyAT
 As you may have noticed pyATS feels really _pythonic_, so wouldn't it be great to have something similar
 to the interactive Python shell? Something that would give us the option to execute individual steps interactively while developing our tests? Well, we got you covered!
 
-[ipyATS](https://github.com/kecorbin/ipyats) is an iPython wrapper for pyATS and Genie, so that you can conveniently explore and develop your own tests in an interactive way.
+Genie has a function called **shell**, which can be invoked from the Bash command line.  When invoking shell, Genie will load the correct testbed file and initiate the required libraries in for the python interactive shell.
 
 For our demos we will start a pyATS container and ask it to start an interactive shell (_bash_) so we can install ipyATS in it.
 
@@ -1945,42 +1944,47 @@ And run it with your VIRL testbed:
 root@2ad68679070c:/pyats# ipyats --testbed demos/default_testbed.yaml
 ```
 
+Invoke Genie Shell with the following command:
+
+```bash
+root@bfaa28c3faf3:/pyats# genie shell --testbed-file demos/default_testbed.yaml 
+```
+
 The great thing about being able to define the specific _testbed_ to use for this test is that you can reuse everything you create in different environments (eg. production, testing, datacenter 1, datacenter 2).
 
 You can see the devices included in your own testbed:
 
-```
-In [1]: testbed.devices
-Out[1]: TopologyDict({'nx-osv-1': <Device nx-osv-1 at 0x1171675c0>, 'csr1000v-1': <Device csr1000v-1 at 0x1174953c8>})
+```python
+>>> testbed.devices
+TopologyDict({'csr1000v-1': <Device csr1000v-1 at 0x7f8fa13e9438>, 'nx-osv-1': <Device nx-osv-1 at 0x7f8fa141f0f0>})
 ```
 
 Create aliases for your devices:
 
-```
-In [2]: nx = testbed.devices['nx-osv-1']
-In [3]: csr = testbed.devices['csr1000v-1']
+```python
+>>> nx = testbed.devices['nx-osv-1']
+>>> csr = testbed.devices['csr1000v-1']
 ```
 
 You can now connect to your device (please make sure you have `telnet` installed in your system):
 
-```
-In [4]: csr.connect()
+```python
+>>> csr.connect()
 ```
 
 Ask if there are any links going _csr_ to _nx_:
 
-```
-In [5]: csr.find_links(nx)
-Out[5]:
-{<Link object 'csr1000v-1-to-nx-osv-1' at 0x117331b38>,
- <Link object 'csr1000v-1-to-nx-osv-1#1' at 0x11757d860>,
- <Link object 'flat' at 0x11757d780>}
+```python
+>>> csr.find_links(nx)
+{<Link object 'csr1000v-1-to-nx-osv-1' at 0x7f8fa0a3db38>, 
+<Link object 'csr1000v-1-to-nx-osv-1#1' at 0x7f8fa0a3d9b0>,
+<Link object 'flat' at 0x7f8fa0a3dba8>}
 ```
 
 Or execute a command in it:
 
-```
-In [6]: csr.execute('show version')
+```python
+>>> csr.execute('show version')
 ```
 
 Probably by now you are thinking...
@@ -1991,124 +1995,105 @@ Probably by now you are thinking...
 
 ... and you are right!
 
-Let's start by exploring what can be done with __genie.ops__ libraries.
+Let's start by exploring what can be done with __genie.ops__ libraries. Genie Ops libraries are at the heart of parsing features on devices and returning structure data.  The models are based on OpenConfig and IETF YANG models.  For the full list of models please go to [Genie Models](https://pubhub.devnetcloud.com/media/pyats-packages/docs/genie/genie_libs/#/models)
 
 How about easily obtaining from a device the complete table of routes __in a structured format__?
 
-```
-In [7]: routes = tasks.get_routing_table(nx)
+```python
+>>> routes = csr.learn('routing')
 ```
 
 This request will execute a number of commands in the device, compile all the received routing info and parse it into a structured format. Check the resulting dictionary:
 
-```
-In [8]: routes
+```python
+>>> routes.info
 ```
 
 It is __structured data__ that you can now easily query and process in your scripting!
 
 For example, let's say you have a tool that needs to verify that a specific route (eg. 172.16.30.0/24) exists in the _management_ VRF of your Nexus switch.
 
-```
-In [9]: routes['vrf']['management']['address_family']['ipv4']['routes']['172.16.30.0/24']
-Out[9]:
-{'route': '172.16.30.0/24',
- 'active': True,
- 'source_protocol': 'direct',
- 'metric': 0,
- 'route_preference': 0,
- 'next_hop': {'next_hop_list': {1: {'index': 1,
-    'next_hop': '172.16.30.130',
-    'updated': '03:59:48',
-    'outgoing_interface': 'mgmt0'}}}}
+```python
+>>> routes.info['vrf']['management']['address_family']['ipv4']['routes']['172.16.30.0/24']
+{'route': '172.16.30.0/24', 
+'active': True, 
+'source_protocol': 'direct', 
+'metric': 0, 
+'route_preference': 0, 
+'next_hop': {'next_hop_list': {1: {'index': 1, 
+	'next_hop': '172.16.1.104', 
+	'updated': '2d00h', 
+	'outgoing_interface': 'mgmt0'}}}}
+
 ```
 
 __Wow, that was easy! Think about the kind of processing and parsing you would have had to do in the past to go through the text output of all those commands. Now pyATS is compiling the information from all those commands and giving you a consolidated, structured view that you can easily work with.__
 
-If you are interested in understanding what that specific _task_ does, you can find out with:
 
-```
-In [10]: show_source(tasks.get_routing_table)
-def get_routing_table(dev):
-    """
-    returns a parsed and normalized routing table
-    """
-    if not dev.is_connected():
-        dev.connect()
-    abstract = Lookup.from_device(dev)
-    # The directory syntax is <feature>.<feature.<Feature>
-    routing = abstract.ops.routing.routing.Routing(dev)
-    routing.learn()
-    return routing.info
-```
-
-This is a pretty neat way of _not-having_ to type all those commands, and just invoke the task. 
-
-And of course, you can even create your own tasks!
 
 Now let's try a different task, and learn about _all-things_ BGP in the _csr_ device:
 
-```
-In [11]: bgp = tasks.learn('bgp',csr)
+```python
+>>> bgp = csr.learn('bgp')
 ```
 
 Again, this task will run multiple BGP-related commands, iterating through all detected BGP neighbors, and provide you with a consolidated view that includes all relevant information in a structured format, so you can easily extract and process the specific data you require.
 
-```
-In [12]: bgp
+```python
+>>> bgp.info
 ```
 
 Now let's explore what can be done with __genie.conf__ libraries.
 
 For example, in order to work with BGP configurations we need to import the required library:
 
-```
-In [13]: from genie.libs.conf.bgp import Bgp
+```python
+>>> from genie.libs.conf.bgp import Bgp
 ```
 
 And then we could use it to learn the BGP configuration in our Nexus switch:
 
-```
-In [14]: bgps_nx = Bgp.learn_config(nx)
+```python
+>>> bgps_nx = Bgp.learn_config(nx)
 ```
 
 As long as for other routing protocols (not BGP) there might be several instances we receive a _list_, and we need to refer to its first entry, numbered 0:
 
-```
-In [15]: bgp_nx = bgps_nx[0]
+```python
+>>> bgp_nx = bgps_nx[0]
 ```
 
 We can also apply configurations, like this or a different one, to our device:
 
-```
-In [16]: bgp_nx.build_config()
+```python
+>>> bgp_nx.build_config()
 ```
 
 Or remove all BGP configuration:
 
-```
-In [17]: bgp_nx.build_unconfig()
+```python
+>>> bgp_nx.build_unconfig()
 ```
 
 You can check it's all gone with the same command we used in the _genie.ops_ section:
 
-```
-In [18]: bgp = tasks.learn('bgp',nx)
-In [19]: bgp
-Out[19]: {}
+```python
+>>> bgp = nx.learn('bgp')
+>>> bgp.info
+{}
 ```
 
 And easily apply all BGP configuration back again:
 
-```
-In [20]: bgp_nx.build_config()
+```python
+>>> bgp_nx.build_config()
 ```
 
 When you are done exploring ipyATS, you can exit with:
 
-```
-In [21]: exit()
-root@2ad68679070c:/pyats# exit
+```python
+>>> exit()
+root@bfaa28c3faf3:/pyats# exit
 ```
 
 __ipyATS makes it really easy for you to develop and debug your tests step-by-step, in the classic _pythonic_ way!__
