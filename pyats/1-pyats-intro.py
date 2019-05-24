@@ -1,7 +1,8 @@
-from ats.topology import loader
-testbed = '/pyats/demos/default_testbed.yaml'
-testbed = loader.load(testbed)
+from genie.conf import Genie
 
+testbed = '/pyats/demos/default_testbed.yaml'
+#testbed = loader.load(testbed)
+testbed = Genie.init(testbed)
 # select a specific device from the testbed definition
 csr = testbed.devices['csr1000v-1']
 # connect to that device
