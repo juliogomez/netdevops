@@ -1999,13 +1999,13 @@ Let's start by exploring what can be done with __genie.ops__ libraries. Genie Op
 
 How about easily obtaining from a device the complete table of routes __in a structured format__?
 
-```
+```python
 >>> routes = csr.learn('routing')
 ```
 
 This request will execute a number of commands in the device, compile all the received routing info and parse it into a structured format. Check the resulting dictionary:
 
-```
+```python
 >>> routes.info
 ```
 
@@ -2013,7 +2013,7 @@ It is __structured data__ that you can now easily query and process in your scri
 
 For example, let's say you have a tool that needs to verify that a specific route (eg. 172.16.30.0/24) exists in the _management_ VRF of your Nexus switch.
 
-```
+```python
 >>> routes.info['vrf']['management']['address_family']['ipv4']['routes']['172.16.30.0/24']
 {'route': '172.16.30.0/24', 
 'active': True, 
@@ -2033,13 +2033,13 @@ __Wow, that was easy! Think about the kind of processing and parsing you would h
 
 Now let's try a different task, and learn about _all-things_ BGP in the _csr_ device:
 
-```
+```python
 >>> bgp = csr.learn('bgp')
 ```
 
 Again, this task will run multiple BGP-related commands, iterating through all detected BGP neighbors, and provide you with a consolidated view that includes all relevant information in a structured format, so you can easily extract and process the specific data you require.
 
-```
+```python
 >>> bgp.info
 ```
 
@@ -2047,37 +2047,37 @@ Now let's explore what can be done with __genie.conf__ libraries.
 
 For example, in order to work with BGP configurations we need to import the required library:
 
-```
+```python
 >>> from genie.libs.conf.bgp import Bgp
 ```
 
 And then we could use it to learn the BGP configuration in our Nexus switch:
 
-```
+```python
 >>> bgps_nx = Bgp.learn_config(nx)
 ```
 
 As long as for other routing protocols (not BGP) there might be several instances we receive a _list_, and we need to refer to its first entry, numbered 0:
 
-```
+```python
 >>> bgp_nx = bgps_nx[0]
 ```
 
 We can also apply configurations, like this or a different one, to our device:
 
-```
+```python
 >>> bgp_nx.build_config()
 ```
 
 Or remove all BGP configuration:
 
-```
+```python
 >>> bgp_nx.build_unconfig()
 ```
 
 You can check it's all gone with the same command we used in the _genie.ops_ section:
 
-```
+```python
 >>> bgp = nx.learn('bgp')
 >>> bgp.info
 {}
@@ -2085,13 +2085,13 @@ You can check it's all gone with the same command we used in the _genie.ops_ sec
 
 And easily apply all BGP configuration back again:
 
-```
+```python
 >>> bgp_nx.build_config()
 ```
 
 When you are done exploring ipyATS, you can exit with:
 
-```
+```python
 >>> exit()
 root@bfaa28c3faf3:/pyats# exit
 ```
