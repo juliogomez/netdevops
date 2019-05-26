@@ -746,7 +746,7 @@ $ ssh developer@10.10.20.20
 Once in, clone the repository that includes all required files to build the setup into your _devbox_.
 
 ```
-[developer@devbox ~]$git clone --recurse-submodules https://github.com/DevNetSandbox/sbx_multi_ios.git
+[developer@devbox ~]$git clone https://github.com/DevNetSandbox/sbx_multi_ios.git
 ```
 
 With that, your sandbox _devbox_ includes now all required info to start building the environment.
