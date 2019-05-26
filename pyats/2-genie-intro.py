@@ -1,7 +1,4 @@
-from ats.topology import loader
 from genie.conf import Genie
-from genie.abstract import Lookup
-from genie.libs import ops
 
 # we define a function to get all interface counters for a device
 def get_interface_counters(dev):
@@ -12,22 +9,15 @@ def get_interface_counters(dev):
     if not dev.is_connected():
         dev.connect()
 
-    # Load the appropriate platform parsers dynamically
-    abstract = Lookup.from_device(dev)
 
-    # Find the Interface Parsers for this device
-    # The directory syntax is .
-    # here the class is capitalized but the directory/files arent.
-    intf = abstract.ops.interface.interface.Interface(dev)
-
-    # Parse required commands, and return structured data
-    intf.learn()
+    # learn and parse data for the interface model of dev,
+    # and return structured data
+    intf = dev.learn('interface')
     return intf.info
 
 # define where the testbed definition file is
 testbed = '/pyats/demos/default_testbed.yaml'
-# load the pyATS testbed
-testbed = loader.load(testbed)
+
 # load the Genie testbed from the pyATS one
 testbed = Genie.init(testbed)
 
