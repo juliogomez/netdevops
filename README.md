@@ -1410,6 +1410,8 @@ After 5 minutes, by the end of this process you should see the complete pipeline
 <img src="imgs/32gitlab_pipeline_prod_complete.png">
 </p>
 
+Please click [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/juliogomez/netdevops/master/demos/NetDevOps_CICD.html) to see a demo of this CICD pipeline working on a 3-tier network environment.
+
 __CONGRATULATIONS! You have completed your first NetDevOps demo on how to fully automate and test network configuration changes all the way to production!__ 
 
 <p align="center"> 
