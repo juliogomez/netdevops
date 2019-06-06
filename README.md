@@ -543,7 +543,7 @@ Some possible HTTP status codes:
 * 4xx Client Error: 400 Bad Request, 401 Unauthorized (something is wrong the authentication), 404 Not Found (most likely URL is wrong, or payload is wrongly formatted)
 * 5xx Server Error: 500 Internal Server Error
 
-Headers will will define the _content-type_ (JSON or XML), cache control, date and enconding.
+Headers will  define the _content-type_ (JSON or XML), cache control, date and encoding.
 
 The response body will be the payload, including the requested data in JSON or XML, depending on the headers provided during the request.
 
