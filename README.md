@@ -753,9 +753,6 @@ With that, your sandbox _devbox_ includes now all required info to start buildin
 
 ```
 [developer@devbox ~]$cd sbx_multi_ios/gitlab
-[developer@devbox gitlab]$git checkout sbxfix
-Branch sbxfix set up to track remote branch sbxfix from origin.
-Switched to a new branch 'sbxfix'
 [developer@devbox gitlab]$./setup.sh
 ```
 
