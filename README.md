@@ -753,6 +753,9 @@ With that, your sandbox _devbox_ includes now all required info to start buildin
 
 ```
 [developer@devbox ~]$cd sbx_multi_ios/gitlab
+[developer@devbox gitlab]$git checkout sbxfix
+Branch sbxfix set up to track remote branch sbxfix from origin.
+Switched to a new branch 'sbxfix'
 [developer@devbox gitlab]$./setup.sh
 ```
 
@@ -871,7 +874,6 @@ Here is a list of all the running nodes
     Attemping ssh connectionto core1 at 172.16.30.221
     Warning: Permanently added '172.16.30.221' (RSA) to the list of known hosts.
     cisco@172.16.30.221's password:
-    ```
 
 
     core1#reload
@@ -1007,7 +1009,7 @@ __All pre-requisites are now complete!__
 
 Let's now dig into setting up the local environment in your workstation.
 
-1. Clone a copy of the repository from GitLab to your local workstation. Use this command to ensure the demo credentials are embedded in the git configuration.
+1. Clone a copy of the repository from GitLab to your local workstation. Use this command to ensure the demo credentials are embedded in the git configuration. Please note this first repo clone might take some time, so you will need to be patient.
 
     ```
     $ git clone http://developer:C1sco12345@10.10.20.50/developer/cicd-3tier
