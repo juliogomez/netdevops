@@ -1474,7 +1474,7 @@ Once you are connected via VPN to your reserved sandbox, please open a terminal 
 $ ssh developer@10.10.20.50
 ```
 
-Once in, and before starting the setup phase please edit the `/opt/nso/etc/ncs/ncs.conf` file, delete the following line, and save the file:
+Once in, and before starting the setup phase, please edit the `/opt/nso/etc/ncs/ncs.conf` file, delete the following line, and save the file:
 
 ```
 <dir>/opt/nso/packages/neds/</dir>
