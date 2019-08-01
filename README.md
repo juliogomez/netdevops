@@ -1474,7 +1474,13 @@ Once you are connected via VPN to your reserved sandbox, please open a terminal 
 $ ssh developer@10.10.20.50
 ```
 
-Once in, clone the repository that includes all required files to build the setup into your _devbox_.
+Once in, and before starting the setup phase please edit the `/opt/nso/etc/ncs/ncs.conf` file, delete the following line, and save the file:
+
+```
+<dir>/opt/nso/packages/neds/</dir>
+```
+
+Now you are ready to start the setup, so clone the repository that includes all required files to build the demo environment into your _devbox_.
 
 ```
 [developer@devbox ~]$git clone https://github.com/DevNetSandbox/sbx_multi_ios.git
@@ -1638,6 +1644,12 @@ The _Extranet Monitoring_ dashboard will show you all information about how the 
 <p align="center"> 
 <img src="imgs/65grafana2.png">
 </p>
+
+As the final step please restore the NCS configuration file we modified at the beginning of this demo, so that you can use the sandbox reservation later for other demos.
+
+```
+[developer@devbox hemp]$cp /opt/nso/etc/ncs/ncs.conf.bak /opt/nso/etc/ncs/ncs.conf
+```
 
 __CONGRATULATIONS! You have now completed your second NetDevOps demo on how to leverage APIs to automate Extranet VPNs management!__ 
 
