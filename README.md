@@ -901,7 +901,7 @@ To complete this step you will need to have a few local pre-requisites setup on 
 
 **2. [Network Service Orchestrator](https://developer.cisco.com/site/nso/)**: in order to test the configuration pipeline locally, you'll need to have a local install of NSO on your workstation. Furthermore, you will need to have the same versions of NSO and NEDs (network element drivers) installed as the _DevBox_ within the Sandbox. Using different versions _may_ work, but for best experience matching the versions exactly is recommended.
 
-* Network Service Orchestrator 4.5.3
+* [Network Service Orchestrator 4.5.3](https://software.cisco.com/download/home/286319308/type/286283941/release/4.5.3?i=!pp)
 * Cisco IOS NED 5.8
 * Cisco IOS XE NED 6.2.10
 * Cisco NX-OS NED 4.5.10
