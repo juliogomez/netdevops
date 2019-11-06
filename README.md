@@ -2,57 +2,54 @@
 <img src="imgs/0frontpage.jpg">
 </p>
 
-<!-- vscode-markdown-toc -->
-* [Network Programmability](#NetworkProgrammability)
-	* [The challenge of Dynamic applications vs Static network](#ThechallengeofDynamicapplicationsvsStaticnetwork)
-	* [What is Programmability](#WhatisProgrammability)
-	* [Why Coding](#WhyCoding)
-	* [What has changed?](#Whathaschanged)
-		* [Modern Programming Languages & Tools](#ModernProgrammingLanguagesTools)
-		* [Online Communities](#OnlineCommunities)
-		* [API Maturity](#APIMaturity)
-	* [Coding essentials](#Codingessentials)
-		* [YANG data models](#YANGdatamodels)
-		* [JSON and XML](#JSONandXML)
-		* [NETCONF and RESTCONF](#NETCONFandRESTCONF)
-		* [REST APIs](#RESTAPIs)
-		* [API Documentation](#APIDocumentation)
-		* [Python](#Python)
-	* [Summary](#Summary)
-* [NetDevOps](#NetDevOps)
-	* [The challenge of network configuration today](#Thechallengeofnetworkconfigurationtoday)
-	* [Network configuration as code](#Networkconfigurationascode)
-* [Hands-on with NetDevOps](#Hands-onwithNetDevOps)
-	* [NetDevOps Demo 1 - Automating network configuration from testing to production](#NetDevOpsDemo1-Automatingnetworkconfigurationfromtestingtoproduction)
-		* [GitLab setup](#GitLabsetup)
-		* [CICD setup](#CICDsetup)
-		* [VIRL verifications](#VIRLverifications)
-		* [Local environment setup (optional)](#Localenvironmentsetupoptional)
-		* [Demo overview](#Demooverview)
-		* [Summary](#Summary-1)
-	* [NetDevOps Demo 2 - VPN Head End Management Platform (HEMP)](#NetDevOpsDemo2-VPNHeadEndManagementPlatformHEMP)
-		* [Topology](#Topology)
-		* [Building blocks](#Buildingblocks)
-		* [Environment setup](#Environmentsetup)
-		* [Demo overview](#Demooverview-1)
-		* [Summary](#Summary-1)
-	* [NetDevOps Demo 3 - Working with pyATS and Genie](#NetDevOpsDemo3-WorkingwithpyATSandGenie)
-		* [Test a - Execute a command on a network device](#Testa-Executeacommandonanetworkdevice)
-		* [Test b - Consolidate info from devices with different CLI](#Testb-ConsolidateinfofromdeviceswithdifferentCLI)
-		* [Test c - Develop your own tests with interactive pyATS](#Testc-DevelopyourowntestswithinteractivepyATS)
-		* [Test d - Check all BGP neighbors are established](#Testd-CheckallBGPneighborsareestablished)
-		* [Test e - Profiling your network for troubleshooting](#Teste-Profilingyournetworkfortroubleshooting)
-		* [Test f - Working with Test Cases](#Testf-WorkingwithTestCases)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-<!-- vscode-markdown-toc-config
-	numbering=false
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
 
----
+- [Network Programmability](#network-programmability)
+  - [The challenge of Dynamic applications vs Static network](#the-challenge-of-dynamic-applications-vs-static-network)
+  - [What is Programmability](#what-is-programmability)
+  - [Why Coding](#why-coding)
+  - [What has changed?](#what-has-changed)
+    - [Modern Programming Languages & Tools](#modern-programming-languages--tools)
+    - [Online Communities](#online-communities)
+    - [API Maturity](#api-maturity)
+  - [Coding essentials](#coding-essentials)
+    - [YANG data models](#yang-data-models)
+    - [JSON and XML](#json-and-xml)
+    - [NETCONF and RESTCONF](#netconf-and-restconf)
+    - [REST APIs](#rest-apis)
+    - [API Documentation](#api-documentation)
+    - [Python](#python)
+  - [Summary](#summary)
+- [NetDevOps](#netdevops)
+  - [The challenge of network configuration today](#the-challenge-of-network-configuration-today)
+  - [Network configuration as code](#network-configuration-as-code)
+- [Hands-on with NetDevOps](#hands-on-with-netdevops)
+  - [NetDevOps Demo 1 - Automating network configuration from testing to production](#netdevops-demo-1---automating-network-configuration-from-testing-to-production)
+    - [GitLab setup](#gitlab-setup)
+    - [CICD setup](#cicd-setup)
+    - [VIRL verifications](#virl-verifications)
+    - [Local environment setup (optional)](#local-environment-setup-optional)
+    - [Demo overview](#demo-overview)
+    - [Summary](#summary-1)
+  - [NetDevOps Demo 2 - VPN Head End Management Platform (HEMP)](#netdevops-demo-2---vpn-head-end-management-platform-hemp)
+    - [Topology](#topology)
+    - [Building blocks](#building-blocks)
+    - [Environment setup](#environment-setup)
+    - [Demo overview](#demo-overview-1)
+    - [Summary](#summary-2)
+  - [NetDevOps Demo 3 - Working with pyATS and Genie](#netdevops-demo-3---working-with-pyats-and-genie)
+    - [Test a - Execute a command on a network device](#test-a---execute-a-command-on-a-network-device)
+    - [Test b - Consolidate info from devices with different CLI](#test-b---consolidate-info-from-devices-with-different-cli)
+    - [Test c - Develop your own tests with interactive pyATS](#test-c---develop-your-own-tests-with-interactive-pyats)
+    - [Test d - Check all BGP neighbors are established](#test-d---check-all-bgp-neighbors-are-established)
+    - [Test e - Profiling your network for troubleshooting](#test-e---profiling-your-network-for-troubleshooting)
+    - [Test f - Working with Test Cases](#test-f---working-with-test-cases)
 
-## <a name='NetworkProgrammability'></a>Network Programmability
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Network Programmability
 
 Do you often ask yourself why we keep configuring our network devices in the same way we have been doing it for the last 30 years? Isn't it strange that we still have to log into each individual box and use command-line instructions to perform any changes? Do you wonder if there might be a more optimal way of configuring your infrastructure, instead of CLI? Does this way of working make you feel like any _simple_ change in your network is _complex_ to implement?
 
@@ -64,7 +61,7 @@ __You are not alone.__
 
 There are definitely alternative and innovative ways of programming your network infrastructure. Yes, when you configure your network devices to adopt a certain behaviour, or implement a new available feature, you are _programming_ them. So one of the first things we should be looking for is more optimal ways of programming our infrastructure.
 
-### <a name='ThechallengeofDynamicapplicationsvsStaticnetwork'></a>The challenge of Dynamic applications vs Static network
+## The challenge of Dynamic applications vs Static network
 
 Furthermore, as the network _exists_ to provide connectivity for __applications__, we should take a look at how these are evolving. Agile microservices-based cloud-native development, DevOps automation with CICD pipelines, and automated unit testing, enable really __dynamic__ application development for quick time-to-market requirements. Let's not forget that software is one of the most important assets to differentiate modern enterprises from their competition. Being able to quickly implement new features, deploy new locations, or fix issues, is absolutely __key__ to their success.
 
@@ -91,7 +88,7 @@ So while Elon Musk finishes his [BMI](https://waitbutwhy.com/2017/04/neuralink.h
 <img src="https://28oa9i1t08037ue3m1l0i861-wpengine.netdna-ssl.com/wp-content/uploads/2018/04/Communication-Speed-GRAPH-1.png">
 </p>
 
-### <a name='WhatisProgrammability'></a>What is Programmability
+## What is Programmability
 
 Computers are _great_ at bulk-work, but if you want your computer to talk to your infrastructure and do something, you will need a machine-to-machine interface or __API__ ([Application Programming Interface](https://en.wikipedia.org/wiki/Application_programming_interface)): an interface designed for software pieces to interact with each other.
 
@@ -120,7 +117,7 @@ Besides this, information included in API responses should be formed by data str
 
 If you need information from your infrastructure, ask for it. Using a machine-to-machine API means your request will complete, your data retrieved in a programmatic data structure, or you will receive notification to the contrary. All done in a way that enables you to automate the interaction. APIs make it easy to send requests to your infrastructure, but what makes it easy to codify the processes?
 
-### <a name='WhyCoding'></a>Why Coding
+## Why Coding
 
 _Coding_ is the process of writing down instructions, in a language a computer can understand, to complete a specific task.
 
@@ -151,13 +148,13 @@ This is essentially the process that you, as a human, would go through to comple
 
 While the code sample above is a snippet of a larger script, and is calling other functions (like `interface.last_change()` and `interface.shutdown()`), implementing the utility functions is straightforward and the code shown is actual valid Python code that would complete the task. The core logic is that simple.
 
-### <a name='Whathaschanged'></a>What has changed?
+## What has changed?
 
 APIs and programming languages aren't new, so, why the recent hype?
 
 Well... they have _matured!_
 
-#### <a name='ModernProgrammingLanguagesTools'></a>Modern Programming Languages & Tools
+### Modern Programming Languages & Tools
 
 Modern programming languages like JavaScript, Python, Go, Swift, and others are less cumbersome and more flexible than their predecessors. It used to be that you had to write 10,000 lines of C++ code to do anything useful, but with these modern languages (and packages and libraries available from their developer communities) you can do powerful things in less than 300 lines of code. Which is probably shorter, or on par with, most Cisco IOS configurations that you have worked with.
 
@@ -165,7 +162,7 @@ These languages, when combined with other modern developer tools (eg. Git reposi
 
 While these tools are great, and are now bringing rich value to the systems engineering discipline, we are also benefiting from another maturing area of the software development industry.
 
-#### <a name='OnlineCommunities'></a>Online Communities
+### Online Communities
 
 In the past, when you set out to create some script or program, you often had to start _from scratch_, working with low-level standard libraries included with your programming language and toolset of choice. This created a high barrier to entry (and massive global repetition) as software developers had to write the same _heavy lifting_ modules to get common tasks done. Take for example making a HTTPS web request, where they had to write code to:
 
@@ -208,13 +205,13 @@ Starting with installing the `requests` package on our machine, in four typed 
 
 Now that languages and tools have evolved to be useful for infrastructure engineers, APIs have become easier to work with.
 
-#### <a name='APIMaturity'></a>API Maturity
+### API Maturity
 
 Gone are the days where it took an expert programmer to work with a product's API. Previous API standards like SOAP proved themselves to be not so _simple_, and easier to use API models like RESTful APIs have taken their place.
 
 Now, thanks to RESTful APIs and standardized data formats like JSON, you can make requests of your infrastructure with the same ease these modern programming languages provide.
 
-### <a name='Codingessentials'></a>Coding essentials
+## Coding essentials
 
 Let's do a quick review of the different foundational coding building blocks that network engineers will need to understand and use when entering the programmability world.
 
@@ -222,7 +219,7 @@ Let's do a quick review of the different foundational coding building blocks tha
 <img src="imgs/39codingessentials.gif">
 </p>
 
-#### <a name='YANGdatamodels'></a>YANG data models
+### YANG data models
 
 Data models are conceptual representations of data, that define what specific information needs to be included and the format to represent it. A data model can be accessed by multiple source applications, via different communication protocols.
 
@@ -277,7 +274,7 @@ Once you decide to use YANG data models in your code, you will need to use libra
 
 Finally you might also be interested in taking a look at the capabilities offered by the [YANG Catalog](https://yangcatalog.org/), a registry that allows users to find models relevant to their use cases from the large and growing number of YANG modules being published. You may read-access it via NETCONF or REST, to validate YANG modules, search the catalog, view module's details, browse modules and much more.
 
-#### <a name='JSONandXML'></a>JSON and XML
+### JSON and XML
 
 Now that we know how to model data and store it locally, we need to start considering how to communicate it machine-to-machine. It is critical that our system knows how to send requests to network devices, and what format to expect when receiving responses. 
 
@@ -311,7 +308,7 @@ This is an example of data in _structured format_, and it is critical for our sy
 
 There are two common formats for data interchange being used these days: JSON and XML.
 
-##### JSON
+#### JSON
 
 [JSON](http://json.org/) (JavaScript Object Notation) is more _modern_ and commonly used by new APIs. With its simple _key:value_ approach, it is very lightweight, easy for systems to generate and parse, but also easy for humans to read. 
 
@@ -338,7 +335,7 @@ This library allows you to easily work with JSON as native Python objects. Very 
 
 Later we will discuss communication protocols, but for your reference please make a note that both __REST APIs__ and __RESTCONF__ support JSON and XML.
 
-##### XML
+#### XML
 
 [XML]() (eXtensible Markup Language) is a bit older, but still used by a lot of APIs. It is used for data transfer, but sometimes also to store info. It is language-independent and designed to be self-descriptive, although, compared to JSON, _tagging_ makes it a little bit more _difficult_ to read for humans.
 
@@ -374,11 +371,11 @@ By now you should have a clearer view on the relationship between YANG and JSON/
 
 JSON displays information in a _clearer_ way and will be used more frequently by modern systems. However XML is still required for multiple systems that support it exclusively.
 
-#### <a name='NETCONFandRESTCONF'></a>NETCONF and RESTCONF
+### NETCONF and RESTCONF
 
 Now that we understand data models and data transfer formats, we need to consider what protocol to use in order to exchange that information. NETCONF and RESTCONF are different protocols that you will need to use depending on the availability provided by your platform.
 
-##### NETCONF
+#### NETCONF
 
 Network Configuration Protocol ([RFC 6241](https://tools.ietf.org/html/rfc6241)), is a network management protocol developed and standardized by the Internet Engineering Task Force (IETF). It supports a rich set of functionality to manage _configuration_ and _operational_ data, being able to manage network devices _running_, _candidate_ and _startup_ configurations. The NETCONF protocol defines a simple mechanism through which a network device can be managed, configuration data can be retrieved, and new configuration data can be uploaded and manipulated. The NETCONF protocol uses Remote Procedure Calls (RPCs) for its paradigm, such as `get-config`, `edit-config`, or `get`. A client encodes an RPC in XML and sends it to a server using a secure, connection-oriented session (such as Secure Shell Protocol [SSH]). The client (application) initiates a connection using SSH port 830 towards the server (network device). The server responds with a reply encoded in XML, and there is a capability exchange during session initiation, using XML encoding.
 
@@ -435,7 +432,7 @@ And _voilá_, you get an XML response showing _operational_ data for the request
   </data></rpc-reply>
 ```
 
-##### RESTCONF
+#### RESTCONF
 
 RESTCONF ([RFC 8040](https://tools.ietf.org/html/rfc8040)) is based on the idea of adding a REST API to NETCONF. It can manage manage configuration and operational data defined in YANG models, and the URLs, HTTP verbs, and Request bodies are automatically generated from those associated YANG models. RESTCONF uses HTTP(S) as transport, and supports both XML and JSON as data transfer formats, while NETCONF only supports XML. Also, RESTCONF supports only a _sub-set_ of NETCONF, so not all operations are supported. 
 
@@ -496,7 +493,7 @@ So the overall picture looks like this now:
 
 Network devices information is modelled in YANG to make it consistent, independent of the underlying infrastructure. Then than information can be represented with JSON or XML, and accessed by mean of NETCONF or RESTCONF from a remote client.
 
-#### <a name='RESTAPIs'></a>REST APIs
+### REST APIs
 
 By now you might be wondering _what is REST?_ It stands for Representational State Transfer, and [it was born](https://www.ics.uci.edu/~fielding/pubs/dissertation/fielding_dissertation.pdf) from the need to create a scalable Internet, where software systems could interact with each other, in an uniform and efficient approach.
 
@@ -568,7 +565,7 @@ Content-Type →application/json;charset=UTF-8
 }
 ```
 
-#### <a name='APIDocumentation'></a>API Documentation
+### API Documentation
 
 Documentation is always essential, but in this case even more, because REST APIs are an architectural style, not a standard. So docs will define specifically what you need to send to your network device, and what you should expect in return. 
 
@@ -586,7 +583,7 @@ It is also common for them to offer you the option to automatically generate sam
 <img src="imgs/47dnacapi2.png">
 </p>
 
-#### <a name='Python'></a>Python
+### Python
 
 When talking about programmability and APIs you need to pick your favorite programming language to let your system know what you want it to do, and how it needs to communicate with your network devices APIs. The goal will be to automate and script actions using the APIs provided by network devices, controllers, and applications. There are a myriad of different options when choosing your programming language (Python, Ruby, Go, JavaScript, C#, etc) and each developer will have his/her own preferences.
 
@@ -603,7 +600,7 @@ One very good option for network engineers to get started with programming is Py
 * Rich and active support communities
 * Most wanted language in 2017 & 2018
 
-### <a name='Summary'></a>Summary
+## Summary
 
 APIs and programming languages have evolved and matured to the point of being useful and applicable to the domains of infrastructure engineers.
 
@@ -617,13 +614,13 @@ Network programmability provides consistent and dynamic infrastructure configura
 * Integration
 * Innovation
 
-## <a name='NetDevOps'></a>NetDevOps
+# NetDevOps
 
 DevOps principles are not exclusive to software development, and some of them can definitely be applied to infrastructure configuration. NetDevOps brings the culture, technical methods, strategies and best practices of DevOps to network management.
 
 Sometimes it is referred to by different names, like _DevNetOps_, _NetOps_, or _SuperNetOps_. But in general it is related to the more generic term _Network Reliability Engineer_ (also coming from the DevOps counterpart [Site Reliability Engineering](https://en.wikipedia.org/wiki/Site_Reliability_Engineering)).
 
-### <a name='Thechallengeofnetworkconfigurationtoday'></a>The challenge of network configuration today
+## The challenge of network configuration today
 
 Networks exist to provide connectivity for end-systems and applications, so obviously they have a critical role in any type of service. _Everything_ needs connectivity, so the network is certainly a fundamental asset in any modern enterprise these days. Its functionality has become so critical that most business nowadays would not be able to survive without connectivity.
 
@@ -667,7 +664,7 @@ Now __that__ would be a game changer. Not only in the way we manage our networks
 
 Let's explore it.
 
-### <a name='Networkconfigurationascode'></a>Network configuration as code
+## Network configuration as code
 
 With the advent of Cloud computing we have now the capabilities to provision and manage _ephemeral_ data centre resources (compute and connectivity) via machine-readable definition files. These files can be treated as common code, utilizing the same version control systems and best practices we use for software development, with goals like providing automation, improving efficiency and reducing errors. This is called _Infrastructure as Code_, or IaC.
 
@@ -685,7 +682,7 @@ And considering that modern network devices support modern interfaces and APIs, 
 
 Following this strategy, we are now ready to start building a completely automated environment to deploy and test configuration changes across the network.
 
-## <a name='Hands-onwithNetDevOps'></a>Hands-on with NetDevOps
+# Hands-on with NetDevOps
 
 Now that you know about some of the most important building blocks for programmability, it is time to see them working together and how they are used to build business-relevant solutions that help managing our networks. And what better way to learn about them than getting our hands _dirty_ by going through some demos?
 
@@ -711,7 +708,7 @@ Spinning up the whole system will take roughly 15 mins, so please look at this s
 
 Once the setup is ready you will receive an email with all required information to VPN into your sandbox. If you do not have a VPN client you may download AnyConnect [here](https://developer.cisco.com/site/sandbox/anyconnect/). Connect to your VPN and you are now ready to start working on your demos!
 
-### <a name='NetDevOpsDemo1-Automatingnetworkconfigurationfromtestingtoproduction'></a>NetDevOps Demo 1 - Automating network configuration from testing to production
+## NetDevOps Demo 1 - Automating network configuration from testing to production
 
 NetDevOps will deliver consistent version-controlled infrastructure configurations, deployed with parallel and automated provisioning. 
 
@@ -735,7 +732,7 @@ These are the building blocks we will use to provide such a comprehensive demons
 * [VIRL](http://virl.cisco.com/): network modelling and simulation environment
 * [Ansible](https://www.ansible.com/): simple automation
 
-#### <a name='GitLabsetup'></a>GitLab setup
+### GitLab setup
 
 Open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on OSX) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
 
@@ -775,7 +772,7 @@ CONTAINER ID        IMAGE                  COMMAND                  CREATED     
 
 Please point your browser to [http://10.10.20.50](http://10.10.20.50/), the IP address of your _devbox_ (default port 80), and check that you can access the HTTP interface for your new GitLab service.
 
-#### <a name='CICDsetup'></a>CICD setup
+### CICD setup
 
 Now that GitLab is ready, go back to your terminal and let's run the script to setup the complete CICD environment.
 
@@ -802,7 +799,7 @@ This complete process will take like 10 minutes, so time for your fix.
 
 __Congrats, everything is now installed and ready!__
 
-#### <a name='VIRLverifications'></a>VIRL verifications
+### VIRL verifications
 
 Now you have two complete simulated environments running in your VIRL server: one for testing, and one replicating what would be a production physical network. Real world scenarios might be diverse: some customers may have a physical network in production, but only a simulated one for testing. Others might also have a real network for testing. Maybe even an additional one for staging before going to production. No matter how, the same principles apply to what we will be demonstrating. In our case the sandbox includes a couple of virtual environments, like the one depicted below, and implemented with VIRL for convenience.
 
@@ -891,7 +888,7 @@ Here is a list of all the running nodes
 
 Now that both of your VIRL environments are ready, let's setup your local environment.
 
-#### <a name='Localenvironmentsetupoptional'></a>Local environment setup (optional)
+### Local environment setup (optional)
 
 To experience and demonstrate the full NetDevOps configuration pipeline, you may want to setup a local development environment where you can test proposed configuration changes before committing and pushing them to GitLab for the full test builds to occur. This is a completely optional step you might want to skip if you are not interested in testing locally.
 
@@ -1189,7 +1186,7 @@ Let's now dig into setting up the local environment in your workstation.
 
     _(Note: after you complete the rest of this demo, when you don't need the local environment anymore, you can easily delete everything by running `make clean`. It will shutdown netsim devices, NSO, and delete any related remnants.)_
 
-#### <a name='Demooverview'></a>Demo overview
+### Demo overview
 
 Our demonstration will include the following architecture and elements, to show how a completely automated CICD pipeline could be applied to a network configuration environment across a complete network, including test and production environments.
 
@@ -1417,7 +1414,7 @@ __CONGRATULATIONS! You have completed your first NetDevOps demo on how to fully 
 <img src="imgs/100congrats.gif">
 </p>
 
-#### <a name='Summary-1'></a>Summary
+### Summary
 
 In this NetDevOps demo you have seen a modern approach into version-controlled automated network configuration and testing. The scenario describes how multiple network operators would be able to propose configuration changes, in the same way developers do it for code: using _git_ branches. A standard version control server provides multiple benefits, like automated pipelines, version control and tracking, rollback cababilities, etc. During the demo you have also experienced the benefits of being able to locally verify syntax for proposed changes before submitting them. Also how a simulated environment helps verifying proposed changes are correct, before applying them into the production network. Finally, the set of automated tests helps making sure proposed changes have not had unexpected results on critical business-relevant functionality. This way you have experienced end-to-end automation and testing in a scalable and error-free approach.
 
@@ -1425,7 +1422,7 @@ In this NetDevOps demo you have seen a modern approach into version-controlled a
 <img src="imgs/34netdevops_overview.png">
 </p>
 
-### <a name='NetDevOpsDemo2-VPNHeadEndManagementPlatformHEMP'></a>NetDevOps Demo 2 - VPN Head End Management Platform (HEMP)
+## NetDevOps Demo 2 - VPN Head End Management Platform (HEMP)
 
 Managing connections from [extranet](https://en.wikipedia.org/wiki/Extranet) environments usually involves a great amount of workload, especially around VPN configurations at central hub points. One way of implementing this type of environments is pre-configuring VPN endpoints at remote locations, and then completing the required configuration from the central head-end point as connectivity is required. This configuration will explicitly define the authorized end-points and type of traffic that can traverse the connection.
 
@@ -1439,7 +1436,7 @@ As you might guess, scaling this type of environment would really benefit from _
 
 This demonstration will focus on how to automate the lifecycle of extranet VPN connections, from setting them up to checking everything is correct, providing related metrics, and tearing them down once they are not required anymore. It also includes a simple graphical user interface (GUI) that uses APIs to demonstrate how easy it could be to manage those VPN connections for users without the required permissions to connect via CLI to network devices, or even the knowledge to configure them.
 
-#### <a name='Topology'></a>Topology
+### Topology
 
 Our demo setup will include 1 central hub location with a _headend_ router that will concentrate VPN connections from 4 remote _partner_ locations.
 
@@ -1451,7 +1448,7 @@ All devices will be simulated using VIRL as per the diagram below.
 <img src="imgs/51hemptopo.png">
 </p>
 
-#### <a name='Buildingblocks'></a>Building blocks
+### Building blocks
 
 These are the components we will use to build the demo:
 
@@ -1466,7 +1463,7 @@ The provided GUI portal to manage HEMP uses the following technologies:
 
 For ease of deployment and portability, all of the above components are run as a [docker compose stack](https://github.com/DevNetSandbox/sbx_multi_ios/blob/add-hemp-demo/hemp/docker-compose.yml) which can be executed directly on your sandbox _devbox_.
 
-#### <a name='Environmentsetup'></a>Environment setup
+### Environment setup
 
 Once you are connected via VPN to your reserved sandbox, please open a terminal window (ie. [putty](https://www.putty.org/) on Windows or `terminal` on OSX) and `ssh` to your _devbox_ with the following credentials: `developer`/`C1sco12345`
 
@@ -1516,7 +1513,7 @@ The process will take approximately 15 minutes, so check this out in the meanwhi
 <img src="imgs/50pendulum.gif">
 </p>
 
-#### <a name='Demooverview-1'></a>Demo overview
+### Demo overview
 
 Your demo architecture is now set up, and includes the following main components: 
 
@@ -1657,7 +1654,7 @@ __CONGRATULATIONS! You have now completed your second NetDevOps demo on how to l
 <img src="imgs/101congrats.gif">
 </p>
 
-#### <a name='Summary-1'></a>Summary
+### Summary
 
 This automation demo shows how you can leverage APIs to easily provision and monitor Extranet VPNs from a simple custom GUI. With this kind of approach network operators would not need to:
 
@@ -1668,7 +1665,7 @@ This automation demo shows how you can leverage APIs to easily provision and mon
 
 > Note: it is important to remark that this automation demo is based on NSO and its capability to extend existing functionalities via service models. The primary service model for NSO can be found in the `./nso/packages/vpn` directory. Service models/packages are the primary way that NSO functionality is extended. A service model is comprised of a YANG file, a set of templates, and optionally some python or java logic.
 
-### <a name='NetDevOpsDemo3-WorkingwithpyATSandGenie'></a>NetDevOps Demo 3 - Working with pyATS and Genie
+## NetDevOps Demo 3 - Working with pyATS and Genie
 
 pyATS is an Automation Test System written in Python. It provides the core infrastructure to define topologies, connect to network devices and run the required tests.
 
@@ -1846,7 +1843,7 @@ As the final preparation step before starting, please make sure to obtain the la
 $ docker pull ciscotestautomation/pyats:latest
 ```
 
-__We are now READY to start our demos!__
+__We are now READY to start our tests!__
 
 _Don't do it now_, but please note that by the end of our set of demos, when you are finally done with your simulation, you can easily tear it down with:
 
@@ -1857,7 +1854,7 @@ Shutting Down Simulation netdevops_default_oAmstu.....
 SUCCESS
 ```
 
-#### <a name='Testa-Executeacommandonanetworkdevice'></a>Test a - Execute a command on a network device
+### Test a - Execute a command on a network device
 
 The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` on a CSR1000v.
 
@@ -1885,7 +1882,7 @@ $ docker run -it --rm \
   python3 /pyats/demos/1-pyats-intro.py
 ```
 
-#### <a name='Testb-ConsolidateinfofromdeviceswithdifferentCLI'></a>Test b - Consolidate info from devices with different CLI
+### Test b - Consolidate info from devices with different CLI
 
 In this case you will use not only pyATS, but also Genie, to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. 
 
@@ -1927,7 +1924,7 @@ $ docker run -it --rm \
   python3 /pyats/demos/2-genie-intro.py
 ```
 
-#### <a name='Testc-DevelopyourowntestswithinteractivepyATS'></a>Test c - Develop your own tests with interactive pyATS
+### Test c - Develop your own tests with interactive pyATS
 
 Now that you have seen a couple of simple examples of what can be done with pyATS and Genie, you might want to start developing your own tests. But instead of iterating through the process of "writing a complete script, trying to run it, failing and rewriting", we would rather have a more _interactive_ way of developing tests. Something that allows us to check the results of each step during the test, and debug it by exploring the results at any point of the flow.
 
@@ -2111,7 +2108,7 @@ root@bfaa28c3faf3:/pyats# exit
 
 __ipyATS makes it really easy for you to develop and debug your tests step-by-step, in the classic _pythonic_ way!__
 
-#### <a name='Testd-CheckallBGPneighborsareestablished'></a>Test d - Check all BGP neighbors are established
+### Test d - Check all BGP neighbors are established
 
 We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state.
 
@@ -2144,7 +2141,7 @@ As a result you will find the following table in your logs, displaying all BGP n
 
 __It was never this easy to make sure BGP neighbors across your network are properly _established_!__
 
-#### <a name='Teste-Profilingyournetworkfortroubleshooting'></a>Test e - Profiling your network for troubleshooting
+### Test e - Profiling your network for troubleshooting
 
 Now let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helps you profile the network end-to-end and store that info as snapshots?
 
@@ -2395,7 +2392,7 @@ In summary, using Robot we have been able to define the desired test case using 
 
 If you want to learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md) and also [this one](https://github.com/CiscoTestAutomation/CL-DevNet-2595). Both offer you the option to run them on _mocked devices_, so you don't actually need a reserved sandbox environment... how cool is that?
 
-#### <a name='Testf-WorkingwithTestCases'></a>Test f - Working with Test Cases
+### Test f - Working with Test Cases
 
 Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build more complex tests. That's what _Test Cases_ are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
 
@@ -2518,17 +2515,17 @@ Once you are done you can exit the container.
 ```
 (pyats) /pyats/examples/basic# exit
 ```
+---
 
-
-# Author
+#### Author
 
 * [Julio Gomez](https://www.linkedin.com/in/juliogomezsanchez/) - Initial work - [Blog](cs.co/julioblog)
 
-# License
+#### License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/juliogomez/netdevops/LICENSE.md) file for details
 
-# Acknowledgements
+#### Acknowledgements
 
 Many thanks to the following programmability and NetDevOps gurus for their contributions and source materials that helped building this document:
 
