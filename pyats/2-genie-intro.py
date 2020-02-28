@@ -1,4 +1,5 @@
 from genie.conf import Genie
+from pprint import pprint
 
 # we define a function to get all interface counters for a device
 def get_interface_counters(dev):
@@ -8,7 +9,6 @@ def get_interface_counters(dev):
     # Device must be connected so that a lookup can be performed
     if not dev.is_connected():
         dev.connect()
-
 
     # learn and parse data for the interface model of dev,
     # and return structured data
@@ -23,15 +23,17 @@ testbed = Genie.init(testbed)
 
 # select a device from the testbed
 csr = testbed.devices['csr1000v-1']
+
 # call our function to obtain counters for all interfaces from that device
 csr_interface_details = get_interface_counters(csr)
-print(csr_interface_details)
+pprint(csr_interface_details)
 
 # select a different device from the testbed, with a different CLI
 nx = testbed.devices['nx-osv-1']
-# use the same function to obtain the counters for all interfaces from that device
+
+# use THE SAME function to obtain the counters for all interfaces from that device
 nx_interface_details = get_interface_counters(nx)
-print(nx_interface_details)
+pprint(nx_interface_details)
 
 # now we will look for CRC error in ANY interface from ANY device... 
 all_interfaces = dict()

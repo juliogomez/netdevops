@@ -1833,15 +1833,19 @@ __With just a single command you have now a YAML file that defines your VIRL env
 <img src="imgs/200wow.gif">
 </p>
 
-That pyATS testbed definition file will need some variables to define the _enable password_ and _login user/password_. The most convenient way to use them later is to have them stored in a file, so please go ahead and download it.
+That pyATS testbed definition file will need some variables to define the _enable password_ and _login user/password_. The most convenient way to use them later is to have them stored in a file, so please go ahead and download it. And while we are at it let's download other files we will also need for our demos.
 
-```
+```shell
 $ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/env.list -o env.list
+$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/1-pyats-intro.py -o 1-pyats-intro.py
+$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/2-genie-intro.py -o 2-genie-intro.py
+$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/initial_snapshot.robot -o initial_snapshot.robot
+$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/compare_snapshot.robot -o compare_snapshot.robot
 ```
 
 As the final preparation step before starting, please make sure to obtain the latest pyATS Docker image.
 
-```
+```shell
 $ docker pull ciscotestautomation/pyats:latest
 ```
 
@@ -1858,15 +1862,7 @@ SUCCESS
 
 ### Test a - Execute a command on a network device
 
-The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` on a CSR1000v.
-
-Download the required script to your system:
-
-```
-$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/1-pyats-intro.py -o 1-pyats-intro.py
-```
-
-Please review [its content](./pyats/1-pyats-intro.py) and you will see it executes the following steps:
+The most basic demo will show you how to use pyATS to execute a single command on a certain network device. In this case you will see in your screen how this script executes a `show version` on a CSR1000v. Please review [its content](./pyats/1-pyats-intro.py) and you will see it executes the following steps:
 
 1. Load the required pyATS library
 2. Load the pyATS testbed definition from file
@@ -1884,6 +1880,10 @@ $ docker run -it --rm \
   python3 /pyats/demos/1-pyats-intro.py
 ```
 
+I know, I know... I can hear you thinking: “how is this cool?!?”. Well, basically you have been able to run a script that automatically connects to one device and executes one command on it. Nothing fancy there, I know, BUT what if you could do the same for a large list of devices? Imagine you needed to run that same command in 1,000 devices. Or maybe you had to run multiple commands in a myriad of devices. pyATS allows you to easily do it, and only requires you to provide the testbed and python script. He will take care of everything else while you go play guitar.
+
+Let’s try something else…
+
 ### Test b - Consolidate info from devices with different CLI
 
 In this case you will use not only pyATS, but also Genie, to compile interface counters from multiple devices across the network and then check if there are any CRC errors in them. 
@@ -1892,13 +1892,7 @@ In this case you will use not only pyATS, but also Genie, to compile interface c
 <img src="imgs/207errors.gif">
 </p>
 
-The script will use the same function to compile CRC errors information from 2 devices with different CLI (ie. CSR1000v and Nexus switch), with the available Genie parsers providing independence from the underlying device type. Genie uses [models](https://pubhub.devnetcloud.com/media/pyats-packages/docs/genie/genie_libs/#/models) to determine the specific commands and format that need to be used for each feature in each platform/OS, and how to map the outcome to the specific fields in the resulting structured data. Genie determines the platform/OS from the testbed file.
-
-Download the required script to your system:
-
-```
-$ curl -L https://raw.githubusercontent.com/juliogomez/netdevops/master/pyats/2-genie-intro.py -o 2-genie-intro.py
-```
+Our python script will use the same function to compile CRC errors information from 2 different devices with different CLI (ie. CSR1000v and Nexus switch). Genie determines the platform/OS from the testbed file definition and its parsers provide independence from the underlying device type. Genie uses models to determine the specific commands and format that need to be used for each feature in each platform/OS, and how to map the outcome to the specific fields in the resulting structured data. 
 
 Please review [its content](./pyats/2-genie-intro.py) and you will see the following steps to execute:
 
@@ -1926,16 +1920,22 @@ $ docker run -it --rm \
   python3 /pyats/demos/2-genie-intro.py
 ```
 
-### Test c - Develop your own tests with interactive pyATS
+Now this is starting to get more interesting, right? Using Genie we have been able to re-use exactly the same function code to connect to devices supporting different CLIs, extract the required info from them and consolidate all that info into structured data we can now use in a programmatic way for our own specific interests.
+
+<p align="center"> 
+<img src="imgs/212tellmemore.png">
+</p>
+
+### Test c - Develop your own tests with an interactive shell
 
 Now that you have seen a couple of simple examples of what can be done with pyATS and Genie, you might want to start developing your own tests. But instead of iterating through the process of "writing a complete script, trying to run it, failing and rewriting", we would rather have a more _interactive_ way of developing tests. Something that allows us to check the results of each step during the test, and debug it by exploring the results at any point of the flow.
 
 As you may have noticed pyATS feels really _pythonic_, so wouldn't it be great to have something similar
-to the interactive Python shell? Something that would give us the option to execute individual steps interactively while developing our tests? Well, we got you covered!
+to the interactive Python shell? Something that would give us the option to execute individual steps interactively while developing our tests? __Say no more fam, we got you covered!__
 
-Genie has a function called **shell**, which can be invoked from the Bash command line.  When invoking shell, Genie will load the correct testbed file and initiate the required libraries in for the python interactive shell.
+Genie has a function called __shell__, which can be invoked from the Bash command line.  When invoking shell, Genie will load the correct testbed file and initiate the required libraries for the python interactive shell.
 
-For our demos we will start a pyATS container and ask it to start an interactive shell (_bash_) so we can install ipyATS in it.
+For our demos we will start a pyATS container and ask it to start an interactive shell (_bash_) so we can run Genie shell in it.
 
 ```
 $ docker run -it --rm \
@@ -1944,19 +1944,7 @@ $ docker run -it --rm \
   ciscotestautomation/pyats:latest bash
 ```
 
-You can easily install ipyATS in it with:
-
-```
-root@2ad68679070c:/pyats# pip install ipyats
-```
-
-And run it with your VIRL testbed:
-
-```
-root@2ad68679070c:/pyats# ipyats --testbed demos/default_testbed.yaml
-```
-
-Invoke Genie Shell with the following command:
+You may invoke the interactive Genie Shell and use your local VIRL testbed, available via the container volume mapping, with the following command:
 
 ```bash
 root@bfaa28c3faf3:/pyats# genie shell --testbed-file demos/default_testbed.yaml 
@@ -1988,9 +1976,7 @@ Ask if there are any links going _csr_ to _nx_:
 
 ```python
 >>> csr.find_links(nx)
-{<Link object 'csr1000v-1-to-nx-osv-1' at 0x7f8fa0a3db38>, 
-<Link object 'csr1000v-1-to-nx-osv-1#1' at 0x7f8fa0a3d9b0>,
-<Link object 'flat' at 0x7f8fa0a3dba8>}
+{<Link object 'flat' at 0x7fd48b490f60>, <Link object 'csr1000v-1-to-nx-osv-1#1' at 0x7fd48b490eb8>, <Link object 'csr1000v-1-to-nx-osv-1' at 0x7fd48b490d68>}
 ```
 
 Or execute a command in it:
@@ -2023,20 +2009,11 @@ This request will execute a number of commands in the device, compile all the re
 
 It is __structured data__ that you can now easily query and process in your scripting!
 
-For example, let's say you have a tool that needs to verify that a specific route (eg. 172.16.30.0/24) exists in the _management_ VRF of your Nexus switch.
+For example, let's say you have a tool that needs to verify that a specific route (eg. 172.16.30.0/24) exists on your Nexus switch.
 
 ```python
->>> routes.info['vrf']['management']['address_family']['ipv4']['routes']['172.16.30.0/24']
-{'route': '172.16.30.0/24', 
-'active': True, 
-'source_protocol': 'direct', 
-'metric': 0, 
-'route_preference': 0, 
-'next_hop': {'next_hop_list': {1: {'index': 1, 
-	'next_hop': '172.16.1.104', 
-	'updated': '2d00h', 
-	'outgoing_interface': 'mgmt0'}}}}
-
+>>> routes.info['vrf']['default']['address_family']['ipv4']['routes']['172.16.30.0/24']
+{'route': '172.16.30.0/24', 'active': True, 'source_protocol': 'connected', 'source_protocol_codes': 'C', 'next_hop': {'outgoing_interface': {'GigabitEthernet1': {'outgoing_interface': 'GigabitEthernet1'}}}}
 ```
 
 __Wow, that was easy! Think about the kind of processing and parsing you would have had to do in the past to go through the text output of all those commands. Now pyATS is compiling the information from all those commands and giving you a consolidated, structured view that you can easily work with.__
@@ -2066,6 +2043,7 @@ For example, in order to work with BGP configurations we need to import the requ
 And then we could use it to learn the BGP configuration in our Nexus switch:
 
 ```python
+>>> nx.connect()
 >>> bgps_nx = Bgp.learn_config(nx)
 ```
 
@@ -2101,49 +2079,16 @@ And easily apply all BGP configuration back again:
 >>> bgp_nx.build_config()
 ```
 
-When you are done exploring ipyATS, you can exit with:
+When you are done exploring Genie interactive shell, you can exit with:
 
 ```python
 >>> exit()
 root@bfaa28c3faf3:/pyats# exit
 ```
 
-__ipyATS makes it really easy for you to develop and debug your tests step-by-step, in the classic _pythonic_ way!__
+__Genie shell makes it really easy for you to develop and debug your tests step-by-step, in the classic _pythonic_ way!__
 
-### Test d - Check all BGP neighbors are established
-
-We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state.
-
-The test case structure includes the following sections:
-
-* Common setup: connect to all devices included in your testbed.
-* Test cases: learn about all BGP sessions in each device, check their status and build a table to represent that info. If there are neighbors _not in a established state_ the test will fail and signal this condition in an error message.
-
-In order to run it first you will need to install `git` on your pyATS container, clone a repo with additional examples, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
-
-```
-$ docker run -it --rm \
-  -v $PWD:/pyats/demos/ \
-  ciscotestautomation/pyats:latest-alpine ash
-(pyats) /pyats # apk add --no-cache git
-(pyats) /pyats # git clone https://github.com/kecorbin/pyats-network-checks.git
-(pyats) /pyats # pip3 install tabulate
-(pyats) /pyats # cd pyats-network-checks/bgp_adjacencies
-(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed-file /pyats/demos/default_testbed.yaml
-```
-
-As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status:
-
-```
-2019-04-05T18:10:41: %SCRIPT-INFO: | Device     | Peer     | State       | Pass/Fail   |
-2019-04-05T18:10:41: %SCRIPT-INFO: |------------+----------+-------------+-------------|
-2019-04-05T18:10:41: %SCRIPT-INFO: | csr1000v-1 | 10.2.2.2 | established | Passed      |
-2019-04-05T18:10:41: %SCRIPT-INFO: | nx-osv-1   | 10.1.1.1 | established | Passed      |
-```
-
-__It was never this easy to make sure BGP neighbors across your network are properly _established_!__
-
-### Test e - Profiling your network for troubleshooting
+### Test d - Profiling your network for troubleshooting
 
 Now let's say you are responsible for a network and could use some help on how to be updated about possible issues happening in it. Wouldn't it be great to have a tool that helps you profile the network end-to-end and store that info as snapshots?
 
@@ -2176,7 +2121,7 @@ First you need to identify the IP address of that CSR1000v, so you can connect t
         ipv4: 172.16.30.129/24
 ```
 
-Now you can SSH to it, with password `cisco`:
+Now you can SSH to it with password _cisco_ (accept it being added to your list of _known hosts_):
 
 ```
 (pyats) /pyats/demos # ssh cisco@172.16.30.129
@@ -2263,7 +2208,7 @@ __Talk about an easy way to determine why your network is not working properly a
 <img src="imgs/211cool.gif">
 </p>
 
-But we could do better... there's always room for improvement, right? Probably you have noticed that the output from `genie` commands is better and more meaningful than the one for the original `pyats` commands. But still it was _a lot_ for just a couple of devices. Please consider if we wanted to run that same test in the complete network with maybe hundreds or thousands of systems... that would be a lot of logging info! However as an operator probably I don't need that much output, and I could use a more intuitive summary that gives me the key info on what I am doing.
+But we could do better... there's always room for improvement, right? Probably you have noticed that the output from `genie` commands is easier to understand than the one for the original `pyats` commands. But still it was _a lot_ for just a couple of devices. Just think if we wanted to run that same test in the complete network with maybe hundreds or thousands of systems... that would be a lot of logging info! However as an operator probably I don't need that much output, and I could use a more intuitive summary that gives me the key info on what I am doing.
 
 Besides this, network operators are probably interested in defining their tests in a way that is as close to natural language as possible. [Robot framework](https://robotframework.org/) is an open-source automation framework for testing that can help you with these challenges. Let's take a look at an example on what can be done with it.
 
@@ -2286,7 +2231,7 @@ Connection to 172.16.30.129 closed.
 
 Everything is now back to the normal initial situation.
 
-Now, instead of running the Genie profiling command directly from the CLI, with Robot we will use the `initial_snapshot.robot` test definition file you will find in the `demos` directory. This file specifies the libraries to import, where the testbed file resides, and the test cases definition. Please review this file and you will see the different steps in these test cases are defined with very simple language.
+Now, instead of running the Genie profiling command directly from the CLI, with Robot we will use the `initial_snapshot.robot` test definition file. [This file](./pyats/initial_snapshot.robot) specifies the libraries to import, where the testbed file resides, and the test cases definition. Please review this file and you will see the different steps in these test cases are defined with very simple language.
 
 First it will connect to the testbed devices:
 
@@ -2309,17 +2254,9 @@ Profile the devices
 
 Very simple and natural language that helps understanding intuitively what the test case is supposed to do.
 
-Once more we will create a container, change to the required directory and run `robot` with a single command that simply specifies the directory where we want to store the resulting log, output and report (`-d good`):
+Let's run `robot` with a single command that simply specifies the directory where we want to store the resulting log, output and report (`-d good`):
 
 ```
-$ docker run -it --rm \
-  -v $PWD:/pyats/demos/ \
-  --env-file env.list \
-  ciscotestautomation/pyats:latest-alpine ash
-[Entrypoint] Starting pyATS Docker Image ...
-[Entrypoint] Workspace Directory: /pyats
-[Entrypoint] Activating workspace
-(pyats) /pyats # cd demos
 (pyats) /pyats/demos # robot -d good initial_snapshot.robot
 ==============================================================================
 Initial Snapshot
@@ -2344,6 +2281,7 @@ As you can see now the output an operator would get when executing the test case
 The `good` directory now stores everything about your network profile when things work _fine_. Let's mess it up again, by connecting to the system and shutting down interface Loopback 1.
 
 ```
+(pyats) /pyats/demos # cat default_testbed.yaml | grep -A 1 GigabitEthernet1:
 (pyats) /pyats/demos # ssh cisco@172.16.30.129
 csr1000v-1#conf t
 Enter configuration commands, one per line.  End with CNTL/Z.
@@ -2394,7 +2332,11 @@ In summary, using Robot we have been able to define the desired test case using 
 
 If you want to learn more about how Genie network profiling can help you manage and debug issues in your network, please check [this fantastic lab](https://github.com/hpreston/netdevops_demos/blob/master/genie-cli-1/README.md) and also [this one](https://github.com/CiscoTestAutomation/CL-DevNet-2595). Both offer you the option to run them on _mocked devices_, so you don't actually need a reserved sandbox environment... how cool is that?
 
-### Test f - Working with Test Cases
+<p align="center"> 
+<img src="imgs/213convince.png">
+</p>
+
+### Test e - Working with Test Cases
 
 Now that you know how to run some basic tests with pyATS and Genie, it is time to explore how we could give it a proper structure to build more complex tests. That's what _Test Cases_ are all about: a framework that allows you to build _repeatable_ and _more sophisticated_ testing processes.
 
@@ -2424,7 +2366,9 @@ The sections are easy to understand:
 Let's see it working in your own setup. In this case we will use the _-alpine_ image because it has _vi_ already included in it, and you will need it to edit some files during this demo. We will ask our pyATS container to provide a shell (_ash_ for _-alpine_ image) so we can work with it interactively.
 
 ```
-$ docker run -it --rm ciscotestautomation/pyats:latest-alpine ash
+$ docker run -it --rm \
+  -v $PWD:/pyats/demos/ \
+  ciscotestautomation/pyats:latest-alpine ash
 ```
 
 Once inside the container shell you have access to its directory structure and tools. Inside the `pyats` directory you will find multiple examples and templates to use with pyATS. To get started let's focus on a _basic_ one.
@@ -2512,12 +2456,40 @@ Check the execution logs and you will find how a failed test looks like when exe
 
 __As you can see you don't need to be a Python expert to use the test cases framework. You have templates readily available for you, where you can insert the specific tests you would like to run and execute them straight away.__
 
-Once you are done you can exit the container.
+### Test f - Check all BGP neighbors are established
+
+We will now explore another example that will help you check all BGP neighbors in your network are in the desired _established_ state.
+
+The test case structure includes the following sections:
+
+* Common setup: connect to all devices included in your testbed.
+* Test cases: learn about all BGP sessions in each device, check their status and build a table to represent that info. If there are neighbors _not in a established state_ the test will fail and signal this condition in an error message.
+
+In order to run it first you will need to install `git` on your pyATS container, clone a repo with additional examples, install a tool to create nice text tables (_tabulate_), go into the directory and execute the _job_: 
 
 ```
-(pyats) /pyats/examples/basic# exit
+(pyats) /pyats/examples/basic# cd ../..
+(pyats) /pyats # apk add --no-cache git
+(pyats) /pyats # git clone https://github.com/kecorbin/pyats-network-checks.git
+(pyats) /pyats # pip3 install tabulate
+(pyats) /pyats # cd pyats-network-checks/bgp_adjacencies
+(pyats) /pyats/pyats-network-checks/bgp_adjacencies # pyats run job BGP_check_job.py --testbed-file /pyats/demos/default_testbed.yaml
 ```
 
+As a result you will find the following table in your logs, displaying all BGP neighbors in all your devices, and their current status:
+
+```
+2019-04-05T18:10:41: %SCRIPT-INFO: | Device     | Peer     | State       | Pass/Fail   |
+2019-04-05T18:10:41: %SCRIPT-INFO: |------------+----------+-------------+-------------|
+2019-04-05T18:10:41: %SCRIPT-INFO: | csr1000v-1 | 10.2.2.2 | established | Passed      |
+2019-04-05T18:10:41: %SCRIPT-INFO: | nx-osv-1   | 10.1.1.1 | established | Passed      |
+```
+
+__It was never this easy to make sure BGP neighbors across your network are properly _established_!__
+
+<p align="center"> 
+<img src="imgs/214fortnite.png">
+</p>
 
 ---
 
