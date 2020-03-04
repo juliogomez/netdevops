@@ -25,28 +25,32 @@
 - [NetDevOps](#netdevops)
   - [The challenge of network configuration today](#the-challenge-of-network-configuration-today)
   - [Network configuration as code](#network-configuration-as-code)
-- [Hands-on with NetDevOps](#hands-on-with-netdevops)
-  - [NetDevOps Demo 1 - Automating network configuration from testing to production](#netdevops-demo-1---automating-network-configuration-from-testing-to-production)
+- [NetDevOps Demonstrations](#netdevops-demonstrations)
+  - [Demo 1 - Automating network configuration from testing to production](#netdevops-demo-1---automating-network-configuration-from-testing-to-production)
     - [GitLab setup](#gitlab-setup)
     - [CICD setup](#cicd-setup)
     - [VIRL verifications](#virl-verifications)
     - [Local environment setup (optional)](#local-environment-setup-optional)
     - [Demo overview](#demo-overview)
     - [Summary](#summary-1)
-  - [NetDevOps Demo 2 - VPN Head End Management Platform (HEMP)](#netdevops-demo-2---vpn-head-end-management-platform-hemp)
+  - [Demo 2 - VPN Head End Management Platform (HEMP)](#netdevops-demo-2---vpn-head-end-management-platform-hemp)
     - [Topology](#topology)
     - [Building blocks](#building-blocks)
     - [Environment setup](#environment-setup)
     - [Demo overview](#demo-overview-1)
     - [Summary](#summary-2)
-  - [NetDevOps Demo 3 - Working with pyATS and Genie](#netdevops-demo-3---working-with-pyats-and-genie)
-    - [Test a - Execute a command on a network device](#test-a---execute-a-command-on-a-network-device)
-    - [Test b - Consolidate info from devices with different CLI](#test-b---consolidate-info-from-devices-with-different-cli)
-    - [Test c - Develop your own tests with interactive pyATS](#test-c---develop-your-own-tests-with-interactive-pyats)
-    - [Test d - Profiling your network for troubleshooting](#test-d---profiling-your-network-for-troubleshooting)
-    - [Test e - Working with Test Cases](#test-e---working-with-test-cases)
-    - [Test f - Check all BGP neighbors are established](#test-f---check-all-bgp-neighbors-are-established)
-  - [NetDevOps Demo 4 - Model driven programmability for network services](https://github.com/CiscoSE/mdp_use_cases/tree/master/network-services)  
+  - [Demo 3 - Working with pyATS and Genie](#netdevops-demo-3---working-with-pyats-and-genie)
+    - [Execute a command on a network device](#test-a---execute-a-command-on-a-network-device)
+    - [Consolidate info from devices with different CLI](#test-b---consolidate-info-from-devices-with-different-cli)
+    - [Develop your own tests with interactive pyATS](#test-c---develop-your-own-tests-with-interactive-pyats)
+    - [Profiling your network for troubleshooting](#test-d---profiling-your-network-for-troubleshooting)
+    - [Working with Test Cases](#test-e---working-with-test-cases)
+    - [Check BGP neighbors are established](#test-f---check-all-bgp-neighbors-are-established)
+  - [Demo 4 - Network Services Orchestrator (NSO)](https://github.com/hpreston/nso-getting-started)
+    - [Compile MAC addresses](https://github.com/hpreston/nso-getting-started/blob/master/04b-mvu.md)
+    - [Network configuration compliance](https://github.com/hpreston/nso-getting-started/blob/master/04c-mvu.md)
+    - [Update SNMP community strings](https://github.com/hpreston/nso-getting-started/blob/master/04a-mvu.md)
+  - [Demo 5 - Model driven programmability for network services](https://github.com/CiscoSE/mdp_use_cases/tree/master/network-services)
 
   <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -686,7 +690,7 @@ And considering that modern network devices support modern interfaces and APIs, 
 
 Following this strategy, we are now ready to start building a completely automated environment to deploy and test configuration changes across the network.
 
-# Hands-on with NetDevOps
+# NetDevOps Demonstrations
 
 Now that you know about some of the most important building blocks for programmability, it is time to see them working together and how they are used to build business-relevant solutions that help managing our networks. And what better way to learn about them than getting our hands _dirty_ by going through some demos?
 
