@@ -25,7 +25,6 @@
 - [NetDevOps](#netdevops)
   - [The challenge of network configuration today](#the-challenge-of-network-configuration-today)
   - [Network configuration as code](#network-configuration-as-code)
-- [NetDevOps Demonstrations](#netdevops-demonstrations)
   - [Demo 1 - Automating network configuration from testing to production](#netdevops-demo-1---automating-network-configuration-from-testing-to-production)
     - [GitLab setup](#gitlab-setup)
     - [CICD setup](#cicd-setup)
