@@ -2,7 +2,65 @@
 <img src="imgs/0frontpage.jpg">
 </p>
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- TOC -->
+
+- [Network Programmability](#network-programmability)
+    - [The challenge of Dynamic applications vs Static network](#the-challenge-of-dynamic-applications-vs-static-network)
+    - [What is Programmability](#what-is-programmability)
+    - [Why Coding](#why-coding)
+    - [What has changed?](#what-has-changed)
+        - [Modern Programming Languages & Tools](#modern-programming-languages--tools)
+        - [Online Communities](#online-communities)
+        - [API Maturity](#api-maturity)
+    - [Coding essentials](#coding-essentials)
+        - [YANG data models](#yang-data-models)
+        - [JSON and XML](#json-and-xml)
+            - [JSON](#json)
+            - [XML](#xml)
+        - [NETCONF and RESTCONF](#netconf-and-restconf)
+            - [NETCONF](#netconf)
+            - [RESTCONF](#restconf)
+        - [REST APIs](#rest-apis)
+        - [API Documentation](#api-documentation)
+        - [Python](#python)
+    - [Summary](#summary)
+- [NetDevOps](#netdevops)
+    - [The challenge of network configuration today](#the-challenge-of-network-configuration-today)
+    - [Network configuration as code](#network-configuration-as-code)
+- [NetDevOps Demonstrations](#netdevops-demonstrations)
+    - [NetDevOps Demo 1 - Automating network configuration from testing to production](#netdevops-demo-1---automating-network-configuration-from-testing-to-production)
+        - [GitLab setup](#gitlab-setup)
+        - [CICD setup](#cicd-setup)
+        - [VIRL verifications](#virl-verifications)
+        - [Local environment setup optional](#local-environment-setup-optional)
+        - [Demo overview](#demo-overview)
+        - [Summary](#summary)
+    - [NetDevOps Demo 2 - VPN Head End Management Platform HEMP](#netdevops-demo-2---vpn-head-end-management-platform-hemp)
+        - [Topology](#topology)
+        - [Building blocks](#building-blocks)
+        - [Environment setup](#environment-setup)
+        - [Demo overview](#demo-overview)
+        - [Summary](#summary)
+    - [NetDevOps Demo 3 - Working with pyATS and Genie](#netdevops-demo-3---working-with-pyats-and-genie)
+        - [Test a - Execute a command on a network device](#test-a---execute-a-command-on-a-network-device)
+        - [Test b - Consolidate info from devices with different CLI](#test-b---consolidate-info-from-devices-with-different-cli)
+        - [Test c - Develop your own tests with an interactive shell](#test-c---develop-your-own-tests-with-an-interactive-shell)
+        - [Test d - Profiling your network for troubleshooting](#test-d---profiling-your-network-for-troubleshooting)
+        - [Test e - Working with Test Cases](#test-e---working-with-test-cases)
+        - [Test f - Check all BGP neighbors are established](#test-f---check-all-bgp-neighbors-are-established)
+    - [NetDevOps Demo 4 - ChatOps is the way](#netdevops-demo-4---chatops-is-the-way)
+        - [Getting started with ChatOps](#getting-started-with-chatops)
+        - [Webex basics](#webex-basics)
+        - [Bot logic](#bot-logic)
+        - [Connectivity and webhooks](#connectivity-and-webhooks)
+  - [Demo 5 - Network Services Orchestrator (NSO)](https://github.com/hpreston/nso-getting-started)
+    - [Compile MAC addresses](https://github.com/hpreston/nso-getting-started/blob/master/04b-mvu.md)
+    - [Network configuration compliance](https://github.com/hpreston/nso-getting-started/blob/master/04c-mvu.md)
+    - [Update SNMP community strings](https://github.com/hpreston/nso-getting-started/blob/master/04a-mvu.md)
+  - [Demo 6 - Model driven programmability for network services](https://github.com/CiscoSE/mdp_use_cases/tree/master/network-services)
+
+
+<!-- /TOC -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
@@ -2519,7 +2577,7 @@ Operating infrastructure systems with bots via messaging applications is called 
 <img src="imgs/220robot.jpeg">
 </p>
 
-#### Webex basics
+### Webex basics
 
 Let's start with the basics: working with Webex means you'll use a local interface (laptop/mobile app or web interface) to communicate via Internet with Webex Cloud services, sending messages back and forth. This will allow you communicate with other Webex users connected in a similar way.
 
@@ -2537,7 +2595,7 @@ But wait a moment... how is it possible? What will it do if we have not created 
 
 For now please save the `Bot access token` somewhere safe, as this will be needed later on and there's no way to recover it once you browse away.
 
-#### Bot logic
+### Bot logic
 
 Time to take a look at the code required to implement your bot logic. We will be using [Python](https://www.python.org/) and [Flask](https://palletsprojects.com/p/flask/) as they offer a simple and convenient approach you can easily leverage.
 
@@ -2572,7 +2630,7 @@ You'll notice the terminal window displays the following and does not allow you 
 
 This means your code is running and waiting for messages to arrive to port 5005. Leave this terminal window running the code and open a new one to continue working.
 
-## Connectivity and webhooks
+### Connectivity and webhooks
 
 Now we would need to tell the bot _when and how_ we want it to contact its bot logic. This means defining the events or messages that will trigger the bot to send a notification message to its bot logic. The way to implement this is by configuring a __webhook__. Webhooks define the specific event types that will trigger a message, and what is the destination address (target URL) where those messages should be sent to. But wait... what might be the destination address of the bot logic that resides in your computer?!?
 
