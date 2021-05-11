@@ -45,11 +45,11 @@
     - [Profiling your network for troubleshooting](#test-d---profiling-your-network-for-troubleshooting)
     - [Working with Test Cases](#test-e---working-with-test-cases)
     - [Check BGP neighbors are established](#test-f---check-all-bgp-neighbors-are-established)
-  - [Demo 4 - Network Services Orchestrator (NSO)](https://github.com/hpreston/nso-getting-started)
+  - [Demo 5 - Network Services Orchestrator (NSO)](https://github.com/hpreston/nso-getting-started)
     - [Compile MAC addresses](https://github.com/hpreston/nso-getting-started/blob/master/04b-mvu.md)
     - [Network configuration compliance](https://github.com/hpreston/nso-getting-started/blob/master/04c-mvu.md)
     - [Update SNMP community strings](https://github.com/hpreston/nso-getting-started/blob/master/04a-mvu.md)
-  - [Demo 5 - Model driven programmability for network services](https://github.com/CiscoSE/mdp_use_cases/tree/master/network-services)
+  - [Demo 6 - Model driven programmability for network services](https://github.com/CiscoSE/mdp_use_cases/tree/master/network-services)
 
   <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2494,6 +2494,349 @@ __It was never this easy to make sure BGP neighbors across your network are prop
 
 <p align="center"> 
 <img src="imgs/214fortnite.png">
+</p>
+
+## NetDevOps Demo 4 - ChatOps is the way
+
+### Getting started with ChatOps
+
+We like robots because we can offload repetitive & tedious tasks to them and they will be happy about it! Well, maybe _happy_ is not the right word... let's say they'll do what we need 'em to do and not get _bored_ in the process.
+
+These robots, or _bots_ for short, might offer different ways to interact with them. We, as humans, normally interact with machines using our fingers as the output interface when typing a request in a keyboard, and our eyes as the input interface when reading in a screen what is the outcome of that request.
+
+Those requests we type might be formatted in 3 different ways:
+1. Using our bot's native language, but we'll need time to learn it
+2. Using our own native (natural) language and have some logic map what we mean to the bot's native language
+3. Something in-between, an easy-to-use and intuitive, but structured, way to interact with our bot
+
+No matter what option we decide to use, the final goal will be the same: to have our bot receive requests and translate them into whatever underlying logic is required to interact with relevant infrastructure to perform them. The easiest way to get started is to go with option #3 and leverage bots to interact with whatever platform APIs we work with.
+
+But what application can we use to communicate with our bot? It might be using SSH to a remote system from a terminal window, sending an SMS or an e-mail message, or even a proprietary app in your mobile terminal. But how convenient would it be to talk to the bot using the same messaging app we use to communicate with our colleagues at work? For example [Cisco Webex](https://www.webex.com/).
+
+Operating infrastructure systems with bots via messaging applications is called __ChatOps__.
+
+<p align="center"> 
+<img src="imgs/220robot.jpeg">
+</p>
+
+#### Webex basics
+
+Let's start with the basics: working with Webex means you'll use a local interface (laptop/mobile app or web interface) to communicate via Internet with Webex Cloud services, sending messages back and forth. This will allow you communicate with other Webex users connected in a similar way.
+
+<p align="center"> 
+<img src="./chatops/images/1_webex.png">
+</p>
+
+Time to create our first bot! Login to [developer.webex.com](https://developer.webex.com/), [create a new bot](https://developer.webex.com/my-apps/new/bot), give it a name (ie. Alfred), a username (needs to be unique, ie. `julio_bot@webex.bot`), an icon, write any meaningful description (ie. my first bot) and click on `Add bot`. __Congrats, you have just created your first bot!__ It resides in Webex Cloud services.
+
+<p align="center"> 
+<img src="imgs/221alfred.jpg">
+</p>
+
+But wait a moment... how is it possible? What will it do if we have not created any logic? Hmmm... something seems off here, right? Well, the bot _exists_ but it cannot do anything _yet_.
+
+For now please save the `Bot access token` somewhere safe, as this will be needed later on and there's no way to recover it once you browse away.
+
+#### Bot logic
+
+Time to take a look at the code required to implement your bot logic. We will be using [Python](https://www.python.org/) and [Flask](https://palletsprojects.com/p/flask/) as they offer a simple and convenient approach you can easily leverage.
+
+Please make sure to install [Python](https://www.python.org/downloads/) and also the Flask library (`pip install Flask`). Then you are ready to review the code for our first stab at implementing the required bot logic, available [here](./chatops/code/1_chatbot.py).
+
+As you'll see from the content of the file it does the following simple steps:
+* Imports the required Flask modules
+* Defines TCP port 5005 in your computer where it will listen for incoming POST messages
+* Assigns the received JSON payload into a `data` variable and displays it on screen
+
+_(note: if you cloned this repo you'll be able to go to the directory where this file resides (`cd ./chatops/code`), otherwise please create a new file in your computer with the same content)_
+
+Run the code with:
+
+```
+python 1_chatbot.py
+```
+
+You'll notice the terminal window displays the following and does not allow you interact anymore:
+
+```
+ * Serving Flask app "1_chatbot" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:5005/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 180-970-440
+```
+
+This means your code is running and waiting for messages to arrive to port 5005. Leave this terminal window running the code and open a new one to continue working.
+
+## Connectivity and webhooks
+
+Now we would need to tell the bot _when and how_ we want it to contact its bot logic. This means defining the events or messages that will trigger the bot to send a notification message to its bot logic. The way to implement this is by configuring a __webhook__. Webhooks define the specific event types that will trigger a message, and what is the destination address (target URL) where those messages should be sent to. But wait... what might be the destination address of the bot logic that resides in your computer?!?
+
+The bot logic running in your own computer will have to be reachable from Webex Cloud, where the bot resides. So how do we accomplish that? Your computer usually resides behind a NAT/PAT-enabled router and/or firewall, that makes your system virtually unreachable for inbound connections initiated from the Internet.
+
+<p align="center"> 
+<img src="imgs/222hook.jpg">
+</p>
+
+There are different _workarounds_ you may use to solve this __inbound__ reachability challenge (ie. mapping IP + port in your home router, or a reverse SSH tunnel) but for simplicity we will use a service called [ngrok](https://ngrok.com/). 
+
+This way you will be able to tell your Webex bot the publicly reachable destination address it can use to reach the bot logic hosted locally in your computer.
+
+<p align="center"> 
+<img src="./chatops/images/2_bot_ngrok.png">
+</p>
+
+Please [download and install the ngrok client in your computer](https://ngrok.com/download). In order to fire it up you will need to define the port in your computer where the bot logic will listen for messages coming from the Webex bot, so let's use port 5005 for that. Configuring ngrok to provide connectivity to your local port 5005 is as simple as running:
+
+```
+ngrok http 5005
+```
+
+Please wait until `Session status` is `online` and write down the `https` URL displayed as `Forwarding` and ending with `.ngrok.io` (ie. https://f21570cefdf4.ngrok.io). That URL is the publicly accessible address reachable through Internet for your Webex bot to access the bot logic (python script) you have running in your computer.
+
+Now is the time to let your Webex bot know what events we are interested in, and the publicly accessible address where the bot logic resides so it can send notifications there when a new event occurs. We use __webhooks__ for this.
+
+Webex APIs provide an easy way for you to configure a webhook by sending a simple HTTP message using the REST POST method. You can use the command below, where you will need to include the token obtained when you created the Webex bot and the ngrok URL you just got.
+
+```
+curl -X POST \
+  https://webexapis.com/v1/webhooks \
+  -H 'Authorization: Bearer <your_bot_token>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+      "name": "Webhook to ChatBot",
+      "resource": "all",
+      "event": "all",
+      "targetUrl": "<your_ngrok_url>"
+    }'    
+```
+
+__Everything is ready now!__
+
+By now you should have at least a couple of terminal windows: one running your python script with the bot logic and another one running the ngrok client.
+
+Please go to your favourite Webex client interface (app, web-based, mobile) and look for the address of your bot, the one that ended with `@webex.bot`. Send it a message that says "HELLO BOT!" and go back to your terminal windows. The one running ngrok should display an HTTP request with the POST method and a `200 OK` answer. [The HTTP 200 OK success status response code indicates that the request has succeeded](https://tools.ietf.org/html/rfc7231#section-6.3.1).
+
+The other terminal window running your bot logic will display a JSON payload with all the information received from the Webex bot and associated to the message you sent to the bot. There you'll find for example your own address as `personEmail`, the name of the webhook generating this message and its target URL. However you will not find the "HELLO BOT!" message anywhere... strange, huh?
+
+<p align="center"> 
+<img src="imgs/223futurama.jpg">
+</p>
+
+The reason is that webhooks only notify an event happened (in this case receiving a message) but __not the details__ about that event (in this case the content of the received message). If you want those details you need to make a new call to the API and explicitly ask about the details for that specific event. In this case for that new call you will need the __message id__ so you can use it to retrieve all details about that specific message. Let's see how you can obtain the text of the received message.
+
+Before working on the new code please go to the terminal window where you are running your python code (the bot logic) and interrupt it with Ctrl+C. In that same window we'll run the new code so no need to close it.
+
+Please review the python code required to extract the text of the received message, available [here](./chatops/code/2_chatbot.py).
+
+As you'll see from the content of the file it does the following on top of what the previous one did:
+* Import the `requests` library
+* Define the Webex API base URL to use it later
+* Define the bot token as API key to use it later (it's not recommended to include your bot API key in the code, but let's do it like this for now to make things simpler)
+* Define the required headers to include when using the `requests` library to get the message details
+* Extract the message id 
+* Build the specific URL where message details for that specific message id can be found
+* Send an HTTP request to that URL, _massage_ the response and extract the text of the message
+
+Before running the code please make sure to edit the file and assign your bot token to the `api_key` variable.
+
+_(note: if you cloned this repo you'll be able to go to the directory where this file resides (`cd ./code/chatops`), otherwise please create a new file in your computer with the same content)_
+
+Go back to your bot logic terminal window, stop the previous execution with Ctrl+C, and run the code with:
+
+```
+python 2_chatbot.py
+```
+
+You'll notice the terminal window displays something similar to what appeared last time. Leave it there and test it the same way as before, by sending a message in Webex to your bot. When you do it you will see the content of the message showing up in the terminal window. 
+
+0k, so what's happening? Well, you are using your Webex interface to send a message to a bot that resides in the Webex cloud and that bot is then notifying the code running in your laptop (the bot logic) about the new received message. Your bot code is then asking the Webex cloud API for further details about that specific message, extracting the text of the message from the received response and displaying it in your terminal. __Cool, huh?__
+
+<p align="center"> 
+<img src="imgs/224hamster.jpeg">
+</p>
+
+The next step would be to have our bot _answer_ our messages, so let's start with the basics. We will program it to answer with the content of the message we sent it. If we send him a "Hello dear bot!" message we'd like it to answer us with a "You said: Hello dear bot!".
+
+We should examine the API format to _send a message_, available [here](https://developer.webex.com/docs/api/v1/messages/create-a-message). You will notice that, in order to be able to send a message, our bot needs to specify a _room id_. To answer us, it should use the id of the room where it received our initial message. That _room id_ can be found in the data received from the webhook notification, so we'll extract it from there. 
+
+Then we build our answer message and the JSON dictionary with the two required parameters: room_id and answer message. With that and Webex REST API URL it's time to use the _requests_ library to send a POST message to the specified URL, with the defined headers and the data about the room_id and answer message.
+
+All of this is implemented [here](./chatops/code/3_chatbot.py), please review it. 
+
+_(note: if you cloned this repo you'll be able to go to the directory where this file resides (`cd ./code/chatops`), otherwise please create a new file in your computer with the same content)_
+
+Go back to your bot logic terminal window, stop the previous execution with Ctrl+C, and run the code with:
+
+```
+python 3_chatbot.py
+```
+
+As usual leave that terminal window there and test it the same way as before, by sending a message in Webex to your bot (something like `hello dear bot`). When you do it you will see the bot answering with the content of your message (something like `You said: "hello dear bot"`). __Success!__ Or not...? Take a look at what happens next:
+
+```
+You said: "hello dear bot"
+You said: "You said: "hello dear bot""
+You said: "You said: "You said: "hello dear bot"""
+You said: "You said: "You said: "You said: "hello dear bot""""
+You said: "You said: "You said: "You said: "You said: "hello dear bot"""""
+You said: "You said: "You said: "You said: "You said: "You said: "hello dear bot""""""
+You said: "You said: "You said: "You said: "You said: "You said: "You said: "hello dear bot"""""""
+You said: "You said: "You said: "You said: "You said: "You said: "You said: "You said: "hello dear bot""""""""
+You said: "You said: "You said: "You said: "You said: "You said: "You said: "You said: "You said: "hello dear bot"""""""""
+...
+...
+(ad infinitum)
+```
+
+<p align="center"> 
+<img src="imgs/225panic.jpeg">
+</p>
+
+... your bot got into a neverending loop, but why?!?
+
+Before anything else let's save your bot (it deserves to be _freed_ from this): go to your terminal window and stop the python script (bot logic) execution with Ctrl+C. You'll see the loop stops.
+
+Now that your bot is safe let's examine what happened. Looking at the messages it seems like everytime the bot sent you a message it was coming back to it and being processed again, causing the infinite loop.
+
+The problem comes from the fact that the webhook we configured notifies the bot logic about __any__ new message in a room where it is a member. The moment the bot posts a new message that will also trigger a webhook notification to itself, with the subsequent processing.
+
+<p align="center"> 
+<img src="imgs/226ignore.jpeg">
+</p>
+
+So we need to find a way for the bot logic to _ignore_ its own messages. The best way to do it is to take a look at who is the sender for any new message, and filter out the ones where the sender is the bot itself.
+
+Your bot can find information about itself using [this API call](https://developer.webex.com/docs/api/v1/people/get-my-own-details) to extract its own id. With that info, you can filter all webhook notifications that come from messages posted by the bot itself, using a simple `if-else` statement.
+
+You may check the code with this fix implemented [here](./chatops/code/4_chatbot.py).
+
+_(note: if you cloned this repo you'll be able to go to the directory where this file resides (`cd ./code/chatops`), otherwise please create a new file in your computer with the same content)_
+
+Go back to your bot logic terminal window, stop the previous execution with Ctrl+C, and run the code with:
+
+```
+python 4_chatbot.py
+```
+
+The loop is fixed... __now it works perfectly!__
+
+<p align="center"> 
+<img src="imgs/227see.jpeg">
+</p>
+
+Let's review what we have learned until now:
+* How to configure a webhook to have Webex notify our bot logic about new messages
+* How to retrieve all details about a new message, including its text content
+* How to answer back to the user
+* How to ignore our bot's messages and avoid processing them
+
+We've gone a long way, but now we need to make our bot _useful_. Let's explore how we can make it perform a specific task upon receiving a message from us.
+
+Who doesn't like Chuck Norris? And who doesn't like jokes? We _definitely_ need our bot to tell us Chuck Norris jokes! Luckily enough [there is an API for that](https://api.chucknorris.io/) (wha...?!?) and we are going to use it in our bot logic.
+
+<p align="center"> 
+<img src="./chatops/images/3_chuck_norris.png">
+</p>
+
+On top of what we had already implemented we'll add an `if-else` statement to check if the received message is a `/chuck` command:
+* _If_ it is a `/chuck` command we will send an HTTP GET to the Chuck Norris jokes API asking for a new random joke
+* _Else_ we will do the same as before, and echo the received message
+
+As simple as that. Please check the code with this new feature implemented [here](./chatops/code/5_chatbot.py).
+
+_(note: if you cloned this repo you'll be able to go to the directory where this file resides (`cd ./code/chatops`), otherwise please create a new file in your computer with the same content)_
+
+Go back to your bot logic terminal window, stop the previous execution with Ctrl+C, and run the code with:
+
+```
+python 5_chatbot.py
+```
+
+Working fine! Now let's add a parameter to our message that specifies what specific jokes we are interested in. You can check the complete list of categories [here](https://api.chucknorris.io/jokes/categories), but for this exercise we can use just a couple of them: _sport_ and _travel_. This way we can ask our bot for jokes on a specific topic just by typing `/chuck sport` or `/chuck travel`.
+
+In order to implement this new feature we just need to use the `split` method to extract the _parameter_ after `/chuck`. That parameter will be in the second position (number 1, as the first position is number 0) and we will use it as a parameter for the API URL where we'll send the HTTP GET.
+
+_Easy peasy!_ Please check the code with this new feature implemented [here](./chatops/code/6_chatbot.py).
+
+_(note: if you cloned this repo you'll be able to go to the directory where this file resides (`cd ./code/chatops`), otherwise please create a new file in your computer with the same content)_
+
+Go back to your bot logic terminal window, stop the previous execution with Ctrl+C, and run the code with:
+
+```
+python 6_chatbot.py
+```
+
+As long as it's __really__ difficult to refrain yourself from spending 3 hours enjoying Chuck Norris jokes, we will need to ask our bot to use something different and useful... how about the Meraki API?
+
+<p align="center"> 
+<img src="imgs/228norris.jpeg">
+</p>
+
+Let's say we want to create a chatbot that tells users what are the Meraki networks they have. If you are familiar with Meraki probably you know it has a certain hierarchy where your user belongs to a certain organization, and that organization manages a number of networks. So if you want to list your networks first you need to know what organization you belong to.
+
+<p align="center"> 
+<img src="./chatops/images/4_meraki.png">
+</p>
+
+Before reviewing the code you might remember I mentioned previously it is not recommended to include your API key in the code. Now that we are about to start working with the Meraki API let's explore how to do some things in a different way:
+1. Instead of including the Meraki API key in our code we'll do it _properly_ and define it as an environment variable
+2. Instead of using native calls to the API, we'll try the `meraki` library and see how it simplifies management
+
+For the first one about the API key you will have to enable the API from your [Meraki dashboard](http://dashboard.meraki.com). You just need to login and go to "Organization" - "Settings" - "Dashboard API access" and click on "Enable access to the Cisco Meraki Dashboard API". Once done go to your profile and "Generate new API key". Same as with the bot key, please write it down (copy/paste) somewhere safe, as once you close this window you won't be able to recover it.
+
+With that now you need to create the required environment variable in the same terminal window from where you will run your python code (bot logic) later:
+
+```
+export MERAKI_DASHBOARD_API_KEY=<your_meraki_api_key>
+```
+
+Nice! Time to take a look at the code, this is what you'll see on top of what it was doing previously (I've removed the Chuck Norris jokes code for the sake of clarity):
+
+* Import the `meraki` library
+* Instantiate the dashboard API with your API key
+* Define what to do if the command is `/meraki`
+* Define what to do if the command action is `networks` (so the overall message to send the bot is `/meraki networks`)
+  * Extract the organization id (first position in the list, numbered with 0)
+  * Extract a list of all networks under that organization id
+  * Build the answer message the bot will send to the user with info about the networks
+
+Please check the code with this new feature implemented [here](./chatops/code/7_chatbot.py).
+
+_(note: if you cloned this repo you'll be able to go to the directory where this file resides (`cd ./code/chatops`), otherwise please create a new file in your computer with the same content)_
+
+Go to your bot logic terminal window, where you defined the Meraki API key environment variable, and run the code with:
+
+```
+python 7_chatbot.py
+```
+
+Test it by sending your bot a message like this: `/meraki networks`, and you will see it answers with the complete list of networks that belong to your organization. __Superb!__
+
+Now we can implement an additional command action that displays the SSIDs available for our first network, by adding an `elif` statement for the new `ssids` action. The code included there will extract the id of the first listed network (position 0) and use it to get the complete list of SSIDs under that network. With that it will build the formatted answer message to display the required info. And while we're at it, we'll make this `ssids` action the default one in case you just send the bot a message with `/meraki`.
+
+Please check the code with this new feature implemented [here](./chatops/code/8_chatbot.py).
+
+_(note: if you cloned this repo you'll be able to go to the directory where this file resides (`cd ./code/chatops`), otherwise please create a new file in your computer with the same content)_
+
+Go to your bot logic terminal window, where you defined the Meraki API key environment variable, stop the running code for the previous version with Ctrl+C, and run the new code with:
+
+```
+python 8_chatbot.py
+```
+
+Test it by sending your bot a message like this: `/meraki ssids`, and you will see it answers with the complete list of SSIDs that belong to the first network in your organization. You can also test that you get the same result when typing just `/meraki`, as we have defined the `ssids` action as the default one if nothing is specified.
+
+__Well done!__
+
+As you can see this is an easy way to implement different actions based on pre-defined commands that let you interact easily with your bot.
+
+<p align="center"> 
+<img src="imgs/229engineer.jpg">
 </p>
 
 ---
