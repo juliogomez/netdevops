@@ -2581,7 +2581,7 @@ Now we would need to tell the bot _when and how_ we want it to contact its bot l
 The bot logic running in your own computer will have to be reachable from Webex Cloud, where the bot resides. So how do we accomplish that? Your computer usually resides behind a NAT/PAT-enabled router and/or firewall, that makes your system virtually unreachable for inbound connections initiated from the Internet.
 
 <p align="center"> 
-<img src="imgs/222hook.jpg">
+<img src="imgs/222hook.jpeg">
 </p>
 
 There are different _workarounds_ you may use to solve this __inbound__ reachability challenge (ie. mapping IP + port in your home router, or a reverse SSH tunnel) but for simplicity we will use a service called [ngrok](https://ngrok.com/). 
