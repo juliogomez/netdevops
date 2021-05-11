@@ -51,11 +51,14 @@
         - [Webex basics](#webex-basics)
         - [Bot logic](#bot-logic)
         - [Connectivity and webhooks](#connectivity-and-webhooks)
+        - [Why don't you answer my messages?](#why-dont-you-answer-my-messages)
+        - [Chuck Norris jokes and other useful APIs](#chuck-norris-jokes-and-other-useful-apis)
   - [Demo 5 - Network Services Orchestrator (NSO)](https://github.com/hpreston/nso-getting-started)
     - [Compile MAC addresses](https://github.com/hpreston/nso-getting-started/blob/master/04b-mvu.md)
     - [Network configuration compliance](https://github.com/hpreston/nso-getting-started/blob/master/04c-mvu.md)
     - [Update SNMP community strings](https://github.com/hpreston/nso-getting-started/blob/master/04a-mvu.md)
   - [Demo 6 - Model driven programmability for network services](https://github.com/CiscoSE/mdp_use_cases/tree/master/network-services)
+
 
 
 # Network Programmability
@@ -2629,6 +2632,8 @@ The other terminal window running your bot logic will display a JSON payload wit
 <img src="imgs/223futurama.jpg">
 </p>
 
+### Please call for details
+
 The reason is that webhooks only notify an event happened (in this case receiving a message) but __not the details__ about that event (in this case the content of the received message). If you want those details you need to make a new call to the API and explicitly ask about the details for that specific event. In this case for that new call you will need the __message id__ so you can use it to retrieve all details about that specific message. Let's see how you can obtain the text of the received message.
 
 Before working on the new code please go to the terminal window where you are running your python code (the bot logic) and interrupt it with Ctrl+C. In that same window we'll run the new code so no need to close it.
@@ -2661,6 +2666,8 @@ You'll notice the terminal window displays something similar to what appeared la
 <p align="center"> 
 <img src="imgs/224hamster.jpeg">
 </p>
+
+### Why don't you answer my messages?
 
 The next step would be to have our bot _answer_ our messages, so let's start with the basics. We will program it to answer with the content of the message we sent it. If we send him a "Hello dear bot!" message we'd like it to answer us with a "You said: Hello dear bot!".
 
@@ -2739,6 +2746,8 @@ Let's review what we have learned until now:
 
 We've gone a long way, but now we need to make our bot _useful_. Let's explore how we can make it perform a specific task upon receiving a message from us.
 
+### Chuck Norris jokes and other useful APIs
+
 Who doesn't like Chuck Norris? And who doesn't like jokes? We _definitely_ need our bot to tell us Chuck Norris jokes! Luckily enough [there is an API for that](https://api.chucknorris.io/) (wha...?!?) and we are going to use it in our bot logic.
 
 <p align="center"> 
@@ -2778,6 +2787,8 @@ As long as it's __really__ difficult to refrain yourself from spending 3 hours e
 <p align="center"> 
 <img src="imgs/228norris.jpeg">
 </p>
+
+### Integration with Meraki API
 
 Let's say we want to create a chatbot that tells users what are the Meraki networks they have. If you are familiar with Meraki probably you know it has a certain hierarchy where your user belongs to a certain organization, and that organization manages a number of networks. So if you want to list your networks first you need to know what organization you belong to.
 
@@ -2843,15 +2854,15 @@ As you can see this is an easy way to implement different actions based on pre-d
 
 ---
 
-#### Author
+### Author
 
 * [Julio Gomez](https://www.linkedin.com/in/juliogomezsanchez/) - Initial work - [Blog](cs.co/julioblog)
 
-#### License
+### License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/juliogomez/netdevops/LICENSE.md) file for details
 
-#### Acknowledgements
+### Acknowledgements
 
 Many thanks to the following programmability and NetDevOps gurus for their contributions and source materials that helped building this document:
 
