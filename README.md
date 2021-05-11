@@ -2,8 +2,6 @@
 <img src="imgs/0frontpage.jpg">
 </p>
 
-<!-- TOC -->
-
 - [Network Programmability](#network-programmability)
     - [The challenge of Dynamic applications vs Static network](#the-challenge-of-dynamic-applications-vs-static-network)
     - [What is Programmability](#what-is-programmability)
@@ -27,7 +25,7 @@
 - [NetDevOps](#netdevops)
     - [The challenge of network configuration today](#the-challenge-of-network-configuration-today)
     - [Network configuration as code](#network-configuration-as-code)
-- [NetDevOps Demonstrations](#netdevops-demonstrations)
+- [Demonstrations](#netdevops-demonstrations)
     - [Demo 1 - Automating network configuration from testing to production](#netdevops-demo-1---automating-network-configuration-from-testing-to-production)
         - [GitLab setup](#gitlab-setup)
         - [CICD setup](#cicd-setup)
@@ -53,68 +51,12 @@
         - [Webex basics](#webex-basics)
         - [Bot logic](#bot-logic)
         - [Connectivity and webhooks](#connectivity-and-webhooks)
-            - [Author](#author)
-            - [License](#license)
-            - [Acknowledgements](#acknowledgements)
   - [Demo 5 - Network Services Orchestrator (NSO)](https://github.com/hpreston/nso-getting-started)
     - [Compile MAC addresses](https://github.com/hpreston/nso-getting-started/blob/master/04b-mvu.md)
     - [Network configuration compliance](https://github.com/hpreston/nso-getting-started/blob/master/04c-mvu.md)
     - [Update SNMP community strings](https://github.com/hpreston/nso-getting-started/blob/master/04a-mvu.md)
   - [Demo 6 - Model driven programmability for network services](https://github.com/CiscoSE/mdp_use_cases/tree/master/network-services)
 
-<!-- /TOC -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-
-- [Network Programmability](#network-programmability)
-  - [The challenge of Dynamic applications vs Static network](#the-challenge-of-dynamic-applications-vs-static-network)
-  - [What is Programmability](#what-is-programmability)
-  - [Why Coding](#why-coding)
-  - [What has changed?](#what-has-changed)
-    - [Modern Programming Languages & Tools](#modern-programming-languages--tools)
-    - [Online Communities](#online-communities)
-    - [API Maturity](#api-maturity)
-  - [Coding essentials](#coding-essentials)
-    - [YANG data models](#yang-data-models)
-    - [JSON and XML](#json-and-xml)
-    - [NETCONF and RESTCONF](#netconf-and-restconf)
-    - [REST APIs](#rest-apis)
-    - [API Documentation](#api-documentation)
-    - [Python](#python)
-  - [Summary](#summary)
-- [NetDevOps](#netdevops)
-  - [The challenge of network configuration today](#the-challenge-of-network-configuration-today)
-  - [Network configuration as code](#network-configuration-as-code)
-  - [Demo 1 - Automating network configuration from testing to production](#netdevops-demo-1---automating-network-configuration-from-testing-to-production)
-    - [GitLab setup](#gitlab-setup)
-    - [CICD setup](#cicd-setup)
-    - [VIRL verifications](#virl-verifications)
-    - [Local environment setup (optional)](#local-environment-setup-optional)
-    - [Demo overview](#demo-overview)
-    - [Summary](#summary-1)
-  - [Demo 2 - VPN Head End Management Platform (HEMP)](#netdevops-demo-2---vpn-head-end-management-platform-hemp)
-    - [Topology](#topology)
-    - [Building blocks](#building-blocks)
-    - [Environment setup](#environment-setup)
-    - [Demo overview](#demo-overview-1)
-    - [Summary](#summary-2)
-  - [Demo 3 - Working with pyATS and Genie](#netdevops-demo-3---working-with-pyats-and-genie)
-    - [Execute a command on a network device](#test-a---execute-a-command-on-a-network-device)
-    - [Consolidate info from devices with different CLI](#test-b---consolidate-info-from-devices-with-different-cli)
-    - [Develop your own tests with interactive pyATS](#test-c---develop-your-own-tests-with-interactive-pyats)
-    - [Profiling your network for troubleshooting](#test-d---profiling-your-network-for-troubleshooting)
-    - [Working with Test Cases](#test-e---working-with-test-cases)
-    - [Check BGP neighbors are established](#test-f---check-all-bgp-neighbors-are-established)
-  - [Demo 5 - Network Services Orchestrator (NSO)](https://github.com/hpreston/nso-getting-started)
-    - [Compile MAC addresses](https://github.com/hpreston/nso-getting-started/blob/master/04b-mvu.md)
-    - [Network configuration compliance](https://github.com/hpreston/nso-getting-started/blob/master/04c-mvu.md)
-    - [Update SNMP community strings](https://github.com/hpreston/nso-getting-started/blob/master/04a-mvu.md)
-  - [Demo 6 - Model driven programmability for network services](https://github.com/CiscoSE/mdp_use_cases/tree/master/network-services)
-
-  <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-
-  
 
 # Network Programmability
 
