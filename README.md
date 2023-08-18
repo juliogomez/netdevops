@@ -99,7 +99,7 @@ Our brain has a great capacity, but clearly human input/output interfaces with a
 So while Elon Musk finishes his [BMI](https://waitbutwhy.com/2017/04/neuralink.html) (Brain Machine Interface), aka Wizard Hat, we will have to explore alternative options that optimize how we configure our networks.
 
 <p align="center"> 
-<img src="https://28oa9i1t08037ue3m1l0i861-wpengine.netdna-ssl.com/wp-content/uploads/2018/04/Communication-Speed-GRAPH-1.png">
+<img src="imgs/2elon.png">
 </p>
 
 ## What is Programmability
